@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Midget Mafia</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+  <div id="myTopBar" class="topbar">
+    <a href="index.html" class="logo">MM</a>
+    <a href="dashboard.html" style="color: white;">Dashboard</a>
+    <a href="messages.html" style="color: white;">Messages</a>
+    <a href="settings.html" style="color: white;">Settings</a>
+    <a href="signup.html" style="color: white;">Sign-up</a>
+    <a href="login.html" style="color: white;">Log-in</a>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <a href="index.html" style="font-family: sans-serif;">MM</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="messages.html">Messages</a>
+    <a href="settings.html">Settings</a>
+    <a href="signup.html">Sign-up</a>
+    <a href="login.html">Log-in</a>
+  </div>
+
+  <div id="content">
+    <h1>Fill out this form</h1>
+    <h2>Your description should be as follows</h2>
+    <h3>Your wanted Username</h3>
+    <h3>Your wanted Password</h3>
+    <h3>Other information</h3>
+
+    <form id="requestForm" style="
+        max-width: 400px;
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      ">
+      <label for="requestDescription" style="
+          display: block;
+          margin-bottom: 5px;
+          font-weight: bold;
+          font-size: 14px;
+          color: white;
+        ">Description</label>
+      <textarea id="requestDescription" required style="
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 15px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          font-size: 14px;
+          resize: none;
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        "></textarea>
+
+      <label for="requestName" style="
+          display: block;
+          margin-bottom: 5px;
+          font-weight: bold;
+          font-size: 14px;
+          color: white;
+        ">Name</label>
+      <input type="text" id="requestName" required style="
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 20px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          font-size: 14px;
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        " />
+
+      <button id="submit" type="submit" style="
+          width: 100%;
+          padding: 10px;
+          font-size: 16px;
+          font-weight: bold;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s ease, transform 0.2s ease;
+        " onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007bff'">
+        Submit Request
+      </button>
+    </form>
+
+    <style>
+      #create-rect {
+        width: 10%;
+        padding: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      #create-rect:hover {
+        background-color: #0056b3;
+      }
+
+      #word-sheet {
+        position: fixed;
+        top: 10%;
+        left: 10%;
+        width: 80vw;
+        height: 80vh;
+        background-color: black;
+        color: black;
+        font-family: cursive;
+        font-size: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        flex-direction: column;
+        padding: 20px;
+        box-sizing: border-box;
+        border-radius: 10px;
+      }
+
+      #close-btn {
+        background-color: #e53935;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 16px;
+      }
+
+      #close-btn:hover {
+        background-color: #d32f2f;
+      }
+
+      span {
+        margin-right: 10px;
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+    </style>
+
+    <!-- Buttons -->
+    <button class="create-rect" data-set="1">
+      Terms of Service
+    </button>
+    <button class="create-rect" data-set="2">
+      Privacy Policy
+    </button>
+
+    <div id="container"></div>
+  </div>
+
+  <script>
+    const sentences = {
+      1: "Terms of Service. This website and the creator are not responsible if disciplinary action, legal action, or any other action taken against you. This website requires some information in the reward of a license to use the website. If you do not agree, you will not be let on unless someone else, the website creator or Founder of the Midget Mafia allows you in via your own terms. I, the website creator, respect copyright law and if you feel your rights are infringed, do not hesitate to contact me.",
+      2: "Privacy Policy. If you want the simplicity of logging in with usernames and passwords you recognize, you will need to log in with your school account. If you by some chance do NOT wish to input your school information, put in your own username and password, although you will have the responsibility of remembering it, and penalties may be taken if you don't if the Owner of the Midget Mafia chooses. Your messages, login information, etc. will be logged/cached in a database, and penalties will be issued should you break rules with evidence of you doing so."
+    };
+
+    // Function to create the word sheet with a given sentence
+    function createWordSheet(sentence) {
+      // Check if the sheet already exists to prevent duplicates
+      const existingSheet = document.getElementById('word-sheet');
+      if (existingSheet) {
+        alert("The sheet of words already exists!");
+        return;
+      }
+
+      // Create the word sheet container
+      const wordSheet = document.createElement('div');
+      wordSheet.id = 'word-sheet';
+
+      // Create the close button
+      const closeButton = document.createElement('button');
+      closeButton.id = 'close-btn';
+      closeButton.textContent = 'Close';
+
+      // Add event listener to the close button
+      closeButton.addEventListener('click', function () {
+        wordSheet.remove(); // Remove the word sheet when close button is clicked
+      });
+
+      // Add the sentence to the sheet
+      const paragraph = document.createElement('p');
+      paragraph.textContent = sentence;
+
+      // Append the paragraph with the sentence to the word sheet
+      wordSheet.appendChild(paragraph);
+
+      // Prepend the close button to the word sheet
+      wordSheet.prepend(closeButton);
+
+      // Append the word sheet to the body
+      document.body.appendChild(wordSheet);
+    }
+
+    // Add event listeners to each button
+    document.querySelectorAll('.create-rect').forEach(button => {
+      button.addEventListener('click', function () {
+        // Get the set number for the clicked button
+        const setNumber = button.getAttribute('data-set');
+
+        // Call createWordSheet with the corresponding sentence
+        createWordSheet(sentences[setNumber]);
+      });
+    });
+  </script>
+  <script type="module" src="signform.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Midget Mafia</title>
+    <link href="style.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div id="myTopBar" class="topbar">
+      <a href="index.html" class="logo">MM</a>
+      <a href="dashboard.html" style="color: white">Dashboard</a>
+      <a href="messages.html" style="color: white">Messages</a>
+      <a href="settings.html" style="color: white">Settings</a>
+      <a href="signup.html" style="color: white">Sign-up</a>
+      <a href="login.html" style="color: white">Log-in</a>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+      <a href="index.html" style="font-family: sans-serif">MM</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="messages.html">Messages</a>
+      <a href="settings.html">Settings</a>
+      <a href="signup.html">Sign-up</a>
+      <a href="login.html">Log-in</a>
+    </div>
+
+    <div id="content">
+      <button id="clearRequestsButton">Clear All Requests</button>
+
+      <div id="requestsContainer">
+        <h3>Submitted Requests</h3>
+        <ul id="requestsList" style="padding: 0; margin-top: 10px"></ul>
+      </div>
+    </div>
+
+    <script type="module" src="requests.js"></script>
+  </body>
+</html>

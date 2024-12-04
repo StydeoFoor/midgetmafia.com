@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Midget Mafia</title>
+  <script type="module" src="script.js"></script>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+  <div id="myTopBar" class="topbar">
+    <a href="index.html" class="logo">MM</a>
+    <a href="dashboard.html" style="color: white;">Dashboard</a>
+    <a href="messages.html" style="color: white;">Messages</a>
+    <a href="settings.html" style="color: white;">Settings</a>
+    <a href="signup.html" style="color: white;">Sign-up</a>
+    <a href="login.html" style="color: white;">Log-in</a>
+  </div>
+  <div id="sidebar" class="sidebar">
+    <a href="index.html" style="font-family: sans-serif;">MM</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="messages.html">Messages</a>
+    <a href="settings.html">Settings</a>
+    <a href="signup.html">Sign-up</a>
+    <a href="login.html">Log-in</a>
+  </div>
+  <div id="content">
+    <h1>Dashboard</h1>
+    <p>Here is your dashboard</p>
+
+    <h2>Name:</h2>
+    <p id="name">N/A</p>
+
+    <h2>Role:</h2>
+    <p id="role">N/A</p>
+
+    <h2>Team:</h2>
+    <p id="team">N/A</p>
+
+    <h2>Current Involvement:</h2>
+    <p id="currentInvolvement">N/A</p>
+
+    <br>
+    <p>Above is all the information I can currently give. If there is no info provided, nothing will show up.</p>
+
+    <a href="ownerDashboard.html" id="ownerDash" class="ownerDash" style="
+      width: 175px;
+      height: 100px;
+      background-color: #b36800;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      text-decoration: none;
+      color: black;
+      display: none;
+      pointer-events: none;
+      outline-color: #000;
+      "
+      onmouseover="this.style.transition = 'all 0.1s ease'; this.style.width='195px'; this.style.height='120px'; this.style.backgroundColor='#e08300'; this.style.right='890px'; this.style.top='690px'; "
+      onmouseout="this.style.transition = 'all 0.1s ease'; this.style.width='175px'; this.style.height='100px'; this.style.backgroundColor='#b36800'; this.style.right='900px'; this.style.top='700px';">
+      Admin Dashboard
+    </a>
+  </div>
+
+</body>
+
+</html>

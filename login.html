@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Midget Mafia</title>
+  <link href="login.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+  <div id="myTopBar" class="topbar">
+    <a href="index.html" class="logo">MM</a>
+    <a href="dashboard.html" style="color: white;">Dashboard</a>
+    <a href="messages.html" style="color: white;">Messages</a>
+    <a href="settings.html" style="color: white;">Settings</a>
+    <a href="signup.html" style="color: white;">Sign-up</a>
+    <a href="login.html" style="color: white;">Log-in</a>
+  </div>
+  <div id="sidebar" class="sidebar">
+    <a href="index.html" style="font-family: sans-serif;">MM</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="messages.html">Messages</a>
+    <a href="settings.html">Settings</a>
+    <a href="signup.html">Sign-up</a>
+    <a href="login.html">Log-in</a>
+  </div>
+
+  <div id="loginContainer" class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="text" id="username" class="input-field" placeholder="Username" required>
+      <div id="usernameError" class="error">Please enter a username.</div>
+
+      <input type="password" id="password" class="input-field" placeholder="Password" required>
+      <div id="passwordError" class="error">Please enter a password.</div>
+
+      <div id="loginError" class="error">Invalid username or password.</div>
+      <div id="loginSuccess" class="success">Login successful!</div>
+
+      <button type="submit" class="submit-btn">Login</button>
+    </form>
+    <h3>Guest Username and password is: Guest | Password.</h3>
+  </div>
+
+  <script type="module" src="script.js"></script> <!-- Make sure to load the script after content -->
+</body>
+
+</html>

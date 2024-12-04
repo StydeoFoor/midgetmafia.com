@@ -1,0 +1,144 @@
+body {
+  font-family: cursive;
+  background-color: #242424;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+h1 {
+  font-weight: bold;
+  color: yellow;
+}
+h2 {
+  color: yellow
+}
+h3 {
+  color: orange;
+}
+
+.login-container {
+  background-color: #303030;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  display: none;
+}
+
+.success {
+  color: #00d100;
+  font-size: 14px;
+  display: none;
+}
+
+.topbar {
+  height: 60px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #242424;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 0 20px;
+}
+.topbar a {
+  text-decoration: none;
+  font-size: 18px;
+  color: white;
+  padding: 10px 15px;
+  transition: 0.3s;
+}
+.topbar a:hover {
+  color: white;
+  background-color: #3d3d3d;
+  border-radius: 5px;
+}
+.logo {
+    font-family: 'Notable', sans-serif;
+}
+
+#content {
+  margin-left: 0;
+  padding: 16px;
+}
+/* Sidebar styles */
+#sidebar {
+  height: 100%;
+  width: 0; /* Hidden initially */
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #242424;
+  overflow-x: hidden;
+  transition: width 0.3s;
+  padding-top: 60px;
+}
+
+#sidebar a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: black;
+  display: block;
+  transition: color 0.3s;
+}
+
+#sidebar a:hover {
+  color: white;
+}
+
+
+/* Button styles */
+.toggle-btn {
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  z-index: 1000; /* Ensure it stays above other elements */
+}
+
+.toggle-btn:hover {
+  background-color: #45a049;
+}
