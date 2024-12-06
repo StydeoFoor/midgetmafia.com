@@ -369,40 +369,46 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Easter egg: Chicken Nugget on 'N' key press
-  document.addEventListener("keydown", function(event) {
-    if (event.key === "n" || event.key === "N") {
-      const overlay = document.createElement("div");
-      overlay.style.position = "fixed";
-      overlay.style.top = 0;
-      overlay.style.left = 0;
-      overlay.style.width = "100%";
-      overlay.style.height = "100%";
-      overlay.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-      overlay.style.display = "flex";
-      overlay.style.justifyContent = "center";
-      overlay.style.alignItems = "center";
-      overlay.style.zIndex = 1000;
+  document.addEventListener("keydown", function (event) {
+  if (event.key === "n" || event.key === "N") {
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = 0;
+    overlay.style.left = 0;
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+    overlay.style.display = "flex";
+    overlay.style.justifyContent = "center";
+    overlay.style.alignItems = "center";
+    overlay.style.zIndex = 1000;
+    overlay.style.opacity = "0"; // Start with opacity 0 for transition
+    overlay.style.transition = "opacity 0.5s ease";
 
-      const nuggetImage = document.createElement("img");
-      nuggetImage.src = "chicken.png"; // Ensure this path is correct
-      nuggetImage.alt = "Chicken Nugget";
-      nuggetImage.style.maxWidth = "90%";
-      nuggetImage.style.maxHeight = "90%";
-      nuggetImage.style.borderRadius = "20px";
-      nuggetImage.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
-      nuggetImage.style.transition = "opacity 2s ease";
+    const nuggetImage = document.createElement("img");
+    nuggetImage.src = "./chicken.png"; // Update with correct path
+    nuggetImage.alt = "Chicken Nugget";
+    nuggetImage.style.maxWidth = "90%";
+    nuggetImage.style.maxHeight = "90%";
+    nuggetImage.style.borderRadius = "20px";
+    nuggetImage.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
+    nuggetImage.style.opacity = "1"; // Set initial opacity for nuggetImage
 
-      overlay.appendChild(nuggetImage);
-      document.body.appendChild(overlay);
+    overlay.appendChild(nuggetImage);
+    document.body.appendChild(overlay);
 
-      setTimeout(() => {
-        nuggetImage.style.opacity = "0";
-        overlay.style.transition = "opacity 2s ease";
-        overlay.style.opacity = "0";
-        overlay.addEventListener("transitionend", () => {
-          overlay.remove();
-        });
-      }, 1000);
-    }
-  });
+    // Trigger transition
+    setTimeout(() => {
+      overlay.style.opacity = "1";
+    }, 0);
+
+    setTimeout(() => {
+      nuggetImage.style.opacity = "0"; // Fade out the image
+      overlay.style.opacity = "0"; // Fade out the overlay
+      overlay.addEventListener("transitionend", () => {
+        overlay.remove();
+      });
+    }, 2000);
+  }
+});
 });
