@@ -116,13 +116,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ===== Initialize Theme =====
   function initializeTheme() {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      applyDarkMode();
-    } else {
-      applyLightMode();
-    }
+  const savedTheme = localStorage.getItem("theme");
+
+  // If no theme is saved, set dark mode as default
+  if (!savedTheme) {
+    applyDarkMode();
+    localStorage.setItem("theme", "dark"); // Save the dark theme as default
+  } else if (savedTheme === "dark") {
+    applyDarkMode();
+  } else {
+    applyLightMode();
   }
+}
 
   // ===== Sidebar/Topbar Toggle =====
   let useSidebar = localStorage.getItem("useSidebar") === "true";

@@ -31,6 +31,12 @@ function sendMessage(message) {
     return;
   }
 
+  // Check if the message exceeds the 500-character limit
+  if (message.length > 500) {
+    alert("Message exceeds the 500-character limit. Please shorten your message.");
+    return;
+  }
+
   // Get reference to 'chats' node in Firebase
   const messageRef = ref(database, "chats/" + Date.now()); // Timestamp as unique ID for each message
 
@@ -75,14 +81,20 @@ function displayMessages(messages) {
     return;
   }
 
-  console.log("Fetched messages:", messages); // Add this
   chatBox.innerHTML = ""; // Clear the chat box
 
   if (messages) {
     Object.keys(messages).forEach((key) => {
       const message = messages[key];
+
+      // Create a container for each message
       const messageElement = document.createElement("div");
       messageElement.textContent = `${message.username}: ${message.message}`;
+      
+      // Apply styles for spacing
+      messageElement.style.margin = "10px 0"; // Add vertical spacing between messages
+      messageElement.style.border = "1px solid #ccc"; // Optional border for clarity
+
       chatBox.appendChild(messageElement);
     });
   } else {
