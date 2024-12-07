@@ -31,8 +31,8 @@ function sendMessage(message) {
     return;
   }
 
-  // Check if the message exceeds the 500-character limit
-  if (message.length > 500) {
+  // Validate the message length
+  if (message.trim().length > 500) {
     alert("Message exceeds the 500-character limit. Please shorten your message.");
     return;
   }
@@ -43,7 +43,7 @@ function sendMessage(message) {
   // Set the message data in Firebase
   set(messageRef, {
     username: loggedInUser.name,
-    message: message,
+    message: message.trim(),
     timestamp: Date.now(),
   })
     .then(() => {
