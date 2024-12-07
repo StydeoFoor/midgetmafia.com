@@ -24,6 +24,14 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get Firebase Database instance
 
 // Send message function using 'set'
+const bannedWords = ["fuck", "nigga", "nigger", "ass", "shit"]; // Replace with your words
+
+function containsBannedWords(message) {
+  // Check if the message contains any banned words (case-insensitive)
+  const regex = new RegExp(`\\b(${bannedWords.join("|")})\\b`, "i");
+  return regex.test(message);
+}
+
 function sendMessage(message) {
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) {
@@ -31,16 +39,15 @@ function sendMessage(message) {
     return;
   }
 
-  messageInput.addEventListener("input", () => {
-    if (messageInput.value.length > 500) {
-      messageInput.value = messageInput.value.slice(0, 500);
-      console.log("Truncated input to 500 characters.");
-    }
-  });
-
   // Validate the message length
   if (message.trim().length > 500) {
     alert("Message exceeds the 500-character limit. Please shorten your message.");
+    return;
+  }
+
+  // Check for banned words
+  if (containsBannedWords(message)) {
+    alert("Your message was moderated and not sent.");
     return;
   }
 
