@@ -31,6 +31,13 @@ function sendMessage(message) {
     return;
   }
 
+  messageInput.addEventListener("input", () => {
+    if (messageInput.value.length > 500) {
+      messageInput.value = messageInput.value.slice(0, 500);
+      console.log("Truncated input to 500 characters.");
+    }
+  });
+
   // Validate the message length
   if (message.trim().length > 500) {
     alert("Message exceeds the 500-character limit. Please shorten your message.");
@@ -119,12 +126,15 @@ const messageInput = document.getElementById("message-input");
 const sendButton = document.getElementById("send-button");
 
 // Add event listener for Send button
-sendButton.addEventListener("click", function () {
+sendButton.addEventListener("click", () => {
   const message = messageInput.value.trim();
-  if (message && message.length <= 500) {
+  console.log("Message length:", message.length);
+  if (message.length > 500) {
+    alert("Message exceeds 500 characters!");
+    return;
+  }
+  if (message.length > 0) {
     sendMessage(message);
-    messageInput.value = ""; // Clear the input after sending
-  } else if (message.length > 500) {
-    alert("Message exceeds the 500-character limit. Please shorten your message.");
+    messageInput.value = "";
   }
 });
