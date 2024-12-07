@@ -29,6 +29,11 @@ function sendMessage(message) {
     return;
   }
 
+  if (message.length > 500) {
+    alert("Message exceeds the 500-character limit. Please shorten your message.");
+    return;
+  }
+
   // Get reference to 'chats' node in Firebase
   const messageRef = ref(database, "privChats/" + Date.now()); // Timestamp as unique ID for each message
 

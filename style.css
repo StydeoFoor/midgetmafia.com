@@ -190,6 +190,7 @@ img.fade-out {
   background-color: #28a745;
   color: white;
   cursor: pointer;
+  text-align: center;
 }
 
 .container {
