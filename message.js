@@ -100,7 +100,7 @@ function displayMessages(messages) {
       
       // Apply styles for spacing
       messageElement.style.margin = "10px 0"; // Add vertical spacing between messages
-      messageElement.style.border = "1px solid #ccc"; // Optional border for clarity
+      messageElement.style.borderTop = "1px solid #ccc"; // Optional border for clarity
 
       chatBox.appendChild(messageElement);
     });
