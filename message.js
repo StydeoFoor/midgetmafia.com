@@ -121,8 +121,10 @@ const sendButton = document.getElementById("send-button");
 // Add event listener for Send button
 sendButton.addEventListener("click", function () {
   const message = messageInput.value.trim();
-  if (message) {
-    sendMessage(message); // Send message to Firebase
+  if (message && message.length <= 500) {
+    sendMessage(message);
     messageInput.value = ""; // Clear the input after sending
+  } else if (message.length > 500) {
+    alert("Message exceeds the 500-character limit. Please shorten your message.");
   }
 });
