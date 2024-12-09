@@ -150,47 +150,59 @@ const COHERE_API_KEY = "peALrg2ivFtYudJwPeUAY9mMY8PVuNbnFbJiuzKZ";
 let userMessageCount = 0; // Track user messages to decide when the bot should respond
 
 async function getBotResponse(userInput) {
-  const response = await fetch("https://api.cohere.ai/generate", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${COHERE_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "command-xlarge",
-      prompt: `
-      You are a friendly and casual chatbot for a website. Respond simply and engagingly.
-      User: ${userInput}
-      Chatbot:`,
-      max_tokens: 100,
-      temperature: 0.7,
-    }),
-  });
+  try {
+    const response = await fetch("https://api.cohere.ai/generate", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${COHERE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "command-xlarge",
+        prompt: `You are a friendly and casual chatbot for a website. Respond simply and engagingly.\nUser: ${userInput}\nChatbot:`,
+        max_tokens: 100,
+        temperature: 0.7,
+      }),
+    });
 
-  const data = await response.json();
-  return data.generations[0]?.text?.trim() || "Hmm, I couldn't understand that!";
+    const data = await response.json();
+    console.log("API response:", data); // Debug log
+    return data.generations[0]?.text?.trim() || "Hmm, I couldn't understand that!";
+  } catch (error) {
+    console.error("Error getting response from Cohere API:", error);
+    return "Sorry, there was an issue with the chatbot.";
+  }
 }
 
 // Handle send button click
-document.getElementById("send-button").addEventListener("click", async () => {
+sendButton.addEventListener("click", async () => {
   const messageInput = document.getElementById("message-input").value.trim();
-  if (!messageInput) return;
+  if (!messageInput) {
+    console.log("No input provided");
+    return;
+  }
 
+  console.log("Sending message: ", messageInput);
   sendMessage(messageInput); // Send user message
-  userMessageCount++;
 
   // Chatbot responds to one out of every three messages
-  if (userMessageCount % 3 === 0) {
-    const botResponse = await getBotResponse(messageInput);
+  userMessageCount++;
 
-    // Append bot response
-    const chatBox = document.getElementById("chat-box");
+  if (userMessageCount % 3 === 0) {
+    const typingIndicator = document.createElement("div");
+    typingIndicator.textContent = "Titan is typing...";
+    typingIndicator.style.color = "gray";
+    document.getElementById("chat-box").appendChild(typingIndicator);
+
+    const botResponse = await getBotResponse(messageInput);
+    document.getElementById("chat-box").removeChild(typingIndicator);
+
+    // Append bot response to the chat box
     const botMessageElement = document.createElement("div");
     botMessageElement.innerHTML = `<strong style="color: darkred;">Titan:</strong> <span style="color: darkred;">${botResponse}</span>`;
     botMessageElement.style.margin = "10px 0";
     botMessageElement.style.borderTop = "1px solid #ccc";
-
-    chatBox.appendChild(botMessageElement);
+    document.getElementById("chat-box").appendChild(botMessageElement);
   }
 
   document.getElementById("message-input").value = ""; // Clear input field
