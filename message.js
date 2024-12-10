@@ -147,18 +147,26 @@ async function getBotResponse(userInput) {
       },
       body: JSON.stringify({
         model: "command-xlarge",
-        prompt: `You are a friendly and casual chatbot for a website. Respond simply and engagingly.\nUser: ${userInput}\nChatbot:`,
+        prompt: `You are a friendly and casual chatbot for a website. Respond simply and engagingly.
+        User: ${userInput}
+        Chatbot:`,
         max_tokens: 100,
         temperature: 0.7,
       }),
     });
 
+    // Check if the response is valid
     const data = await response.json();
-    console.log("API response:", data); // Debug log
+    if (!data.generations || data.generations.length === 0) {
+      console.error("Error: No response from Cohere API.");
+      return "Sorry, I couldn't generate a response right now.";
+    }
+
+    // Return the bot's response
     return data.generations[0]?.text?.trim() || "Hmm, I couldn't understand that!";
   } catch (error) {
     console.error("Error getting response from Cohere API:", error);
-    return "Sorry, there was an issue with the chatbot.";
+    return "Oops! Something went wrong while talking to the bot.";
   }
 }
 
@@ -187,7 +195,7 @@ sendButton.addEventListener("click", async () => {
   userMessageCount++;
 
   // Chatbot responds every three messages
-  if (userMessageCount % 3 === 0) {
+  if (userMessageCount % 1 === 0) {
     const chatBox = document.getElementById("chat-box");
 
     // Show typing indicator
