@@ -155,10 +155,13 @@ async function getBotResponse(userInput) {
       }),
     });
 
-    // Check if the response is valid
+    // Log the response body to see what we are getting back
     const data = await response.json();
+    console.log("Cohere API Response:", data); // Log the entire response to debug
+
+    // Check if the response is valid
     if (!data.generations || data.generations.length === 0) {
-      console.error("Error: No response from Cohere API.");
+      console.error("Error: No generations found in response.");
       return "Sorry, I couldn't generate a response right now.";
     }
 
