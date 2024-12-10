@@ -147,29 +147,25 @@ async function getBotResponse(userInput) {
       },
       body: JSON.stringify({
         model: "command-xlarge",
-        prompt: `You are a friendly and casual chatbot for a website. Respond simply and engagingly.
-        User: ${userInput}
-        Chatbot:`,
+        prompt: `You are a friendly and casual chatbot for a website. Respond simply and engagingly.\nUser: ${userInput}\nChatbot:`,
         max_tokens: 100,
         temperature: 0.7,
       }),
     });
 
-    // Log the response body to see what we are getting back
     const data = await response.json();
-    console.log("Cohere API Response:", data); // Log the entire response to debug
+    console.log("Cohere API Response:", data); // Log the full response
 
-    // Check if the response is valid
-    if (!data.generations || data.generations.length === 0) {
-      console.error("Error: No generations found in response.");
-      return "Sorry, I couldn't generate a response right now.";
+    // Check if 'generations' exists and return the response text
+    if (data && data.generations && data.generations.length > 0) {
+      return data.generations[0].text.trim();
+    } else {
+      console.error("No generations found in response.");
+      return "Hmm, I couldn't understand that!";
     }
-
-    // Return the bot's response
-    return data.generations[0]?.text?.trim() || "Hmm, I couldn't understand that!";
   } catch (error) {
     console.error("Error getting response from Cohere API:", error);
-    return "Oops! Something went wrong while talking to the bot.";
+    return "Sorry, there was an error processing your message.";
   }
 }
 
