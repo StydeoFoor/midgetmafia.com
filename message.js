@@ -133,18 +133,6 @@ const messageInput = document.getElementById("message-input");
 const sendButton = document.getElementById("send-button");
 
 // Add event listener for Send button
-sendButton.addEventListener("click", () => {
-  const message = messageInput.value.trim();
-  console.log("Message length:", message.length);
-  if (message.length > 500) {
-    alert("Message exceeds 500 characters!");
-    return;
-  }
-  if (message.length > 0) {
-    sendMessage(message);
-    messageInput.value = "";
-  }
-});
 
 const COHERE_API_KEY = "peALrg2ivFtYudJwPeUAY9mMY8PVuNbnFbJiuzKZ";
 let userMessageCount = 0; // Track user messages to decide when the bot should respond
@@ -179,15 +167,26 @@ sendButton.addEventListener("click", async () => {
   const inputField = document.getElementById("message-input");
   const messageInput = inputField.value.trim();
 
+  console.log("Message length:", messageInput.length);
+
+  // Check for message length
+  if (messageInput.length > 500) {
+    alert("Message exceeds 500 characters!");
+    return;
+  }
+
+  // If no input, log and exit
   if (!messageInput) {
     console.log("No input provided");
     return;
   }
 
-  sendMessage(messageInput); // Send user message
+  // Send user message
+  sendMessage(messageInput);
+  inputField.value = ""; // Clear the input field after sending
   userMessageCount++;
 
-  // Chatbot responds to one out of every three messages
+  // Chatbot responds every three messages
   if (userMessageCount % 3 === 0) {
     const chatBox = document.getElementById("chat-box");
 
@@ -211,6 +210,4 @@ sendButton.addEventListener("click", async () => {
 
     chatBox.appendChild(botMessageElement);
   }
-
-  inputField.value = ""; // Clear the input field
 });
