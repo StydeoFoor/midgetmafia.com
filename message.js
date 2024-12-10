@@ -176,48 +176,41 @@ async function getBotResponse(userInput) {
 
 // Handle send button click
 sendButton.addEventListener("click", async () => {
-  const chatBox = document.getElementById("chat-box");
-  const messageInputElement = document.getElementById("message-input");
-  const userMessage = messageInputElement.value.trim(); // Capture user input
+  const inputField = document.getElementById("message-input");
+  const messageInput = inputField.value.trim();
 
-  if (!userMessage) {
+  if (!messageInput) {
     console.log("No input provided");
     return;
   }
 
-  console.log("User message captured:", userMessage);
-
-  // Send the user's message to Firebase
-  sendMessage(userMessage);
-
-  // Clear the input field
-  messageInputElement.value = "";
-
-  // Track user message count
+  sendMessage(messageInput); // Send user message
   userMessageCount++;
 
-  // Titan responds every three user messages
+  // Chatbot responds to one out of every three messages
   if (userMessageCount % 3 === 0) {
-    // Display "Titan is typing..." indicator
+    const chatBox = document.getElementById("chat-box");
+
+    // Show typing indicator
     const typingIndicator = document.createElement("div");
     typingIndicator.textContent = "Titan is typing...";
     typingIndicator.style.color = "gray";
     chatBox.appendChild(typingIndicator);
 
-    // Fetch the bot's response
-    const botResponse = await getBotResponse(userMessage);
+    // Fetch bot response
+    const botResponse = await getBotResponse(messageInput);
 
     // Remove typing indicator
     chatBox.removeChild(typingIndicator);
 
-    // Append Titan's response
+    // Append bot response
     const botMessageElement = document.createElement("div");
     botMessageElement.innerHTML = `<strong style="color: darkred;">Titan:</strong> <span style="color: darkred;">${botResponse}</span>`;
     botMessageElement.style.margin = "10px 0";
     botMessageElement.style.borderTop = "1px solid #ccc";
-    chatBox.appendChild(botMessageElement);
 
-    // Ensure chatbox scrolls to the latest message
-    chatBox.scrollTop = chatBox.scrollHeight;
+    chatBox.appendChild(botMessageElement);
   }
+
+  inputField.value = ""; // Clear the input field
 });
