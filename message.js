@@ -176,34 +176,48 @@ async function getBotResponse(userInput) {
 
 // Handle send button click
 sendButton.addEventListener("click", async () => {
-  const messageInput = document.getElementById("message-input").value.trim();
-  if (!messageInput) {
+  const chatBox = document.getElementById("chat-box");
+  const messageInputElement = document.getElementById("message-input");
+  const userMessage = messageInputElement.value.trim(); // Capture user input
+
+  if (!userMessage) {
     console.log("No input provided");
     return;
   }
 
-  console.log("Sending message: ", messageInput);
-  sendMessage(messageInput); // Send user message
+  console.log("User message captured:", userMessage);
 
-  // Chatbot responds to one out of every three messages
+  // Send the user's message to Firebase
+  sendMessage(userMessage);
+
+  // Clear the input field
+  messageInputElement.value = "";
+
+  // Track user message count
   userMessageCount++;
 
+  // Titan responds every three user messages
   if (userMessageCount % 3 === 0) {
+    // Display "Titan is typing..." indicator
     const typingIndicator = document.createElement("div");
     typingIndicator.textContent = "Titan is typing...";
     typingIndicator.style.color = "gray";
-    document.getElementById("chat-box").appendChild(typingIndicator);
+    chatBox.appendChild(typingIndicator);
 
-    const botResponse = await getBotResponse(messageInput);
-    document.getElementById("chat-box").removeChild(typingIndicator);
+    // Fetch the bot's response
+    const botResponse = await getBotResponse(userMessage);
 
-    // Append bot response to the chat box
+    // Remove typing indicator
+    chatBox.removeChild(typingIndicator);
+
+    // Append Titan's response
     const botMessageElement = document.createElement("div");
     botMessageElement.innerHTML = `<strong style="color: darkred;">Titan:</strong> <span style="color: darkred;">${botResponse}</span>`;
     botMessageElement.style.margin = "10px 0";
     botMessageElement.style.borderTop = "1px solid #ccc";
-    document.getElementById("chat-box").appendChild(botMessageElement);
-  }
+    chatBox.appendChild(botMessageElement);
 
-  document.getElementById("message-input").value = ""; // Clear input field
+    // Ensure chatbox scrolls to the latest message
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
 });
