@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===== Dark Mode Functions =====
   function applyDarkMode() {
     if (sunButton) sunButton.textContent = "🌙";
-    body.style.backgroundColor = "#303030";
+    body.style.backgroundColor = "#2d5f29";
     body.style.color = "white";
 
     body.querySelectorAll("a").forEach((a) => {
@@ -69,9 +69,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (el && !el.classList.contains("exclude-dark-mode")) {
         el.style.color =
           el.tagName === "H3"
-            ? "orange"
+            ? "red"
             : el.tagName === "H1" || el.tagName === "H2"
-              ? "yellow"
+              ? "white"
               : "white";
       }
     });
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function applyLightMode() {
     if (sunButton) sunButton.textContent = "☀️";
-    body.style.backgroundColor = "#f4f4f9";
+    body.style.backgroundColor = "#7fff76";
     body.style.color = "black";
 
     body.querySelectorAll("a").forEach((a) => {

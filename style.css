@@ -8,13 +8,13 @@ p {
 }
 h1 {
   font-weight: bold;
-  color: yellow;
+  color: rgb(255, 0, 0);
 }
 h2 {
-  color: yellow
+  color: rgb(255, 255, 255)
 }
 h3 {
-  color: orange;
+  color: rgb(149, 255, 128);
 }
 .topbar {
   height: 60px;
