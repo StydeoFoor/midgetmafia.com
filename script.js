@@ -62,8 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
       a.style.color = "white";
     });
 
-    if (topbar) topbar.style.backgroundColor = "#242424";
-    if (sidebar) sidebar.style.backgroundColor = "#242424";
+    if (topbar) topbar.style.backgroundColor = "#044100";
+    if (sidebar) sidebar.style.backgroundColor = "#044100";
 
     body.querySelectorAll("p, h1, h2, h3").forEach((el) => {
       if (el && !el.classList.contains("exclude-dark-mode")) {
@@ -94,8 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
       a.style.color = "black";
     });
 
-    if (topbar) topbar.style.backgroundColor = "#c2c2c2";
-    if (sidebar) sidebar.style.backgroundColor = "#c2c2c2";
+    if (topbar) topbar.style.backgroundColor = "#5eff52";
+    if (sidebar) sidebar.style.backgroundColor = "#5eff52";
 
     // Check if elements exist before modifying their styles
 

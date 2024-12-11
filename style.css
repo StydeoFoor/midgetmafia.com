@@ -1,5 +1,5 @@
 body {
-  background: #303030;
+  background: #2d5f29;
   color: white;
   font-family: cursive
 }
@@ -22,7 +22,7 @@ h3 {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #242424;
+  background-color: #044100;
   z-index: 1;
   display: flex;
   align-items: center;
