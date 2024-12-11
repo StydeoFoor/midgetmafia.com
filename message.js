@@ -106,8 +106,7 @@ function displayMessages(messages) {
       messageElement.textContent = `${message.username}: ${message.message}`;
       
       // Apply styles for spacing
-      messageElement.style.margin = "10px 0"; // Add vertical spacing between messages
-      messageElement.style.borderTop = "1px solid #ccc"; // Optional border for clarity
+      messageElement.style.margin = "10px 0"; // Add vertical spacing between messages // Optional border for clarity
 
       chatBox.appendChild(messageElement);
     });

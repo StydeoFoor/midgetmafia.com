@@ -39,7 +39,7 @@ h3 {
 }
 .topbar a:hover {
   color: white;
-  background-color: #3d3d3d;
+  background-color: #34752f;
   border-radius: 5px;
 }
 body {
@@ -222,4 +222,8 @@ img.fade-out {
 
 .rules ul li {
   margin-bottom: 5px;
+}
+
+test {
+  background-color: #11ff00;
 }
