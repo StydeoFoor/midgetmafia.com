@@ -193,6 +193,7 @@ sendButton.addEventListener("click", async () => {
   inputField.value = ""; // Clear the input field after sending
   userMessageCount++;
 
+  /*
   // Chatbot responds every three messages
   if (userMessageCount % 1 === 0) {
     const chatBox = document.getElementById("chat-box");
@@ -216,5 +217,6 @@ sendButton.addEventListener("click", async () => {
     botMessageElement.style.borderTop = "1px solid #ccc";
 
     chatBox.appendChild(botMessageElement);
+    */
   }
-});
+);
