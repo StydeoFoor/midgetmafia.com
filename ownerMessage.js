@@ -1,15 +1,3 @@
-const allowedRoles = [
-  "Owner",
-  "Vice Manager",
-  "Developer",
-  "Manager",
-  "Vice Owner",
-];
-if (!allowedRoles.includes(loggedInUser.role)) {
-  window.location.href = "index.html";
-  alert("You aren't allowed here")
-}
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {
   getDatabase,
