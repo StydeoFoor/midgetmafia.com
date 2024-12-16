@@ -203,6 +203,7 @@ async function handleUserInput() {
   inputField.value = ""; // Clear the input field after sending
 
   // Increment user message count
+  /*
   userMessageCount++;
 
   // Show AI response
@@ -223,4 +224,5 @@ async function handleUserInput() {
   botMessageElement.style.borderTop = "1px solid #ccc";
 
   chatBox.appendChild(botMessageElement);
+  */
 }
