@@ -196,6 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
           localStorage.setItem("loggedInUser", JSON.stringify(user));
           alert("Login successful!");
           window.location.href = "dashboard.html";
+          localStorage.removeItem("users");
         } else {
           alert("Invalid username or password.");
         }
@@ -264,6 +265,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function ownerDashboard() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    const allowedRoles = [
+      "Owner",
+      "Vice Manager",
+      "Developer",
+      "Manager",
+      "Vice Owner",
+    ];
+    if (!allowedRoles.includes(loggedInUser.role)) {
+      window.location.href = "index.html";
+      alert("You aren't allowed here")
+      return;
+    }
 
     if (!loggedInUser) {
       window.location.href = "login.html";

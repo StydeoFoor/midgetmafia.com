@@ -19,6 +19,11 @@ const firebaseConfig = {
   measurementId: "G-3PTREP7EJ8",
 };
 
+if (!loggedInUser && !window.location.pathname.includes("login.html")) {
+  window.location.href = "login.html";
+  return;
+}
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get Firebase Database instance
