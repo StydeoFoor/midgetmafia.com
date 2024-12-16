@@ -1,3 +1,16 @@
+const allowedRoles = [
+  "Owner",
+  "Vice Manager",
+  "Developer",
+  "Manager",
+  "Vice Owner",
+];
+if (!allowedRoles.includes(loggedInUser.role)) {
+  window.location.href = "index.html";
+  alert("You aren't allowed here")
+  return;
+}
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {
   getDatabase,
@@ -22,19 +35,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get Firebase Database instance
-
-const allowedRoles = [
-  "Owner",
-  "Vice Manager",
-  "Developer",
-  "Manager",
-  "Vice Owner",
-];
-if (!allowedRoles.includes(loggedInUser.role)) {
-  window.location.href = "index.html";
-  alert("You aren't allowed here")
-  return;
-}
 
 // Send message function using 'set'
 function sendMessage(message) {

@@ -1,3 +1,8 @@
+if (!loggedInUser && !window.location.pathname.includes("login.html")) {
+  window.location.href = "login.html";
+  return;
+}
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {
   getDatabase,
@@ -18,11 +23,6 @@ const firebaseConfig = {
   appId: "1:597092364947:web:2c7db18295c2cd151f5366",
   measurementId: "G-3PTREP7EJ8",
 };
-
-if (!loggedInUser && !window.location.pathname.includes("login.html")) {
-  window.location.href = "login.html";
-  return;
-}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
