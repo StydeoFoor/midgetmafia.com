@@ -52,7 +52,7 @@ function sendMessage(message) {
   }
 
   // Get reference to 'chats' node in Firebase
-  const messageRef = ref(database, "chats/" + Date.now()); // Timestamp as unique ID for each message
+  const messageRef = ref(database, "court/" + Date.now()); // Timestamp as unique ID for each message
 
   // Set the message data in Firebase
   set(messageRef, {
@@ -70,7 +70,7 @@ function sendMessage(message) {
 
 // Fetch and display messages using 'get'
 function fetchMessages() {
-  const messagesRef = ref(database, "chats/"); // Reference to your 'chats' node
+  const messagesRef = ref(database, "court/"); // Reference to your 'chats' node
 
   // Fetch messages once from Firebase
   get(messagesRef)
@@ -133,41 +133,6 @@ const sendButton = document.getElementById("send-button");
 
 // Add event listener for Send button
 
-const COHERE_API_KEY = "peALrg2ivFtYudJwPeUAY9mMY8PVuNbnFbJiuzKZ";
-let userMessageCount = 0; // Track user messages to decide when the bot should respond
-
-async function getBotResponse(userInput) {
-  try {
-    const response = await fetch("https://api.cohere.ai/generate", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${COHERE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "command-xlarge",
-        prompt: `You are a friendly and casual chatbot for a website. Respond simply and engagingly.\nUser: ${userInput}\nChatbot:`,
-        max_tokens: 100,
-        temperature: 0.7,
-      }),
-    });
-
-    const data = await response.json();
-    console.log("Cohere API Response:", data); // Log the full response
-
-    // Check if 'generations' exists and return the response text
-    if (data && data.generations && data.generations.length > 0) {
-      return data.generations[0].text.trim();
-    } else {
-      console.error("No generations found in response.");
-      return "Hmm, I couldn't understand that!";
-    }
-  } catch (error) {
-    console.error("Error getting response from Cohere API:", error);
-    return "Sorry, there was an error processing your message.";
-  }
-}
-
 // Handle send button click
 sendButton.addEventListener("click", async () => {
   await handleUserInput(); // Call shared function for input handling
@@ -203,24 +168,4 @@ async function handleUserInput() {
   inputField.value = ""; // Clear the input field after sending
 
   // Increment user message count
-  userMessageCount++;
-
-  // Show AI response
-  const chatBox = document.getElementById("chat-box");
-
-  const typingIndicator = document.createElement("div");
-  typingIndicator.textContent = "Titan is typing...";
-  typingIndicator.style.color = "gray";
-  chatBox.appendChild(typingIndicator);
-
-  const botResponse = await getBotResponse(userMessage);
-
-  chatBox.removeChild(typingIndicator);
-
-  const botMessageElement = document.createElement("div");
-  botMessageElement.innerHTML = `<strong style="color: darkred;">Titan:</strong> <span style="color: darkred;">${botResponse}</span>`;
-  botMessageElement.style.margin = "10px 0";
-  botMessageElement.style.borderTop = "1px solid #ccc";
-
-  chatBox.appendChild(botMessageElement);
 }
