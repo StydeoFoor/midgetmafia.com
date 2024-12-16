@@ -5,8 +5,7 @@ const allowedRoles = [
 ];
 if (!allowedRoles.includes(loggedInUser.role)) {
   window.location.href = "index.html";
-  alert("You aren't allowed here")
-  return;
+  alert("You aren't allowed here");
 }
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";

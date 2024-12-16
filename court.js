@@ -116,7 +116,7 @@ function displayMessages(messages) {
 }
 
 // Listen for real-time updates (whenever new messages are added)
-const messagesRef = ref(database, "chats/");
+const messagesRef = ref(database, "court/");
 onValue(messagesRef, (snapshot) => {
   const messages = snapshot.val();
   displayMessages(messages);

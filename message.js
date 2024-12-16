@@ -1,6 +1,5 @@
 if (!loggedInUser && !window.location.pathname.includes("login.html")) {
   window.location.href = "login.html";
-  return;
 }
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
