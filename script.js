@@ -384,45 +384,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Easter egg: Chicken Nugget on 'N' key press
   document.addEventListener("keydown", function (event) {
-  if (event.key === "n" || event.key === "N") {
-    const overlay = document.createElement("div");
-    overlay.style.position = "fixed";
-    overlay.style.top = 0;
-    overlay.style.left = 0;
-    overlay.style.width = "100%";
-    overlay.style.height = "100%";
-    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-    overlay.style.display = "flex";
-    overlay.style.justifyContent = "center";
-    overlay.style.alignItems = "center";
-    overlay.style.zIndex = 1000;
-    overlay.style.opacity = "0"; // Start with opacity 0 for transition
-    overlay.style.transition = "opacity 0.5s ease";
-
-    const nuggetImage = document.createElement("img");
-    nuggetImage.src = "./chicken.png"; // Update with correct path
-    nuggetImage.alt = "Chicken Nugget";
-    nuggetImage.style.maxWidth = "90%";
-    nuggetImage.style.maxHeight = "90%";
-    nuggetImage.style.borderRadius = "20px";
-    nuggetImage.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
-    nuggetImage.style.opacity = "1"; // Set initial opacity for nuggetImage
-
-    overlay.appendChild(nuggetImage);
-    document.body.appendChild(overlay);
-
-    // Trigger transition
-    setTimeout(() => {
-      overlay.style.opacity = "1";
-    }, 0);
-
-    setTimeout(() => {
-      nuggetImage.style.opacity = "0"; // Fade out the image
-      overlay.style.opacity = "0"; // Fade out the overlay
-      overlay.addEventListener("transitionend", () => {
-        overlay.remove();
+    if (event.key === "n" || event.key === "N") {
+      // Check for existing overlay to avoid duplicates
+      if (document.getElementById("nugget-overlay")) return;
+  
+      // Create overlay
+      const overlay = document.createElement("div");
+      overlay.id = "nugget-overlay"; // Unique ID to prevent duplicates
+      overlay.style.position = "fixed";
+      overlay.style.top = "0";
+      overlay.style.left = "0";
+      overlay.style.width = "100%";
+      overlay.style.height = "100%";
+      overlay.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+      overlay.style.display = "flex";
+      overlay.style.justifyContent = "center";
+      overlay.style.alignItems = "center";
+      overlay.style.zIndex = "1000";
+      overlay.style.opacity = "0"; // Start transparent
+      overlay.style.transition = "opacity 0.5s ease";
+  
+      // Create image element
+      const nuggetImage = document.createElement("img");
+      nuggetImage.src = "./chicken.png"; // Correct path to your image
+      nuggetImage.alt = "Chicken Nugget";
+      nuggetImage.style.maxWidth = "300px";
+      nuggetImage.style.maxHeight = "300px";
+      nuggetImage.style.borderRadius = "20px";
+      nuggetImage.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.2)";
+      nuggetImage.style.transition = "opacity 1s ease"; // Fade-in transition
+  
+      // Append image to overlay and overlay to body
+      overlay.appendChild(nuggetImage);
+      document.body.appendChild(overlay);
+  
+      // Fade-in the overlay and image
+      requestAnimationFrame(() => {
+        overlay.style.opacity = "1";
       });
-    }, 2000);
-  }
+  
+      // Fade-out logic after 2 seconds
+      setTimeout(() => {
+        nuggetImage.style.opacity = "0"; // Fade out the image
+        overlay.style.opacity = "0"; // Fade out the overlay
+  
+        overlay.addEventListener("transitionend", () => {
+          overlay.remove(); // Remove overlay after fade-out completes
+        });
+      }, 2000);
+    }
+  });
 });
-});
+
+export { applyDarkMode, applyLightMode }
