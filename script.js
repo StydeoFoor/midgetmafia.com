@@ -435,5 +435,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
-export { applyDarkMode, applyLightMode }
