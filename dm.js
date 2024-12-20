@@ -112,8 +112,12 @@ async function sendMessage() {
   console.log("Current Chat ID:", currentChatId);
 
   try {
-    // Construct the chat messages path
-    const chatMessagesPath = `dm_chats/${currentChatId}/messages/${Date.now()}`;
+    // Sanitize the chat ID
+    const sanitizedChatId = currentChatId.replace(/[.#$/[\]]/g, "_");
+    console.log("Sanitized Chat ID:", sanitizedChatId);
+
+    // Construct the Firebase path
+    const chatMessagesPath = `dm_chats/${sanitizedChatId}/messages/${Date.now()}`;
     console.log("Chat Messages Path:", chatMessagesPath);
 
     // Set the message in Firebase
@@ -123,14 +127,13 @@ async function sendMessage() {
       timestamp: Date.now(),
     });
 
-    messageInput.value = ""; // Clear the input field after sending
+    messageInput.value = ""; // Clear input field
     console.log("Message sent successfully!");
   } catch (error) {
     console.error("Error sending message:", error);
     alert("Failed to send message. Please try again.");
   }
 }
-
 // Start New DM
 async function startNewDM() {
   const recipient = prompt("Enter the name to start a new DM:");
