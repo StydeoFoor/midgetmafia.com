@@ -17,7 +17,12 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 let currentChatId = null;
-let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")); // Replace with actual logged-in user
+let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+if (!loggedInUser || !loggedInUser.name) {
+  alert("User not logged in. Please log in first.");
+  throw new Error("User not logged in.");
+}
+loggedInUser = loggedInUser.name; // Extract the username string
 
 if (!loggedInUser) {
   alert("User not logged in. Please log in first.");
@@ -161,4 +166,4 @@ document.getElementById("send-dm-button").addEventListener("click", sendMessage)
 document.getElementById("start-new-dm").addEventListener("click", startNewDM);
 
 // On Load
-window.onload = fetchUserDMs;
+window.onload = fetchUserDMs();
