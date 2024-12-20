@@ -18,38 +18,46 @@ const database = getDatabase(app);
 
 let currentChatId = null;
 let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")); // Replace with actual logged-in user
-let availableUsers = ["user1", "user2", "user3"]; // Replace with dynamic fetching
+
+if (!loggedInUser) {
+  alert("User not logged in. Please log in first.");
+  throw new Error("User not logged in.");
+}
 
 // Populate DM List
 async function fetchUserDMs() {
-  const dmsRef = ref(database, "dm_chats");
-  const snapshot = await get(dmsRef);
+  try {
+    const dmsRef = ref(database, "dm_chats");
+    const snapshot = await get(dmsRef);
 
-  if (!snapshot.exists()) {
-    console.log("No DMs available.");
-    return;
+    if (!snapshot.exists()) {
+      console.log("No DMs available.");
+      return;
+    }
+
+    const allDMs = snapshot.val();
+    const userDMs = Object.entries(allDMs).filter(([chatId, chatData]) =>
+      chatData.metadata.users.includes(loggedInUser)
+    );
+
+    const dmList = document.getElementById("dm-list");
+    dmList.innerHTML = "";
+
+    userDMs.forEach(([chatId, chatData]) => {
+      const dmElement = document.createElement("div");
+      const lastMessage = chatData.metadata.lastMessage;
+      const otherUser = chatData.metadata.users.find(user => user !== loggedInUser);
+
+      dmElement.textContent = `Chat with ${otherUser}: ${lastMessage.message}`;
+      dmElement.style.margin = "10px 0";
+      dmElement.style.cursor = "pointer";
+      dmElement.addEventListener("click", () => switchChat(chatId, otherUser));
+
+      dmList.appendChild(dmElement);
+    });
+  } catch (error) {
+    console.error("Error fetching DMs:", error);
   }
-
-  const allDMs = snapshot.val();
-  const userDMs = Object.entries(allDMs).filter(([chatId, chatData]) =>
-    chatData.metadata.users.includes(loggedInUser)
-  );
-
-  const dmList = document.getElementById("dm-list");
-  dmList.innerHTML = "";
-
-  userDMs.forEach(([chatId, chatData]) => {
-    const dmElement = document.createElement("div");
-    const lastMessage = chatData.metadata.lastMessage;
-    const otherUser = chatData.metadata.users.find(user => user !== loggedInUser);
-
-    dmElement.textContent = `Chat with ${otherUser}: ${lastMessage.message}`;
-    dmElement.style.margin = "10px 0";
-    dmElement.style.cursor = "pointer";
-    dmElement.addEventListener("click", () => switchChat(chatId, otherUser));
-
-    dmList.appendChild(dmElement);
-  });
 }
 
 // Switch Chat
@@ -94,22 +102,27 @@ async function sendMessage() {
     return;
   }
 
-  const chatMessagesRef = ref(database, `dm_chats/${currentChatId}/messages`);
-  const messageId = Date.now();
+  try {
+    const chatMessagesRef = ref(database, `dm_chats/${currentChatId}/messages`);
+    const messageId = Date.now();
 
-  await set(ref(chatMessagesRef, messageId), {
-    sender: loggedInUser,
-    message,
-    timestamp: messageId,
-  });
+    await set(ref(chatMessagesRef, messageId), {
+      sender: loggedInUser,
+      message,
+      timestamp: messageId,
+    });
 
-  messageInput.value = "";
+    messageInput.value = "";
+  } catch (error) {
+    console.error("Error sending message:", error);
+    alert("Failed to send message. Please try again.");
+  }
 }
 
 // Start New DM
 async function startNewDM() {
   const recipient = prompt("Enter the username to start a new DM:");
-  if (!recipient || recipient === loggedInUser) {
+  if (!recipient || recipient.trim() === "" || recipient === loggedInUser) {
     alert("Invalid recipient.");
     return;
   }
@@ -117,23 +130,30 @@ async function startNewDM() {
   const chatId = [loggedInUser, recipient].sort().join("-");
   const chatRef = ref(database, `dm_chats/${chatId}`);
 
-  const chatSnapshot = await get(chatRef);
+  try {
+    const chatSnapshot = await get(chatRef);
 
-  if (!chatSnapshot.exists()) {
-    await set(chatRef, {
-      metadata: {
-        users: [loggedInUser, recipient],
-        lastMessage: {
-          message: "Start of conversation.",
-          sender: loggedInUser,
-          timestamp: Date.now(),
+    if (!chatSnapshot.exists()) {
+      await set(chatRef, {
+        metadata: {
+          users: [loggedInUser, recipient],
+          lastMessage: {
+            message: "Start of conversation.",
+            sender: loggedInUser,
+            timestamp: Date.now(),
+          },
         },
-      },
-    });
-  }
+      });
 
-  fetchUserDMs();
-  switchChat(chatId, recipient);
+      console.log("Chat created successfully!");
+    }
+
+    fetchUserDMs(); // Refresh DM list
+    switchChat(chatId, recipient); // Open the new chat
+  } catch (error) {
+    console.error("Error creating or switching to chat:", error);
+    alert("An error occurred. Please try again.");
+  }
 }
 
 // Event Listeners
