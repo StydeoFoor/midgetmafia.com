@@ -17,7 +17,7 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 let currentChatId = null;
-let loggedInUser = "currentUser"; // Replace with actual logged-in user
+let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")); // Replace with actual logged-in user
 let availableUsers = ["user1", "user2", "user3"]; // Replace with dynamic fetching
 
 // Populate DM List
