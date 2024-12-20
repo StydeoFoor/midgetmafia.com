@@ -49,7 +49,7 @@ async function fetchUserDMs() {
       const otherUser = chatData.metadata.users.find(user => user !== loggedInUser);
 
       const dmElement = document.createElement("div");
-      dmElement.textContent = `Chat with ${otherUser}: ${lastMessage.message}`;
+      dmElement.textContent = `${otherUser}}`;
       dmElement.style.margin = "10px 0";
       dmElement.style.cursor = "pointer";
       dmElement.addEventListener("click", () => switchChat(chatId, otherUser));
@@ -66,7 +66,7 @@ function switchChat(chatId, otherUser) {
   currentChatId = chatId;
 
   const chatHeader = document.getElementById("chat-header");
-  chatHeader.textContent = `Chat with ${otherUser}`;
+  chatHeader.textContent = `${otherUser}`;
 
   displayDM(chatId);
 }
