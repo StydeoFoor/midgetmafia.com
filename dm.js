@@ -112,8 +112,13 @@ async function sendMessage() {
   const messageInput = document.getElementById("message-input");
   const message = messageInput.value.trim();
 
-  if (!currentChatId || !message) {
-    alert("Please select a conversation and enter a message.");
+  if (!currentChatId) {
+    alert("No conversation selected. Please select or start a conversation first.");
+    return;
+  }
+
+  if (!message) {
+    alert("Cannot send an empty message.");
     return;
   }
 
@@ -127,13 +132,13 @@ async function sendMessage() {
       timestamp: messageId,
     });
 
-    messageInput.value = "";
+    messageInput.value = ""; // Clear the input field after sending
+    console.log("Message sent successfully!");
   } catch (error) {
     console.error("Error sending message:", error);
     alert("Failed to send message. Please try again.");
   }
 }
-
 // Start New DM
 async function startNewDM() {
   const recipient = prompt("Enter the name to start a new DM:");
