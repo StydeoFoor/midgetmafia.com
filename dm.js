@@ -1,5 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/compat/app.js";
+import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/compat/database.js";
 
 // Firebase Initialization
 const firebaseConfig = {
@@ -112,22 +112,18 @@ async function sendMessage() {
   console.log("Current Chat ID:", currentChatId);
 
   try {
-    // Sanitize chat ID
-    const sanitizedChatId = currentChatId.replace(/[.#$/[\]]/g, "_");
-    console.log("Sanitized Path:", `dm_chats/${sanitizedChatId}/messages`);
+    // Construct the chat messages path
+    const chatMessagesPath = `dm_chats/${currentChatId}/messages/${Date.now()}`;
+    console.log("Chat Messages Path:", chatMessagesPath);
 
-    // Reference to chat messages
-    const chatMessagesRef = ref(database, `dm_chats/${sanitizedChatId}/messages`);
-    const messageId = Date.now();
-
-    // Set message in Firebase
-    await set(ref(chatMessagesRef, messageId), {
+    // Set the message in Firebase
+    await set(ref(database, chatMessagesPath), {
       sender: loggedInUser,
       message,
-      timestamp: messageId,
+      timestamp: Date.now(),
     });
 
-    messageInput.value = ""; // Clear input field
+    messageInput.value = ""; // Clear the input field after sending
     console.log("Message sent successfully!");
   } catch (error) {
     console.error("Error sending message:", error);
