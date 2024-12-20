@@ -22,7 +22,7 @@ if (!loggedInUser || !loggedInUser.name) {
   alert("User not logged in. Please log in first.");
   throw new Error("User not logged in.");
 }
-loggedInUser = loggedInUser.name; // Extract the username string
+loggedInUser = loggedInUser.name; // Extract the name string
 
 if (!loggedInUser) {
   alert("User not logged in. Please log in first.");
@@ -48,12 +48,20 @@ async function fetchUserDMs() {
     const dmList = document.getElementById("dm-list");
     dmList.innerHTML = "";
 
+    // Get user names from Firebase
+    const usersRef = ref(database, "users");
+    const usersSnapshot = await get(usersRef);
+    const users = usersSnapshot.exists() ? usersSnapshot.val() : {};
+
     userDMs.forEach(([chatId, chatData]) => {
-      const dmElement = document.createElement("div");
       const lastMessage = chatData.metadata.lastMessage;
       const otherUser = chatData.metadata.users.find(user => user !== loggedInUser);
 
-      dmElement.textContent = `Chat with ${otherUser}: ${lastMessage.message}`;
+      // Get the name of the recipient from the users object
+      const recipientName = users[otherUser]?.name || otherUser; // Default to otherUser if no name found
+
+      const dmElement = document.createElement("div");
+      dmElement.textContent = `Chat with ${recipientName}: ${lastMessage.message}`;
       dmElement.style.margin = "10px 0";
       dmElement.style.cursor = "pointer";
       dmElement.addEventListener("click", () => switchChat(chatId, otherUser));
@@ -69,8 +77,10 @@ async function fetchUserDMs() {
 function switchChat(chatId, otherUser) {
   currentChatId = chatId;
 
+  // Get the name of the recipient
   const chatHeader = document.getElementById("chat-header");
-  chatHeader.textContent = `Chat with ${otherUser}`;
+  const recipientName = otherUser; // Just use the name of the other user
+  chatHeader.textContent = `Chat with ${recipientName}`;
 
   displayDM(chatId);
 }
@@ -126,7 +136,7 @@ async function sendMessage() {
 
 // Start New DM
 async function startNewDM() {
-  const recipient = prompt("Enter the username to start a new DM:");
+  const recipient = prompt("Enter the name to start a new DM:");
   if (!recipient || recipient.trim() === "" || recipient === loggedInUser) {
     alert("Invalid recipient.");
     return;
