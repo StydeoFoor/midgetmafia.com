@@ -112,17 +112,22 @@ async function sendMessage() {
   console.log("Current Chat ID:", currentChatId);
 
   try {
-    // Ensure path is valid
-    const chatMessagesRef = ref(database, `dm_chats/${currentChatId}/messages`);
+    // Sanitize chat ID
+    const sanitizedChatId = currentChatId.replace(/[.#$/[\]]/g, "_");
+    console.log("Sanitized Path:", `dm_chats/${sanitizedChatId}/messages`);
+
+    // Reference to chat messages
+    const chatMessagesRef = ref(database, `dm_chats/${sanitizedChatId}/messages`);
     const messageId = Date.now();
 
+    // Set message in Firebase
     await set(ref(chatMessagesRef, messageId), {
       sender: loggedInUser,
       message,
       timestamp: messageId,
     });
 
-    messageInput.value = ""; // Clear the input field after sending
+    messageInput.value = ""; // Clear input field
     console.log("Message sent successfully!");
   } catch (error) {
     console.error("Error sending message:", error);
