@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Midget Mafia</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+</head>
+
+<body>
+
+  <div id="myTopBar" class="topbar">
+    <a href="index.html" class="logo">MM</a>
+    <a href="dashboard.html" style="color: white;">Dashboard</a>
+    <a href="messages.html" style="color: white;">Messages</a>
+    <a href="settings.html" style="color: white;">Settings</a>
+    <a href="signup.html" style="color: white;">Sign-up</a>
+    <a href="login.html" style="color: white;">Log-in</a>
+    <a href="info.html">Info</a>
+  </div>
+  <div id="sidebar" class="sidebar">
+    <a href="index.html" style="font-family: sans-serif;">MM</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="messages.html">Messages</a>
+    <a href="settings.html">Settings</a>
+    <a href="signup.html">Sign-up</a>
+    <a href="login.html">Log-in</a>
+    <a href="info.html">Info</a>
+  </div>
+
+  <div id="content">
+    <h3 id="chat-header">DMs</h3>
+      <div id="chat-container" style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif;">
+        <div
+          id="chat-box"
+          style="
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            color: black;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          "
+        ></div>
+        <div
+          style="
+            display: flex;
+            margin-top: 15px;
+            align-items: center;
+            gap: 10px;
+          "
+        >
+          <input
+            id="message-input"
+            type="text"
+            placeholder="Type a message..."
+            style="
+              flex: 1;
+              border: 1px solid #ccc;
+              border-radius: 20px;
+              padding: 10px 15px;
+              font-size: 16px;
+              box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            "
+          />
+          <button
+            id="send-button"
+            style="
+              padding: 10px 20px;
+              font-size: 16px;
+              border: none;
+              border-radius: 20px;
+              background-color: #007bff;
+              color: white;
+              cursor: pointer;
+              transition: background-color 0.3s ease, transform 0.2s ease;
+            "
+          >
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+    </div>
+  <a href="privMessage.html" style="
+      width: 175px;
+      height: 100px;
+      background-color: red;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      text-decoration: none;
+      color: black;
+      display: inline-block;
+      pointer-events: auto;
+      outline-color: #000;
+      margin-right: 10px;
+      " onmouseover="this.style.transition = 'all 0.1s ease'; this.style.width='195px'; this.style.height='120px'; this.style.backgroundColor='darkred'; this.style.right='890px'; this.style.top='690px'; "
+    onmouseout="this.style.transition = 'all 0.1s ease'; this.style.width='175px'; this.style.height='100px'; this.style.backgroundColor='red'; this.style.right='900px'; this.style.top='700px';">
+    Private Messaging
+  </a>
+  <p>Your messages are logged, so don't send anything inappropriate</p>  
+   </div>
+  <script type="module" src="dm.js"></script>
+</body>
+</html>
