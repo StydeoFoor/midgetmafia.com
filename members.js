@@ -77,7 +77,7 @@ async function fetchAllUsers() {
       const role = userData.role || "No Role";
 
       const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")); // Get the current logged-in user
-  const allowedToChangeRoles = loggedInUser?.name === "Specific Name";
+  const allowedToChangeRoles = loggedInUser?.name === "Shawn Rabb";
   
       // Add user details
       const userText = document.createElement("span");
