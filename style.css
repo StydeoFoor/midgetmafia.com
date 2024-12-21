@@ -227,3 +227,15 @@ img.fade-out {
 test {
   background-color: #11ff00;
 }
+
+.msgSidebar {
+  height: 100%;
+  width: 100px; /* Hidden initially */
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #044100;
+  overflow-x: hidden;
+  padding-top: 60px;
+}
