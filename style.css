@@ -230,6 +230,7 @@ test {
 
 .msgSidebar {
   height: 100%;
+  margin-top: auto;
   width: 100px; /* Hidden initially */
   position: fixed;
   z-index: 1;
