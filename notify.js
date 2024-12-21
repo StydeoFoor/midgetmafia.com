@@ -1,4 +1,4 @@
-import { database } from "script.js";
+import { database } from "./script.js";
 
 // Track last known message timestamps for notifications
 let lastBodyChatsTimestamp = null;
