@@ -18,30 +18,37 @@ const database = getDatabase(app);
 
 // Fetch all user names from the "users" node
 async function fetchAllUsers() {
-  const usersRef = ref(database, "users");
-
-  try {
-    const snapshot = await get(usersRef);
-
-    if (snapshot.exists()) {
-      const users = snapshot.val();
-
-      // Extract names from the users object
-      const userNames = Object.values(users).map(user => user.name);
-
-      console.log("User Names:", userNames); // For debugging
-      displayUserList(userNames); // Display names on the page
-    } else {
-      console.log("No users found.");
-      displayUserList([]); // Display empty list
+    const usersRef = ref(database, "users");
+  
+    try {
+      const snapshot = await get(usersRef);
+  
+      if (snapshot.exists()) {
+        const users = snapshot.val();
+  
+        // Validate each user object
+        const validatedUsers = Object.entries(users).reduce((acc, [userId, userData]) => {
+          if (userData?.name && userData?.role) {
+            acc[userId] = userData; // Only include valid users
+          } else {
+            console.warn(`Skipping invalid user:`, userId, userData);
+          }
+          return acc;
+        }, {});
+  
+        console.log("Validated Users:", validatedUsers);
+        displayUserList(validatedUsers); // Display the validated user list
+      } else {
+        console.log("No users found.");
+        displayUserList({});
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      displayUserList({});
     }
-  } catch (error) {
-    console.error("Error fetching users:", error);
   }
-}
-
-// Display user names in a list
-function displayUserList(users) {
+  
+  function displayUserList(users) {
     const userListContainer = document.getElementById("user-list");
   
     if (!userListContainer) {
@@ -49,15 +56,12 @@ function displayUserList(users) {
       return;
     }
   
-    userListContainer.innerHTML = ""; // Clear any existing content
+    userListContainer.innerHTML = ""; // Clear the user list
   
     if (Object.keys(users).length === 0) {
       userListContainer.textContent = "No users found.";
       return;
     }
-  
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    const ownerName = "Shawn Rabb"; // Replace with the actual owner's name
   
     const ul = document.createElement("ul");
     ul.style.listStyleType = "none";
@@ -65,20 +69,22 @@ function displayUserList(users) {
   
     Object.entries(users).forEach(([userId, userData]) => {
       const li = document.createElement("li");
-      li.style.display = "flex";
-      li.style.justifyContent = "space-between";
-      li.style.alignItems = "center";
-      li.style.padding = "5px 0";
+      li.style.padding = "10px 0";
       li.style.fontFamily = "Arial, sans-serif";
       li.style.color = "#333";
   
-      const nameSpan = document.createElement("span");
-      nameSpan.textContent = `${userData.name} - ${userData.role}`;
+      const name = userData.name || "Unknown User";
+      const role = userData.role || "No Role";
+
+      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")); // Get the current logged-in user
+  const allowedToChangeRoles = loggedInUser?.name === "Specific Name";
   
-      li.appendChild(nameSpan);
-  
-      // Add "Change Role" button if the logged-in user is the owner
-      if (loggedInUser.name === ownerName) {
+      // Add user details
+      const userText = document.createElement("span");
+      userText.textContent = `${name} - ${role}`;
+      li.appendChild(userText);
+
+      if (allowedToChangeRoles) {
         const roleButton = document.createElement("button");
         roleButton.textContent = "Change Role";
         roleButton.style.marginLeft = "10px";
@@ -88,12 +94,14 @@ function displayUserList(users) {
         roleButton.style.border = "none";
         roleButton.style.borderRadius = "5px";
         roleButton.style.cursor = "pointer";
-        roleButton.onclick = () => showRolePopup(userId, userData.name); // Attach the popup
+  
+        // Hook the `showRolePopup` function
+        roleButton.onclick = () => showRolePopup(userId, name);
   
         li.appendChild(roleButton);
       }
   
-      // Add "Mute" button
+      // Add Mute button
       const muteButton = document.createElement("button");
       muteButton.textContent = "Mute";
       muteButton.style.marginLeft = "10px";
@@ -103,10 +111,10 @@ function displayUserList(users) {
       muteButton.style.border = "none";
       muteButton.style.borderRadius = "5px";
       muteButton.style.cursor = "pointer";
-      muteButton.onclick = () => muteUser(userData.name); // Attach muteUser function
+  
+      muteButton.onclick = () => muteUser(name); // Hook `muteUser`
   
       li.appendChild(muteButton);
-  
       ul.appendChild(li);
     });
   
@@ -131,7 +139,7 @@ function displayUserList(users) {
     }
   }
 
-  function showRolePopup(userId, userName) {
+  function showRolePopup(userName) {
     // Create popup elements
     const popup = document.createElement("div");
     popup.style.position = "fixed";
@@ -173,7 +181,7 @@ function displayUserList(users) {
     saveButton.style.border = "none";
     saveButton.style.borderRadius = "5px";
     saveButton.style.cursor = "pointer";
-    saveButton.onclick = () => updateUserRole(userId, select.value, popup);
+    saveButton.onclick = () => updateUserRole(userName, select.value, popup);
   
     const cancelButton = document.createElement("button");
     cancelButton.textContent = "Cancel";

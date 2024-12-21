@@ -99,5 +99,8 @@ function listenForAdminChats() {
 }
 
 // Start listening for changes
-listenForBodyChats();
-listenForAdminChats();
+window.onload = () => {
+    console.log("Page is ready, initializing notifications...");
+    listenForBodyChats();
+    listenForAdminChats();
+  };
