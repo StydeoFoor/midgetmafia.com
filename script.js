@@ -435,3 +435,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+export { app, database };
