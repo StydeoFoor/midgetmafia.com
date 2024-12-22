@@ -102,15 +102,26 @@ async function fetchAllUsers() {
       }
   
       // Add Mute button
+      const isMuted = mutedList[name];
+
+      // Add Mute/Unmute button
       const muteButton = document.createElement("button");
-      muteButton.textContent = "Mute";
+      muteButton.textContent = isMuted ? "Unmute" : "Mute";
       muteButton.style.marginLeft = "10px";
       muteButton.style.padding = "5px 10px";
-      muteButton.style.backgroundColor = "#ff4d4d";
+      muteButton.style.backgroundColor = isMuted ? "#28a745" : "#ff4d4d";
       muteButton.style.color = "white";
       muteButton.style.border = "none";
       muteButton.style.borderRadius = "5px";
       muteButton.style.cursor = "pointer";
+  
+      muteButton.onclick = () => {
+        if (isMuted) {
+          unmuteUser(name); // Call unmute function
+        } else {
+          muteUser(name); // Call mute function
+        }
+      };
   
       muteButton.onclick = () => muteUser(name); // Hook `muteUser`
   
@@ -133,9 +144,29 @@ async function fetchAllUsers() {
   
       alert(`${userName} has been muted.`);
       console.log(`${userName} added to muted list.`);
+      fetchAllUsers(); // Refresh the user list to update the button
     } catch (error) {
       console.error("Error muting user:", error);
       alert("An error occurred while muting the user.");
+    }
+  }
+
+  async function unmuteUser(userName) {
+    if (!userName) {
+      console.error("Invalid user name provided.");
+      return;
+    }
+  
+    try {
+      const mutedRef = ref(database, `muted/${userName}`);
+      await set(mutedRef, null); // Remove the user from the muted list
+  
+      alert(`${userName} has been unmuted.`);
+      console.log(`${userName} removed from muted list.`);
+      fetchAllUsers(); // Refresh the user list to update the button
+    } catch (error) {
+      console.error("Error unmuting user:", error);
+      alert("An error occurred while unmuting the user.");
     }
   }
 
