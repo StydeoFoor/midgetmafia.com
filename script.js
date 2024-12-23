@@ -32,25 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Firebase initialization moved before the functions that use it
 
-  // ===== Fetch User Data Dynamically on Each Refresh =====
-  function loadUsersFromDatabase(callback) {
-    const dbRef = ref(database);
-    get(child(dbRef, "users"))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const users = snapshot.val();
-          localStorage.setItem("users", JSON.stringify(users));
-          if (callback) callback(users);
-        } else {
-          console.error("No user data found in the database.");
-          if (callback) callback([]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error.message);
-        if (callback) callback([]);
-      });
-  }
+  // ===== Fetch User Data Dynamically on Each Refresh ====
 
   // ===== Dark Mode Functions =====
   function applyDarkMode() {
@@ -178,27 +160,39 @@ document.addEventListener("DOMContentLoaded", () => {
   function initializeLoginForm() {
     const loginForm = document.getElementById("loginForm");
     if (loginForm) {
-      loginForm.addEventListener("submit", function(event) {
+      loginForm.addEventListener("submit", async function (event) {
         event.preventDefault();
-
+  
         const username = document.getElementById("username").value.trim();
         const password = document.getElementById("password").value.trim();
-
+  
         if (!username || !password) {
           alert("Username and password are required.");
           return;
         }
-
-        const users = JSON.parse(localStorage.getItem("users")) || {};
-        const user = users[username];
-
-        if (user && user.password === password) {
-          localStorage.setItem("loggedInUser", JSON.stringify(user));
-          alert("Login successful!");
-          window.location.href = "dashboard.html";
-          localStorage.removeItem("users");
-        } else {
-          alert("Invalid username or password.");
+  
+        try {
+          // Fetch only the specific user's data from Firebase
+          const userRef = ref(database, `users/${username}`);
+          const snapshot = await get(userRef);
+  
+          if (snapshot.exists()) {
+            const user = snapshot.val();
+  
+            // Validate the password
+            if (user.password === password) {
+              localStorage.setItem("loggedInUser", JSON.stringify(user)); // Store only the logged-in user's info
+              alert("Login successful!");
+              window.location.href = "dashboard.html";
+            } else {
+              alert("Invalid username or password.");
+            }
+          } else {
+            alert("Invalid username or password.");
+          }
+        } catch (error) {
+          console.error("Error during login:", error);
+          alert("An error occurred while logging in. Please try again.");
         }
       });
     }
@@ -313,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Load user data and initialize the page
-  loadUsersFromDatabase(initializePage);
+  initializePage();
 
   // Add event listener for layout toggle
   if (toggleBtn) {
