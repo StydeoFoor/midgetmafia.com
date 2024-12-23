@@ -1,20 +1,20 @@
 body {
-  background: #2d5f29;
+  background:rgb(44, 44, 44);
   color: white;
-  font-family: cursive
+  font-family: sans-serif
 }
 p {
   color: white;
 }
 h1 {
   font-weight: bold;
-  color: rgb(255, 0, 0);
+  color: rgb(255, 255, 255);
 }
 h2 {
   color: rgb(255, 255, 255)
 }
 h3 {
-  color: rgb(149, 255, 128);
+  color: rgb(255, 255, 255);
 }
 .topbar {
   height: 60px;
@@ -22,7 +22,7 @@ h3 {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #044100;
+  background-color:rgb(24, 24, 24);
   z-index: 1;
   display: flex;
   align-items: center;
@@ -39,7 +39,7 @@ h3 {
 }
 .topbar a:hover {
   color: white;
-  background-color: #34752f;
+  background-color: rgb(44, 44, 44);
   border-radius: 5px;
 }
 body {
@@ -236,7 +236,7 @@ test {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #044100;
+  background-color: rgb(24, 24, 24);
   overflow-x: hidden;
   padding-top: 60px;
 }
