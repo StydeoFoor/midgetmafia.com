@@ -9,14 +9,16 @@ import {
 
 // Firebase Configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAZUP0oePM49jWOQPPBneOMhp7c6Xri-6w",
-  authDomain: "pookie-natio.firebaseapp.com",
-  projectId: "pookie-natio",
-  storageBucket: "pookie-natio.firebasestorage.app",
-  messagingSenderId: "814115703444",
-  appId: "1:814115703444:web:13c97bc1c9be5e8c104281",
-  measurementId: "G-8VH4ZC31ND"
+  apiKey: "AIzaSyB17qMT--ON4KaYZLnEjU5HbwZmds9KgWg",
+  authDomain: "midget-mafia.firebaseapp.com",
+  databaseURL: "https://midget-mafia-default-rtdb.firebaseio.com",
+  projectId: "midget-mafia",
+  storageBucket: "midget-mafia.firebasestorage.app",
+  messagingSenderId: "597092364947",
+  appId: "1:597092364947:web:2c7db18295c2cd151f5366",
+  measurementId: "G-3PTREP7EJ8",
 };
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get Firebase Database instance

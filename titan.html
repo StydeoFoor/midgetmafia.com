@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom AI Chatbot</title>
+  <style>
+    /* Chatbot Container Styles */
+    #chatbot {
+      width: 400px;
+      height: 600px;
+      margin: 20px auto;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+    }
+
+    #chat-header {
+      background: #4caf50;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 10px 10px 0 0;
+    }
+
+    #chat-window {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    #chat-messages .message {
+      margin: 10px 0;
+    }
+
+    .user-message {
+      text-align: right;
+      color: #0066cc;
+    }
+
+    .bot-message {
+      text-align: left;
+      color: #4caf50;
+    }
+
+    #chat-input {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #send-btn {
+      padding: 8px 15px;
+      margin-left: 10px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="chatbot">
+    <div id="chat-header">Custom AI Chatbot</div>
+    <div id="chat-window">
+      <div id="chat-messages"></div>
+    </div>
+    <div id="chat-input">
+      <input type="text" id="user-input" placeholder="Type your message...">
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+  <script type="module">
+    document.addEventListener("DOMContentLoaded", () => {
+      const chatMessages = document.getElementById("chat-messages");
+      const userInput = document.getElementById("user-input");
+      const sendBtn = document.getElementById("send-btn");
+
+      // Add a message to the chat
+      function addMessage(message, sender) {
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("message", sender === "user" ? "user-message" : "bot-message");
+        messageDiv.textContent = message;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      // Function to generate AI response
+      async function generateResponse(userMessage) {
+        const tone = "friendly"; // Example: Adjust the tone dynamically
+
+        const response = await fetch("https://api.openai.com/v1/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer YOUR_OPENAI_API_KEY`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4",
+            prompt: `Respond in a ${tone} tone. User: ${userMessage}`,
+            max_tokens: 150,
+          }),
+        });
+
+        const data = await response.json();
+        return data.choices[0].text.trim();
+      }
+
+      // Function to send a message
+      async function sendMessage() {
+        const userMessage = userInput.value.trim();
+        if (!userMessage) return;
+
+        addMessage(userMessage, "user");
+        userInput.value = "";
+
+        addMessage("Typing...", "bot");
+
+        try {
+          const botMessage = await generateResponse(userMessage);
+          document.querySelector(".bot-message:last-child").textContent = botMessage;
+        } catch (error) {
+          document.querySelector(".bot-message:last-child").textContent =
+            "Error generating response.";
+          console.error("Error:", error);
+        }
+      }
+
+      // Event listeners
+      sendBtn.addEventListener("click", sendMessage);
+      userInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+      });
+    });
+  </script>
+</body>
+</html>

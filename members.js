@@ -3,13 +3,14 @@ import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/1
 
 // Firebase Initialization
 const firebaseConfig = {
-  apiKey: "AIzaSyAZUP0oePM49jWOQPPBneOMhp7c6Xri-6w",
-  authDomain: "pookie-natio.firebaseapp.com",
-  projectId: "pookie-natio",
-  storageBucket: "pookie-natio.firebasestorage.app",
-  messagingSenderId: "814115703444",
-  appId: "1:814115703444:web:13c97bc1c9be5e8c104281",
-  measurementId: "G-8VH4ZC31ND"
+  apiKey: "AIzaSyB17qMT--ON4KaYZLnEjU5HbwZmds9KgWg",
+  authDomain: "midget-mafia.firebaseapp.com",
+  databaseURL: "https://midget-mafia-default-rtdb.firebaseio.com",
+  projectId: "midget-mafia",
+  storageBucket: "midget-mafia.firebasestorage.app",
+  messagingSenderId: "597092364947",
+  appId: "1:597092364947:web:2c7db18295c2cd151f5366",
+  measurementId: "G-3PTREP7EJ8",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -110,7 +111,7 @@ async function displayUserList(users) {
 
     // Add Role Change button (visible only to specific users)
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    const allowedToChangeRoles = loggedInUser?.name === "Anthony";
+    const allowedToChangeRoles = loggedInUser?.name === "Shawn Rabb";
 
     if (allowedToChangeRoles) {
       const roleButton = document.createElement("button");
@@ -195,10 +196,13 @@ async function displayUserList(users) {
     select.style.padding = "10px";
     select.style.marginBottom = "15px";
     select.innerHTML = `
-      <option value="President">President</option>
-      <option value="Vice President">Vice President</option>
-      <option value="News Reporter">Newspaper Writer</option>
-      <option value="Congressmen">Congressmen</option>
+      <option value="Owner">Owner</option>
+      <option value="Manager">Manager</option>
+      <option value="Vice Manager">Vice Manager</option>
+      <option value="SPY!!!">Spy</option>
+      <option value="Mighty Midget">Mighty Midget</option>
+      <option value="Developer">Developer</option>
+      <option value="Bodyguard">Bodyguard</option>
       <option value="Member">Member</option>
     `;
   
