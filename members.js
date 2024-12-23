@@ -18,130 +18,123 @@ const database = getDatabase(app);
 
 // Fetch all user names from the "users" node
 async function fetchAllUsers() {
-    const usersRef = ref(database, "users");
+  const usersRef = ref(database, "users");
+
+  try {
+    const snapshot = await get(usersRef);
+
+    if (snapshot.exists()) {
+      const users = snapshot.val();
+
+      // Use the name as the key for simplicity and validation
+      const validatedUsers = Object.values(users).filter(userData => userData?.name && userData?.role);
+      displayUserList(validatedUsers); // Pass only valid user data
+    } else {
+      console.log("No users found.");
+      displayUserList([]);
+    }
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    displayUserList([]);
+  }
+}
   
-    try {
-      const snapshot = await get(usersRef);
-  
-      if (snapshot.exists()) {
-        const users = snapshot.val();
-  
-        // Validate each user object
-        const validatedUsers = Object.entries(users).reduce((acc, [userId, userData]) => {
-          if (userData?.name && userData?.role) {
-            acc[userId] = userData; // Only include valid users
-          } else {
-            console.warn(`Skipping invalid user:`, userId, userData);
-          }
-          return acc;
-        }, {});
-  
-        console.log("Validated Users:", validatedUsers);
-        displayUserList(validatedUsers); // Display the validated user list
+async function displayUserList(users) {
+  const userListContainer = document.getElementById("user-list");
+
+  if (!userListContainer) {
+    console.error("HTML element with ID 'user-list' is missing.");
+    return;
+  }
+
+  userListContainer.innerHTML = ""; // Clear the user list
+
+  if (users.length === 0) {
+    userListContainer.textContent = "No users found.";
+    return;
+  }
+
+  // Fetch the muted list from Firebase
+  const mutedRef = ref(database, "muted");
+  let mutedList = {};
+  try {
+    const snapshot = await get(mutedRef);
+    if (snapshot.exists()) {
+      mutedList = snapshot.val();
+    }
+  } catch (error) {
+    console.error("Error fetching muted list:", error);
+  }
+
+  const ul = document.createElement("ul");
+  ul.style.listStyleType = "none";
+  ul.style.padding = "0";
+
+  users.forEach((userData) => {
+    const { name, role } = userData;
+
+    if (!name) return; // Skip users without a name
+
+    const li = document.createElement("li");
+    li.style.padding = "10px 0";
+    li.style.fontFamily = "Arial, sans-serif";
+    li.style.color = "#333";
+
+    // Add user details
+    const userText = document.createElement("span");
+    userText.textContent = `${name} - ${role || "No Role"}`;
+    li.appendChild(userText);
+
+    // Determine if user is muted
+    const isMuted = !!mutedList[name];
+
+    // Add Mute/Unmute button
+    const muteButton = document.createElement("button");
+    muteButton.textContent = isMuted ? "Unmute" : "Mute";
+    muteButton.style.marginLeft = "10px";
+    muteButton.style.padding = "5px 10px";
+    muteButton.style.backgroundColor = isMuted ? "#28a745" : "#ff4d4d";
+    muteButton.style.color = "white";
+    muteButton.style.border = "none";
+    muteButton.style.borderRadius = "5px";
+    muteButton.style.cursor = "pointer";
+
+    muteButton.onclick = () => {
+      if (isMuted) {
+        unmuteUser(name); // Call unmute function
       } else {
-        console.log("No users found.");
-        displayUserList({});
+        muteUser(name); // Call mute function
       }
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      displayUserList({});
+    };
+
+    li.appendChild(muteButton);
+
+    // Add Role Change button (visible only to specific users)
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    const allowedToChangeRoles = loggedInUser?.name === "Special";
+
+    if (allowedToChangeRoles) {
+      const roleButton = document.createElement("button");
+      roleButton.textContent = "Change Role";
+      roleButton.style.marginLeft = "10px";
+      roleButton.style.padding = "5px 10px";
+      roleButton.style.backgroundColor = "#007bff";
+      roleButton.style.color = "white";
+      roleButton.style.border = "none";
+      roleButton.style.borderRadius = "5px";
+      roleButton.style.cursor = "pointer";
+
+      // Hook the `showRolePopup` function
+      roleButton.onclick = () => showRolePopup(name);
+
+      li.appendChild(roleButton);
     }
-  }
-  
-  async function displayUserList(users) {
-    const userListContainer = document.getElementById("user-list");
-  
-    if (!userListContainer) {
-      console.error("HTML element with ID 'user-list' is missing.");
-      return;
-    }
-  
-    userListContainer.innerHTML = ""; // Clear the user list
-  
-    if (Object.keys(users).length === 0) {
-      userListContainer.textContent = "No users found.";
-      return;
-    }
-  
-    // Fetch the muted list from Firebase
-    const mutedRef = ref(database, "muted");
-    let mutedList = {};
-    try {
-      const snapshot = await get(mutedRef);
-      if (snapshot.exists()) {
-        mutedList = snapshot.val();
-      }
-    } catch (error) {
-      console.error("Error fetching muted list:", error);
-    }
-  
-    const ul = document.createElement("ul");
-    ul.style.listStyleType = "none";
-    ul.style.padding = "0";
-  
-    Object.entries(users).forEach(([name, userData]) => {
-      const li = document.createElement("li");
-      li.style.padding = "10px 0";
-      li.style.fontFamily = "Arial, sans-serif";
-      li.style.color = "#333";
-  
-      const role = userData.role || "No Role";
-  
-      // Add user details
-      const userText = document.createElement("span");
-      userText.textContent = `${name} - ${role}`;
-      li.appendChild(userText);
-  
-      // Determine if user is muted
-      const isMuted = mutedList[name];
-  
-      // Add Mute/Unmute button
-      const muteButton = document.createElement("button");
-      muteButton.textContent = isMuted ? "Unmute" : "Mute";
-      muteButton.style.marginLeft = "10px";
-      muteButton.style.padding = "5px 10px";
-      muteButton.style.backgroundColor = isMuted ? "#28a745" : "#ff4d4d";
-      muteButton.style.color = "white";
-      muteButton.style.border = "none";
-      muteButton.style.borderRadius = "5px";
-      muteButton.style.cursor = "pointer";
-  
-      muteButton.onclick = () => {
-        if (isMuted) {
-          unmuteUser(name); // Call unmute function
-        } else {
-          muteUser(name); // Call mute function
-        }
-      };
-  
-      li.appendChild(muteButton);
-  
-      // Add Role Change button (visible only to special users)
-      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-      const allowedToChangeRoles = loggedInUser?.name === "Shawn Rabb";
-  
-      if (allowedToChangeRoles) {
-        const roleButton = document.createElement("button");
-        roleButton.textContent = "Change Role";
-        roleButton.style.marginLeft = "10px";
-        roleButton.style.padding = "5px 10px";
-        roleButton.style.backgroundColor = "#007bff";
-        roleButton.style.color = "white";
-        roleButton.style.border = "none";
-        roleButton.style.borderRadius = "5px";
-        roleButton.style.cursor = "pointer";
-  
-        // Hook the `showRolePopup` function
-        roleButton.onclick = () => showRolePopup(name);
-  
-        li.appendChild(roleButton);
-      }
-  
-      ul.appendChild(li);
-    });
-  
-    userListContainer.appendChild(ul);
-  }
+
+    ul.appendChild(li);
+  });
+
+  userListContainer.appendChild(ul);
+}
 
   async function muteUser(userName) {
     if (!userName) {
