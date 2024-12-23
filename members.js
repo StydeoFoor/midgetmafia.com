@@ -35,6 +35,8 @@ async function fetchAllUsers() {
           }
           return acc;
         }, {});
+  
+        console.log("Validated Users:", validatedUsers);
         displayUserList(validatedUsers); // Display the validated user list
       } else {
         console.log("No users found.");
@@ -77,13 +79,12 @@ async function fetchAllUsers() {
     ul.style.listStyleType = "none";
     ul.style.padding = "0";
   
-    Object.entries(users).forEach(([userData]) => {
+    Object.entries(users).forEach(([name, userData]) => {
       const li = document.createElement("li");
       li.style.padding = "10px 0";
       li.style.fontFamily = "Arial, sans-serif";
       li.style.color = "#333";
   
-      const name = userData.name || "Unknown User";
       const role = userData.role || "No Role";
   
       // Add user details
@@ -114,6 +115,28 @@ async function fetchAllUsers() {
       };
   
       li.appendChild(muteButton);
+  
+      // Add Role Change button (visible only to special users)
+      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      const allowedToChangeRoles = loggedInUser?.name === "Shawn Rabb";
+  
+      if (allowedToChangeRoles) {
+        const roleButton = document.createElement("button");
+        roleButton.textContent = "Change Role";
+        roleButton.style.marginLeft = "10px";
+        roleButton.style.padding = "5px 10px";
+        roleButton.style.backgroundColor = "#007bff";
+        roleButton.style.color = "white";
+        roleButton.style.border = "none";
+        roleButton.style.borderRadius = "5px";
+        roleButton.style.cursor = "pointer";
+  
+        // Hook the `showRolePopup` function
+        roleButton.onclick = () => showRolePopup(name);
+  
+        li.appendChild(roleButton);
+      }
+  
       ul.appendChild(li);
     });
   
@@ -128,7 +151,7 @@ async function fetchAllUsers() {
   
     try {
       const mutedRef = ref(database, `muted/${userName}`);
-      await set(mutedRef, true); // Set the user as muted
+      await set(mutedRef, true); // Add user to muted list
   
       alert(`${userName} has been muted.`);
       console.log(`${userName} added to muted list.`);
@@ -138,7 +161,7 @@ async function fetchAllUsers() {
       alert("An error occurred while muting the user.");
     }
   }
-
+  
   async function unmuteUser(userName) {
     if (!userName) {
       console.error("Invalid user name provided.");
@@ -147,7 +170,7 @@ async function fetchAllUsers() {
   
     try {
       const mutedRef = ref(database, `muted/${userName}`);
-      await set(mutedRef, null); // Remove the user from the muted list
+      await set(mutedRef, null); // Remove user from muted list
   
       alert(`${userName} has been unmuted.`);
       console.log(`${userName} removed from muted list.`);
@@ -157,7 +180,6 @@ async function fetchAllUsers() {
       alert("An error occurred while unmuting the user.");
     }
   }
-
   function showRolePopup(userName) {
     // Create popup elements
     const popup = document.createElement("div");
