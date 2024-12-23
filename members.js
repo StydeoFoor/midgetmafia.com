@@ -111,7 +111,7 @@ async function displayUserList(users) {
 
     // Add Role Change button (visible only to specific users)
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    const allowedToChangeRoles = loggedInUser?.name === "Special";
+    const allowedToChangeRoles = loggedInUser?.name === "Shawn Rabb";
 
     if (allowedToChangeRoles) {
       const roleButton = document.createElement("button");
