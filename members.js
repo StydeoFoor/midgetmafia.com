@@ -35,8 +35,6 @@ async function fetchAllUsers() {
           }
           return acc;
         }, {});
-  
-        console.log("Validated Users:", validatedUsers);
         displayUserList(validatedUsers); // Display the validated user list
       } else {
         console.log("No users found.");
@@ -79,7 +77,7 @@ async function fetchAllUsers() {
     ul.style.listStyleType = "none";
     ul.style.padding = "0";
   
-    Object.entries(users).forEach(([userId, userData]) => {
+    Object.entries(users).forEach(([userData]) => {
       const li = document.createElement("li");
       li.style.padding = "10px 0";
       li.style.fontFamily = "Arial, sans-serif";
