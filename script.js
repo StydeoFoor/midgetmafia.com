@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Firebase Initialization
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
+  const auth = getAuth(app);
 
   // Firebase initialization moved before the functions that use it
 
@@ -432,4 +433,45 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+  function setStatus(status) {
+    const userRef = ref(database, `users/TrustedInstaller`);
+    set(userRef, {
+      status: status
+    }).catch((error) => {
+      console.error("Error setting status:", error);
+    });
+  }
+  
+  // Real-time tracking of the TrustedInstaller's status
+  function trackStatus() {
+    const statusRef = ref(database, 'users/TrustedInstaller/status');
+    onValue(statusRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const status = snapshot.val();
+        console.log(`TrustedInstaller status is now: ${status}`);
+      } else {
+        console.log("No status data found for TrustedInstaller.");
+      }
+    });
+  }
+  
+  // Check if the user is logged in and update status to active or inactive
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is logged in, set the status to "active"
+      setStatus("active");
+    } else {
+      // User is logged out, set the status to "inactive"
+      setStatus("inactive");
+    }
+  });
+  
+  // Window close or tab close - Mark as offline
+  window.onbeforeunload = () => {
+    // Set the status to "inactive" before the page is unloaded
+    setStatus("inactive");
+  };
+  
+  // Call the trackStatus function to log real-time status changes
+  trackStatus();
 });
