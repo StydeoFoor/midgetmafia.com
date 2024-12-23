@@ -48,7 +48,7 @@ async function fetchAllUsers() {
     }
   }
   
-  function displayUserList(users) {
+  async function displayUserList(users) {
     const userListContainer = document.getElementById("user-list");
   
     if (!userListContainer) {
@@ -63,6 +63,18 @@ async function fetchAllUsers() {
       return;
     }
   
+    // Fetch the muted list from Firebase
+    const mutedRef = ref(database, "muted");
+    let mutedList = {};
+    try {
+      const snapshot = await get(mutedRef);
+      if (snapshot.exists()) {
+        mutedList = snapshot.val();
+      }
+    } catch (error) {
+      console.error("Error fetching muted list:", error);
+    }
+  
     const ul = document.createElement("ul");
     ul.style.listStyleType = "none";
     ul.style.padding = "0";
@@ -75,35 +87,15 @@ async function fetchAllUsers() {
   
       const name = userData.name || "Unknown User";
       const role = userData.role || "No Role";
-
-      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")); // Get the current logged-in user
-  const allowedToChangeRoles = loggedInUser?.name === "Shawn Rabb";
   
       // Add user details
       const userText = document.createElement("span");
       userText.textContent = `${name} - ${role}`;
       li.appendChild(userText);
-
-      if (allowedToChangeRoles) {
-        const roleButton = document.createElement("button");
-        roleButton.textContent = "Change Role";
-        roleButton.style.marginLeft = "10px";
-        roleButton.style.padding = "5px 10px";
-        roleButton.style.backgroundColor = "#007bff";
-        roleButton.style.color = "white";
-        roleButton.style.border = "none";
-        roleButton.style.borderRadius = "5px";
-        roleButton.style.cursor = "pointer";
   
-        // Hook the `showRolePopup` function
-        roleButton.onclick = () => showRolePopup(userId, name);
-  
-        li.appendChild(roleButton);
-      }
-  
-      // Add Mute button
+      // Determine if user is muted
       const isMuted = mutedList[name];
-
+  
       // Add Mute/Unmute button
       const muteButton = document.createElement("button");
       muteButton.textContent = isMuted ? "Unmute" : "Mute";
@@ -122,8 +114,6 @@ async function fetchAllUsers() {
           muteUser(name); // Call mute function
         }
       };
-  
-      muteButton.onclick = () => muteUser(name); // Hook `muteUser`
   
       li.appendChild(muteButton);
       ul.appendChild(li);
