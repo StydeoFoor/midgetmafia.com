@@ -227,6 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Developer",
         "Manager",
         "Vice Owner",
+        "TrustedInstaller",
       ];
       if (ownerDash && allowedRoles.includes(loggedInUser.role)) {
         ownerDash.style.display = "block";
@@ -244,6 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "Owner",
       "Bodyguard",
       "Developer",
+      "TrustedInstaller",
     ];
     if (bodyMsg && allowedRoles.includes(loggedInUser.role)) {
       bodyMsg.style.display = "block";
@@ -266,6 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "Developer",
       "Manager",
       "Vice Owner",
+      "TrustedInstaller",
     ];
     if (!allowedRoles.includes(loggedInUser.role)) {
       window.location.href = "index.html";

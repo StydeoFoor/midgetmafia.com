@@ -112,22 +112,43 @@ async function displayUserList(users) {
     // Add Role Change button (visible only to specific users)
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     const allowedToChangeRoles = loggedInUser?.name === "Shawn Rabb";
+    const allowedRoleChange = loggedInUser?.role === "TrustedInstaller";
 
     if (allowedToChangeRoles) {
-      const roleButton = document.createElement("button");
-      roleButton.textContent = "Change Role";
-      roleButton.style.marginLeft = "10px";
-      roleButton.style.padding = "5px 10px";
-      roleButton.style.backgroundColor = "#007bff";
-      roleButton.style.color = "white";
-      roleButton.style.border = "none";
-      roleButton.style.borderRadius = "5px";
-      roleButton.style.cursor = "pointer";
-
-      // Hook the `showRolePopup` function
-      roleButton.onclick = () => showRolePopup(name);
-
-      li.appendChild(roleButton);
+      if (role !== "TrustedInstaller") {
+        const roleButton = document.createElement("button");
+        roleButton.textContent = "Change Role";
+        roleButton.style.marginLeft = "10px";
+        roleButton.style.padding = "5px 10px";
+        roleButton.style.backgroundColor = "#007bff";
+        roleButton.style.color = "white";
+        roleButton.style.border = "none";
+        roleButton.style.borderRadius = "5px";
+        roleButton.style.cursor = "pointer";
+  
+        // Hook the `showRolePopup` function
+        roleButton.onclick = () => showRolePopup(name);
+  
+        li.appendChild(roleButton);
+      }
+    }
+    else if (allowedRoleChange) {
+      if (role !== "TrustedInstaller") {
+        const roleButton = document.createElement("button");
+        roleButton.textContent = "Change Role";
+        roleButton.style.marginLeft = "10px";
+        roleButton.style.padding = "5px 10px";
+        roleButton.style.backgroundColor = "#007bff";
+        roleButton.style.color = "white";
+        roleButton.style.border = "none";
+        roleButton.style.borderRadius = "5px";
+        roleButton.style.cursor = "pointer";
+  
+        // Hook the `showRolePopup` function
+        roleButton.onclick = () => showRolePopup(name);
+  
+        li.appendChild(roleButton);
+      }
     }
 
     ul.appendChild(li);
@@ -235,21 +256,26 @@ async function displayUserList(users) {
     document.body.appendChild(popup);
   }
 
-  async function updateUserRole(userId, newRole, popup) {
+  async function updateUserRole(userData, newRole, popup) {
     try {
-      const userRef = ref(database, `users/${userId}/role`);
-      await set(userRef, newRole); // Update the user's role
-  
-      alert(`Role updated to ${newRole}`);
-      console.log(`User role updated: ${userId} -> ${newRole}`);
-  
-      document.body.removeChild(popup); // Close the popup
-      fetchAllUsers(); // Refresh the user list
+        if (!userData || !userData.role) {
+            throw new Error("Invalid userData: role path not found");
+        }
+
+        const userRoleRef = ref(database, `users/${userData.role}`); // Reference the user's role directly
+        await set(userRoleRef, newRole); // Update the user's role
+
+        alert(`Role updated to ${newRole}`);
+        console.log(`User role updated: ${userData.role} -> ${newRole}`);
+
+        document.body.removeChild(popup); // Close the popup
+        fetchAllUsers(); // Refresh the user list
     } catch (error) {
-      console.error("Error updating user role:", error);
-      alert("An error occurred while updating the role.");
+        console.error("Error updating user role:", error);
+        alert("An error occurred while updating the role.");
     }
-  }
+}
+
 
 // On page load, fetch and display the user list
 window.onload = fetchAllUsers;
