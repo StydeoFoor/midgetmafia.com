@@ -32,13 +32,37 @@
   </div>
 
   <div id="content">
-  <h1>Developer Console</h1>
-  <p>Only Developers and TrustedInstaller are allowed here. What lies below holds massive priveledges not even Owners have, <strong style="color: rgb(170, 0, 0);">PROCEED WITH CAUTION<strong></p>
-  <div>
-    <iframe 
-      style="width: 100%; height: 50%; border: none;" 
-      src="https://console.firebase.google.com/u/1/project/midget-mafia/database/midget-mafia-default-rtdb/data/~2F">
-    </iframe>
+    <h1>Developer Console</h1>
+    <p>Only Developers and TrustedInstaller are allowed here. What lies below holds massive privileges not even Owners have, 
+      <strong style="color: rgb(170, 0, 0);">PROCEED WITH CAUTION<strong>
+    </p>
+    
+    <form id="userForm">
+      <h3>Create or Update User</h3>
+      <label for="username">Username:</label>
+      <input type="text" id="username" placeholder="Enter username" required />
+
+      <label for="role">Role:</label>
+      <input type="text" id="role" placeholder="Enter role" required />
+
+      <label for="team">Team:</label>
+      <input type="text" id="team" placeholder="Enter team" required />
+
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Enter name" required />
+
+      <label for="currentInvolvement">Current Involvement:</label>
+      <input type="text" id="currentInvolvement" placeholder="Enter involvement" required />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" placeholder="Enter password" required />
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="requestsContainer">
+      <h3>Requests Overview</h3>
+      <ul id="requestsList"></ul>
+    </div>
   </div>
-</div>
 </html>

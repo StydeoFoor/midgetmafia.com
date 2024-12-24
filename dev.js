@@ -35,4 +35,54 @@ function checkUser() {
   checkUser();
 
 // Fetch all user names from the "users" node
-
+document.getElementById("userForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+  
+    const username = document.getElementById("username").value.trim();
+    const role = document.getElementById("role").value.trim();
+    const team = document.getElementById("team").value.trim();
+    const name = document.getElementById("name").value.trim();
+    const currentInvolvement = document.getElementById("currentInvolvement").value.trim();
+    const password = document.getElementById("password").value.trim();
+  
+    if (!username || !role || !team || !name || !currentInvolvement || !password) {
+      alert("All fields are required!");
+      return;
+    }
+  
+    try {
+      const userRef = ref(database, `users/${username}`);
+      await set(userRef, { role, team, name, currentInvolvement, password });
+      alert("User data submitted successfully!");
+      document.getElementById("userForm").reset();
+      loadUsers(); // Refresh the users list
+    } catch (error) {
+      console.error("Error submitting user data:", error);
+      alert("An error occurred. Please try again.");
+    }
+  });
+  
+  // Load users overview
+  async function loadUsers() {
+    const usersRef = ref(database, "users");
+  
+    onValue(usersRef, (snapshot) => {
+      const usersList = document.getElementById("requestsList");
+      usersList.innerHTML = ""; // Clear existing list
+  
+      if (snapshot.exists()) {
+        const users = snapshot.val();
+  
+        Object.entries(users).forEach(([username, userData]) => {
+          const listItem = document.createElement("li");
+          listItem.textContent = `Username: ${username}, Name: ${userData.name}, Role: ${userData.role}, Team: ${userData.team}`;
+          usersList.appendChild(listItem);
+        });
+      } else {
+        usersList.innerHTML = "<li>No users available</li>";
+      }
+    });
+  }
+  
+  // Load users on page load
+  window.onload = loadUsers;
