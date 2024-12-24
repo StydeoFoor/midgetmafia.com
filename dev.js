@@ -16,23 +16,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-if (!loggedInUser) {
-    alert("You are not logged in");
-    window.location.href = "index.html";
-    return;
-}
-
-if (loggedInUser.role !== "Developer") {
-    alert("You are not allowed here.");
-    window.location.href = "index.html";
-    return;
-}
-
-else if (loggedInUser.role !== "TrustedInstaller") {
-    alert("You are not allowed here.");
-    window.location.href = "index.html";
-    return;
-}
+function checkUser() {
+    if (!loggedInUser) {
+      alert("You are not logged in");
+      window.location.href = "index.html";
+      return;
+    }
+  
+    if (loggedInUser.role !== "Developer" && loggedInUser.role !== "TrustedInstaller") {
+      alert("You are not allowed here.");
+      window.location.href = "index.html";
+      return;
+    }
+  }
+  
+  // Call the function to perform the checks
+  checkUser();
 
 // Fetch all user names from the "users" node
 
