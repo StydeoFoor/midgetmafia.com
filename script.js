@@ -432,35 +432,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-
-async function checkUser() {
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (!loggedInUser) {
-    alert("You are not logged in");
-    window.location.href = "index.html";
-    return;
-  }
-
-  const username = loggedInUser.username;
-
-  try {
-    const usersRef = ref(database, "users");
-    const snapshot = await get(child(usersRef, username)); // Check for a child with the username key
-
-    if (!snapshot.exists()) {
-      alert("Sorry, but your account isn't in our system. Logging you out");
-      localStorage.removeItem("loggedInUser");
-      window.location.href = "index.html";
-    }
-  } catch (error) {
-    console.error("Error checking user:", error);
-    alert("An error occurred while verifying your account. Logging you out.");
-    localStorage.removeItem("loggedInUser");
-    window.location.href = "index.html";
-  }
-}
-
-// Call the function to perform the checks
-checkUser();
-
 });
