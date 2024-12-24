@@ -115,7 +115,6 @@ async function displayUserList(users) {
     const allowedRoleChange = loggedInUser?.role === "TrustedInstaller";
 
     if (allowedToChangeRoles) {
-      if (role !== "TrustedInstaller") {
         const roleButton = document.createElement("button");
         roleButton.textContent = "Change Role";
         roleButton.style.marginLeft = "10px";
@@ -130,10 +129,8 @@ async function displayUserList(users) {
         roleButton.onclick = () => showRolePopup(name);
   
         li.appendChild(roleButton);
-      }
     }
     else if (allowedRoleChange) {
-      if (role !== "TrustedInstaller") {
       const roleButton = document.createElement("button");
       roleButton.textContent = "Change Role";
       roleButton.style.marginLeft = "10px";
@@ -149,7 +146,7 @@ async function displayUserList(users) {
 
       li.appendChild(roleButton);
     }
-    }
+
 
     ul.appendChild(li);
   });
