@@ -7,10 +7,33 @@
   <title>Midget Mafia</title>
   <script type="module" src="dev.js"></script>
   <link href="style.css" rel="stylesheet" type="text/css" />
+  <style>
+    #userForm {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #userForm label {
+      font-weight: bold;
+    }
+
+    #requestsList {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    #requestsList li {
+      margin-bottom: 5px;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+  </style>
 </head>
 
 <body>
-  
+
   <div id="myTopBar" class="topbar">
     <a href="index.html" class="logo">MM</a>
     <a href="dashboard.html" style="color: white;">Dashboard</a>
@@ -39,24 +62,30 @@
     
     <form id="userForm">
       <h3>Create or Update User</h3>
-      <label for="username">Username:</label>
-      <input type="text" id="username" placeholder="Enter username" required />
-
-      <label for="role">Role:</label>
-      <input type="text" id="role" placeholder="Enter role" required />
-
-      <label for="team">Team:</label>
-      <input type="text" id="team" placeholder="Enter team" required />
-
-      <label for="name">Name:</label>
-      <input type="text" id="name" placeholder="Enter name" required />
-
-      <label for="currentInvolvement">Current Involvement:</label>
-      <input type="text" id="currentInvolvement" placeholder="Enter involvement" required />
-
-      <label for="password">Password:</label>
-      <input type="password" id="password" placeholder="Enter password" required />
-
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="Enter username" required />
+      </div>
+      <div>
+        <label for="role">Role:</label>
+        <input type="text" id="role" placeholder="Enter role" required />
+      </div>
+      <div>
+        <label for="team">Team:</label>
+        <input type="text" id="team" placeholder="Enter team" required />
+      </div>
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Enter name" required />
+      </div>
+      <div>
+        <label for="currentInvolvement">Current Involvement:</label>
+        <input type="text" id="currentInvolvement" placeholder="Enter involvement" required />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Enter password" required />
+      </div>
       <button type="submit">Submit</button>
     </form>
 
@@ -65,4 +94,6 @@
       <ul id="requestsList"></ul>
     </div>
   </div>
+</body>
+
 </html>
