@@ -72,7 +72,7 @@ async function loadRequests() {
   
         Object.entries(requests).forEach(([requestId, requestData]) => {
           const listItem = document.createElement("li");
-          listItem.textContent = `Request ID: ${requestId}, Type: ${requestData.type}, Description: ${requestData.description}`;
+          listItem.textContent = `Name: ${requestData.name}, Description: ${requestData.description}`;
           requestsList.appendChild(listItem);
         });
       } else {
