@@ -126,13 +126,6 @@ document.addEventListener("DOMContentLoaded", () => {
     applyTheme(newTheme);
   });
   
-  // Add dropdown functionality
-  themeSwitcher.addEventListener("change", (event) => {
-    const selectedTheme = event.target.value;
-    currentThemeIndex = themes.indexOf(selectedTheme); // Update index
-    applyTheme(selectedTheme);
-  });
-  
   // Initialize everything on page load
   initializeTheme();
 
