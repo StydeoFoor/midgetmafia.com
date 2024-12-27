@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===== Fetch User Data Dynamically on Each Refresh ====
 
   // ===== Dark Mode Functions =====
-  function applyDarkMode() {
+  export function applyDarkMode() {
     if (sunButton) sunButton.textContent = "🌙";
     body.style.backgroundColor = "#2d5f29";
     body.style.color = "white";
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("theme", "dark");
   }
 
-  function applyLightMode() {
+  export function applyLightMode() {
     if (sunButton) sunButton.textContent = "☀️";
     body.style.backgroundColor = "#7fff76";
     body.style.color = "black";
