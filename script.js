@@ -349,14 +349,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Add event listener for theme toggle
-  sunButton.addEventListener("click", () => {
-    const currentTheme = localStorage.getItem("theme");
-    if (currentTheme === "light") {
-      applyDarkMode();
-    } else {
-      applyLightMode();
-    }
-  });
 
   if (window.location.href.includes("login.html")) {
     console.log("Login page detected.");
