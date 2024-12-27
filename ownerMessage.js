@@ -23,6 +23,32 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get Firebase Database instance
 
+function checkUser() {
+
+  const allowedRoles = [
+    "Owner",
+    "Vice Manager",
+    "Developer",
+    "Manager",
+    "Vice Owner",
+    "TrustedInstaller",
+  ];
+
+  if (!loggedInUser) {
+    alert("You are not logged in");
+    window.location.href = "index.html";
+    return;
+  }
+
+  if (loggedInUser.role !== allowedRoles) {
+    alert("You are not allowed here.");
+    window.location.href = "index.html";
+    return;
+  }
+}
+
+checkUser();
+
 // Send message function using 'set'
 function sendMessage(message) {
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));

@@ -23,6 +23,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get Firebase Database instance
 
+function checkUser() {
+  if (!loggedInUser) {
+    alert("You are not logged in");
+    window.location.href = "index.html";
+    return;
+  }
+}
+
+checkUser();
+
 async function checkIfMuted() {
   const mutedRef = ref(database, "muted");
 
