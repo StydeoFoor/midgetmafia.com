@@ -6,7 +6,7 @@ import {
   get,
   onValue,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
-import { applyLightMode, applyDarkMode } from "script.js"
+import { applyLightMode, applyDarkMode } from "./script.js"
 
 applyDarkMode();
 applyLightMode();
