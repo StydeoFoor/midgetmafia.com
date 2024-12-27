@@ -30,6 +30,47 @@ document.addEventListener("DOMContentLoaded", () => {
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
 
+  function initializeLoginForm() {
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+      loginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+  
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+  
+        if (!username || !password) {
+          alert("Username and password are required.");
+          return;
+        }
+  
+        try {
+          // Fetch only the specific user's data from Firebase
+          const userRef = ref(database, `users/${username}`);
+          const snapshot = await get(userRef);
+  
+          if (snapshot.exists()) {
+            const user = snapshot.val();
+  
+            // Validate the password
+            if (user.password === password) {
+              localStorage.setItem("loggedInUser", JSON.stringify(user)); // Store only the logged-in user's info
+              alert("Login successful!");
+              window.location.href = "dashboard.html";
+            } else {
+              alert("Invalid username or password.");
+            }
+          } else {
+            alert("Invalid username or password.");
+          }
+        } catch (error) {
+          console.error("Error during login:", error);
+          alert("An error occurred while logging in. Please try again.");
+        }
+      });
+    }
+  }
+
   // Firebase initialization moved before the functions that use it
 
   // ===== Fetch User Data Dynamically on Each Refresh ====
@@ -54,11 +95,13 @@ document.addEventListener("DOMContentLoaded", () => {
       case "sunset":
         applySunsetTheme();
         break;
+        case "chrome":
+        applyChromeTheme();
+        break;
       default:
         console.error("Unknown theme:", theme);
     }
     localStorage.setItem("theme", theme); // Save theme to localStorage
-    if (themeSwitcher) themeSwitcher.value = theme; // Update dropdown selection
   }
   
   // Theme Functions
@@ -112,6 +155,19 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("theme", "sunset");
   }
   
+  function applyChromeTheme() {
+    if (sunButton) sunButton.textContent = "🌈";
+    body.style.background = "#303030";
+    body.style.color = "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);"
+  
+    body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+    if (topbar) topbar.style.backgroundColor = "#242424";
+    if (sidebar) sidebar.style.backgroundColor = "#242424";
+  
+    localStorage.setItem("theme", "chrome");
+  }
+  
+
   // Initialize the theme
   function initializeTheme() {
     const savedTheme = localStorage.getItem("theme");
@@ -175,46 +231,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===== Login System =====
-  function initializeLoginForm() {
-    const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-      loginForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
-  
-        const username = document.getElementById("username").value.trim();
-        const password = document.getElementById("password").value.trim();
-  
-        if (!username || !password) {
-          alert("Username and password are required.");
-          return;
-        }
-  
-        try {
-          // Fetch only the specific user's data from Firebase
-          const userRef = ref(database, `users/${username}`);
-          const snapshot = await get(userRef);
-  
-          if (snapshot.exists()) {
-            const user = snapshot.val();
-  
-            // Validate the password
-            if (user.password === password) {
-              localStorage.setItem("loggedInUser", JSON.stringify(user)); // Store only the logged-in user's info
-              alert("Login successful!");
-              window.location.href = "dashboard.html";
-            } else {
-              alert("Invalid username or password.");
-            }
-          } else {
-            alert("Invalid username or password.");
-          }
-        } catch (error) {
-          console.error("Error during login:", error);
-          alert("An error occurred while logging in. Please try again.");
-        }
-      });
-    }
-  }
 
   // ===== Dashboard Logic =====
   function populateDashboard() {
@@ -345,48 +361,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (window.location.href.includes("login.html")) {
     console.log("Login page detected.");
-    loginTheme();
+    initializeLoginForm();
   } else {
     console.log("Not on the login page.");
-  }
-
-  function loginTheme() {
-    console.log("loginTheme function called.");
-
-    const loginContainer = document.getElementById("loginContainer");
-    console.log("loginContainer:", loginContainer); // Debugging line
-
-    if (!loginContainer) {
-      console.error("loginContainer not found.");
-      return;
-    }
-
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    console.log("Saved theme in localStorage:", savedTheme); // Debugging line
-
-    if (savedTheme === "dark") {
-      loginContainer.style.setProperty(
-        "background-color",
-        "#303030",
-        "important",
-      );
-      loginContainer.style.setProperty("color", "white", "important");
-      loginContainer.querySelectorAll("input, label").forEach((el) => {
-        el.style.setProperty("color", "white", "important");
-      });
-      console.log("Dark theme applied.");
-    } else {
-      loginContainer.style.setProperty(
-        "background-color",
-        "#f4f4f9",
-        "important",
-      );
-      loginContainer.style.setProperty("color", "black", "important");
-      loginContainer.querySelectorAll("input, label").forEach((el) => {
-        el.style.setProperty("color", "black", "important");
-      });
-      console.log("Light theme applied.");
-    }
   }
 
   // Easter egg: Chicken Nugget on 'N' key press
