@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Theme Functions
   function applyDarkMode() {
     if (sunButton) sunButton.textContent = "🌙";
-    body.style.backgroundColor = "#303030";
+    body.style.background = "#303030";
     body.style.color = "white";
   
     body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   function applyLightMode() {
     if (sunButton) sunButton.textContent = "☀️";
-    body.style.backgroundColor = "#ffffff";
+    body.style.background = "#ffffff";
     body.style.color = "black";
   
     body.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
