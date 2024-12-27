@@ -1,6 +1,6 @@
 body {
   font-family: cursive;
-  background-color: #242424;
+  background-color: #303030;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,7 +20,7 @@ h3 {
 }
 
 .login-container {
-  background-color: #303030;
+  background-color: #242424;
   padding: 20px;
   border-radius: 10px;
   width: 300px;
