@@ -22,6 +22,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get Firebase Database instance
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
 function checkUser() {
 
