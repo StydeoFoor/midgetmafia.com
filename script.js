@@ -90,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (sunButton) sunButton.textContent = "🌊";
     body.style.background = "linear-gradient(to bottom, #0077be, #004080)";
     body.style.minHeight = "100vh";
-    body.style.margin = "0";
     body.style.color = "white";
   
     body.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
@@ -104,7 +103,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (sunButton) sunButton.textContent = "🌅";
     body.style.background = "linear-gradient(to bottom, #ff7e5f, #feb47b)";
     body.style.minHeight = "100vh";
-    body.style.margin = "0";
     body.style.color = "black";
   
     body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
