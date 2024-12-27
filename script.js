@@ -120,12 +120,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   // Add button functionality
-  sunButton.addEventListener("click", () => {
-    currentThemeIndex = (currentThemeIndex + 1) % themes.length; // Cycle through themes
-    const newTheme = themes[currentThemeIndex];
-    applyTheme(newTheme);
-  });
-  
+  if (sunButton) {
+    sunButton.addEventListener("click", () => {
+      currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+      applyTheme(themes[currentThemeIndex]);
+    });
+  }
   // Initialize everything on page load
   initializeTheme();
 
