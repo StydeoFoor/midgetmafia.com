@@ -434,4 +434,65 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+function applyDarkMode() {
+  if (sunButton) sunButton.textContent = "🌙";
+  body.style.backgroundColor = "#2d5f29";
+  body.style.color = "white";
+
+  body.querySelectorAll("a").forEach((a) => {
+    a.style.color = "white";
+  });
+
+  if (topbar) topbar.style.backgroundColor = "#044100";
+  if (sidebar) sidebar.style.backgroundColor = "#044100";
+
+  body.querySelectorAll("p, h1, h2, h3").forEach((el) => {
+    if (el && !el.classList.contains("exclude-dark-mode")) {
+      el.style.color =
+        el.tagName === "H3"
+          ? "red"
+          : el.tagName === "H1" || el.tagName === "H2"
+            ? "white"
+            : "white";
+    }
+  });
+
+  // Reset colors for excluded elements
+  body.querySelectorAll(".exclude-dark-mode").forEach((el) => {
+    el.style.color = ""; // Reset to default or inherited color
+    el.style.backgroundColor = ""; // Optional, if background color matters
+  });
+
+  localStorage.setItem("theme", "dark");
+}
+
+function applyLightMode() {
+  if (sunButton) sunButton.textContent = "☀️";
+  body.style.backgroundColor = "#7fff76";
+  body.style.color = "black";
+
+  body.querySelectorAll("a").forEach((a) => {
+    a.style.color = "black";
+  });
+
+  if (topbar) topbar.style.backgroundColor = "#5eff52";
+  if (sidebar) sidebar.style.backgroundColor = "#5eff52";
+
+  // Check if elements exist before modifying their styles
+
+  body.querySelectorAll("p, h1, h2, h3").forEach((el) => {
+    if (el && !el.classList.contains("exclude-dark-mode")) {
+      el.style.color = "black";
+    }
+  });
+
+  // Reset colors for excluded elements
+  body.querySelectorAll(".exclude-dark-mode").forEach((el) => {
+    el.style.color = ""; // Reset to default or inherited color
+    el.style.backgroundColor = ""; // Optional, if background color matters
+  });
+
+  localStorage.setItem("theme", "light");
+}
+
 export { applyDarkMode, applyLightMode };
