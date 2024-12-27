@@ -35,81 +35,94 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===== Fetch User Data Dynamically on Each Refresh ====
 
   // ===== Dark Mode Functions =====
-    function applyDarkMode() {
+  const themes = ["dark", "light", "ocean", "sunset"];
+  let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
+  
+  // DOM Element
+  const themeSwitcher = document.getElementById("themeSwitcher");
+  
+  // Apply the selected theme
+  function applyTheme(theme) {
+    switch (theme) {
+      case "dark":
+        applyDarkMode();
+        break;
+      case "light":
+        applyLightMode();
+        break;
+      case "ocean":
+        applyOceanTheme();
+        break;
+      case "sunset":
+        applySunsetTheme();
+        break;
+      default:
+        console.error("Unknown theme:", theme);
+    }
+    localStorage.setItem("theme", theme); // Save theme to localStorage
+    if (themeSwitcher) themeSwitcher.value = theme; // Update dropdown selection
+  }
+  
+  // Theme Functions
+  function applyDarkMode() {
     if (sunButton) sunButton.textContent = "🌙";
     body.style.backgroundColor = "#2d5f29";
     body.style.color = "white";
-
-    body.querySelectorAll("a").forEach((a) => {
-      a.style.color = "white";
-    });
-
-    if (topbar) topbar.style.backgroundColor = "#044100";
-    if (sidebar) sidebar.style.backgroundColor = "#044100";
-
-    body.querySelectorAll("p, h1, h2, h3").forEach((el) => {
-      if (el && !el.classList.contains("exclude-dark-mode")) {
-        el.style.color =
-          el.tagName === "H3"
-            ? "red"
-            : el.tagName === "H1" || el.tagName === "H2"
-              ? "white"
-              : "white";
-      }
-    });
-
-    // Reset colors for excluded elements
-    body.querySelectorAll(".exclude-dark-mode").forEach((el) => {
-      el.style.color = ""; // Reset to default or inherited color
-      el.style.backgroundColor = ""; // Optional, if background color matters
-    });
-
+  
+    body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
     localStorage.setItem("theme", "dark");
   }
-
+  
   function applyLightMode() {
     if (sunButton) sunButton.textContent = "☀️";
     body.style.backgroundColor = "#7fff76";
     body.style.color = "black";
-
-    body.querySelectorAll("a").forEach((a) => {
-      a.style.color = "black";
-    });
-
-    if (topbar) topbar.style.backgroundColor = "#5eff52";
-    if (sidebar) sidebar.style.backgroundColor = "#5eff52";
-
-    // Check if elements exist before modifying their styles
-
-    body.querySelectorAll("p, h1, h2, h3").forEach((el) => {
-      if (el && !el.classList.contains("exclude-dark-mode")) {
-        el.style.color = "black";
-      }
-    });
-
-    // Reset colors for excluded elements
-    body.querySelectorAll(".exclude-dark-mode").forEach((el) => {
-      el.style.color = ""; // Reset to default or inherited color
-      el.style.backgroundColor = ""; // Optional, if background color matters
-    });
-
+  
+    body.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
     localStorage.setItem("theme", "light");
   }
-
-  // ===== Initialize Theme =====
-  function initializeTheme() {
-  const savedTheme = localStorage.getItem("theme");
-
-  // If no theme is saved, set dark mode as default
-  if (!savedTheme) {
-    applyDarkMode();
-    localStorage.setItem("theme", "dark"); // Save the dark theme as default
-  } else if (savedTheme === "dark") {
-    applyDarkMode();
-  } else {
-    applyLightMode();
+  
+  function applyOceanTheme() {
+    if (sunButton) sunButton.textContent = "🌊";
+    body.style.background = "linear-gradient(to bottom, #0077be, #004080)";
+    body.style.color = "white";
+  
+    body.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
+    localStorage.setItem("theme", "ocean");
   }
-}
+  
+  function applySunsetTheme() {
+    if (sunButton) sunButton.textContent = "🌅";
+    body.style.background = "linear-gradient(to bottom, #ff7e5f, #feb47b)";
+    body.style.color = "black";
+  
+    body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
+    localStorage.setItem("theme", "sunset");
+  }
+  
+  // Initialize the theme
+  function initializeTheme() {
+    const savedTheme = localStorage.getItem("theme");
+    const defaultTheme = savedTheme || "dark";
+    applyTheme(defaultTheme);
+  }
+  
+  // Add button functionality
+  sunButton.addEventListener("click", () => {
+    currentThemeIndex = (currentThemeIndex + 1) % themes.length; // Cycle through themes
+    const newTheme = themes[currentThemeIndex];
+    applyTheme(newTheme);
+  });
+  
+  // Add dropdown functionality
+  themeSwitcher.addEventListener("change", (event) => {
+    const selectedTheme = event.target.value;
+    currentThemeIndex = themes.indexOf(selectedTheme); // Update index
+    applyTheme(selectedTheme);
+  });
+  
+  // Initialize everything on page load
+  initializeTheme();
 
   // ===== Sidebar/Topbar Toggle =====
   let useSidebar = localStorage.getItem("useSidebar") === "true";
