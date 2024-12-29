@@ -20,33 +20,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-function checkUser() {
-
-  const allowedRoles = [
-    "Owner",
-    "Vice Manager",
-    "Developer",
-    "Manager",
-    "Vice Owner",
-    "TrustedInstaller",
-  ];
-
-  if (!loggedInUser) {
-    alert("You are not logged in");
-    window.location.href = "index.html";
-    return;
-  }
-
-  if (loggedInUser.role !== allowedRoles) {
-    alert("You are not allowed here.");
-    window.location.href = "index.html";
-    return;
-  }
-}
-
-checkUser();
 
 function fetchMessages() {
   const messagesRef = ref(database, "privChats/"); // Reference to your 'chats' node
