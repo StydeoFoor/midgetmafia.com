@@ -9,13 +9,13 @@ p {
 }
 h1 {
   font-weight: bold;
-  color: rgb(255, 196, 0);
+  color: rgb(255, 255, 255);
 }
 h2 {
   color: rgb(255, 145, 0)
 }
 h3 {
-  color: rgb(149, 255, 128);
+  color: rgb(255, 208, 0);
 }
 .topbar {
   height: 60px;
