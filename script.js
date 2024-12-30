@@ -179,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (topbar) topbar.style.backgroundColor = "#000000";
     if (sidebar) sidebar.style.backgroundColor = "#000000";
   
-    localStorage.setItem("theme", "chrome");
+    localStorage.setItem("theme", "midnight");
   }
   
 

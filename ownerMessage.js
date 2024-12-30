@@ -22,6 +22,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get Firebase Database instance
+const topbar = document.getElementById("myTopBar");
+const body = document.body;
 
 const themes = ["dark", "light", "ocean", "sunset", "chrome", "midnight"];
 let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
@@ -55,47 +57,71 @@ function applyTheme(theme) {
 
 // Theme Functions
 function applyDarkMode() {
-  document.body.style.background = "#303030";
-  document.body.style.color = "white";
+  body.style.background = "#303030";
+  body.style.color = "white";
 
-  document.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+  body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+  if (topbar) topbar.style.backgroundColor = "#242424";
+  if (sidebar) sidebar.style.backgroundColor = "#242424";
+
+  localStorage.setItem("theme", "dark");
 }
 
 function applyLightMode() {
-  document.body.style.background = "#ffffff";
-  document.body.style.color = "black";
+  body.style.background = "#ffffff";
+  body.style.color = "black";
 
-  document.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
+  body.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
+  if (topbar) topbar.style.backgroundColor = "#e8e8e8";
+  if (sidebar) sidebar.style.backgroundColor = "#e8e8e8";
+
+  localStorage.setItem("theme", "light");
 }
 
 function applyOceanTheme() {
-  document.body.style.background = "linear-gradient(to bottom, #0077be, #004080)";
-  document.body.style.minHeight = "100vh";
-  document.body.style.color = "white";
+  body.style.background = "linear-gradient(to bottom, #0077be, #004080)";
+  body.style.minHeight = "100vh";
+  body.style.color = "white";
 
-  document.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
+  body.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
+  if (topbar) topbar.style.backgroundColor = "#003c60";
+  if (sidebar) sidebar.style.backgroundColor = "#003c60";
+
+  localStorage.setItem("theme", "ocean");
 }
 
 function applySunsetTheme() {
-  document.body.style.background = "linear-gradient(to bottom, #ff7e5f, #feb47b)";
-  document.body.style.minHeight = "100vh";
-  document.body.style.color = "black";
+  body.style.background = "linear-gradient(to bottom, #ff7e5f, #feb47b)";
+  body.style.minHeight = "100vh";
+  body.style.color = "black";
 
-  document.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
+  body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
+  if (topbar) topbar.style.backgroundColor = "#b35b47";
+  if (sidebar) sidebar.style.backgroundColor = "#b35b47";
+
+  localStorage.setItem("theme", "sunset");
 }
 
 function applyChromeTheme() {
-  document.body.style.background = "#303030";
-  document.body.style.color = "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);";
+  body.style.background = "#303030";
+  body.style.color = "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);"
 
-  document.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+  body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+  if (topbar) topbar.style.backgroundColor = "#242424";
+  if (sidebar) sidebar.style.backgroundColor = "#242424";
+
+  localStorage.setItem("theme", "chrome");
 }
 
 function applyMidnightTheme() {
-  document.body.style.background = "#1a1a1a";
-  document.body.style.color = "white";
+  body.style.background = "#1a1a1a";
+  body.style.color = "white"
 
-  document.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+  body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+  if (topbar) topbar.style.backgroundColor = "#000000";
+  if (sidebar) sidebar.style.backgroundColor = "#000000";
+
+  localStorage.setItem("theme", "midnight");
 }
 
 // Initialize the theme
