@@ -3,6 +3,8 @@ import {
   getDatabase,
   ref,
   set,
+  get,
+  onValue,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
 // Firebase Configuration
@@ -112,6 +114,35 @@ document.getElementById("themeButton")?.addEventListener("click", () => {
 // Call the theme initializer
 initializeTheme();
 
+const allowedRoles = ["Developer", "Owner", "Vice Manager", "Manager", "Vice Owner", "TrustedInstaller"];
+
+// Function to check role and enable message input
+function initializeMessageInput() {
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+  const messageInput = document.getElementById("message-input");
+  const sendButton = document.getElementById("send-button");
+
+  if (!loggedInUser) {
+    console.log("User is not logged in");
+    return;
+  }
+
+  // Check if the user's role is allowed
+  if (allowedRoles.includes(loggedInUser.role)) {
+    messageInput.style.display = "block";
+    messageInput.style.pointerEvents = "auto";
+    sendButton.style.display = "block";
+    sendButton.style.pointerEvents = "auto";
+  } else {
+    console.log(`User role "${loggedInUser.role}" does not allow messaging.`);
+    messageInput.style.display = "none";
+    messageInput.style.pointerEvents = "none";
+    sendButton.style.display = "none";
+    sendButton.style.pointerEvents = "none";
+  }
+}
+
 // Send message function using 'set'
 function sendMessage(message) {
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -126,7 +157,7 @@ function sendMessage(message) {
   }
 
   // Get reference to 'chats' node in Firebase
-  const messageRef = ref(database, "privChats/" + Date.now()); // Timestamp as unique ID for each message
+  const messageRef = ref(database, "announce/" + Date.now()); // Timestamp as unique ID for each message
 
   // Set the message data in Firebase
   set(messageRef, {
@@ -142,12 +173,65 @@ function sendMessage(message) {
     });
 }
 
+// Fetch and display messages using 'get'
+function fetchMessages() {
+  const messagesRef = ref(database, "announce/"); // Reference to your 'chats' node
 
-// Function to display messages in the chat bo
+  // Fetch messages once from Firebase
+  get(messagesRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const messages = snapshot.val();
+        displayMessages(messages);
+      } else {
+        console.log("No messages available.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching messages: ", error);
+    });
+}
+
+// Function to display messages in the chat box
+function displayMessages(messages) {
+  const chatBox = document.getElementById("chat-box");
+  if (!chatBox) {
+    console.error("HTML element with ID 'chat-box' is missing.");
+    return;
+  }
+
+  chatBox.innerHTML = ""; // Clear the chat box
+
+  if (messages) {
+    Object.keys(messages).forEach((key) => {
+      const message = messages[key];
+
+      // Create a container for each message
+      const messageElement = document.createElement("div");
+      messageElement.textContent = `${message.username}: ${message.message}`;
+      
+      // Apply styles for spacing
+      messageElement.style.margin = "10px 0"; // Add vertical spacing between messages // Optional border for clarity
+
+      chatBox.appendChild(messageElement);
+    });
+  } else {
+    chatBox.innerHTML = "<div>No messages to display</div>";
+  }
+}
 
 // Listen for real-time updates (whenever new messages are added)
+const messagesRef = ref(database, "announce/");
+onValue(messagesRef, (snapshot) => {
+  const messages = snapshot.val();
+  displayMessages(messages);
+});
 
 // Call fetchMessages to load initial messages when the page loads
+window.onload = () => {
+  fetchMessages();
+  initializeMessageInput(); // Load messages on page load (optional if onValue is enough)
+};
 
 // Get references for input and send button
 const messageInput = document.getElementById("message-input");

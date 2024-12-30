@@ -21,14 +21,13 @@
     <a href="info.html">Info</a>
   </div>
   <div class="msgSidebar">
-    <a href="dm.html">Announcements</a>
     <a href="dm.html">DMs</a>
     <a href="messages.html">Main Chat</a>
     <a href="court.html">Court Chat</a>
   </div>
 
   <div id="content" style="margin-left: 100px;">
-    <h3 id="chat-header">Main Chat</h3>
+    <h1>Talking is restricted to things related about the trial</h1>
       <div id="chat-container" style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif;">
         <div
           id="chat-box"
@@ -62,6 +61,8 @@
               padding: 10px 15px;
               font-size: 16px;
               box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+              display: none;
+              pointer-events: none;
             "
           />
           <button
@@ -74,6 +75,8 @@
               background-color: #007bff;
               color: white;
               cursor: pointer;
+              display: none;
+              pointer-events: none;
               transition: background-color 0.3s ease, transform 0.2s ease;
             "
           >
@@ -83,27 +86,8 @@
       </div>
     </div>
     </div>
-  <a href="privMessage.html" style="
-      width: 175px;
-      height: 100px;
-      background-color: red;
-      border-radius: 10px;
-      padding: 10px;
-      text-align: center;
-      text-decoration: none;
-      color: black;
-      display: inline-block;
-      pointer-events: auto;
-      outline-color: #000;
-      margin-right: 10px;
-      margin-left: 100px;
-      " onmouseover="this.style.transition = 'all 0.1s ease'; this.style.width='195px'; this.style.height='120px'; this.style.backgroundColor='darkred'; this.style.right='890px'; this.style.top='690px'; "
-    onmouseout="this.style.transition = 'all 0.1s ease'; this.style.width='175px'; this.style.height='100px'; this.style.backgroundColor='red'; this.style.right='900px'; this.style.top='700px';">
-    Private Messaging
-  </a>
   <p style="margin-left: 100px;">Your messages are logged, so don't send anything inappropriate</p>  
    </div>
-  <script type="module" src="message.js"></script>
-  <script type="module" src="notify.js"></script>
+  <script type="module" src="announce.js"></script>
 </body>
 </html>

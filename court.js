@@ -23,6 +23,97 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get Firebase Database instance
 
+const themes = ["dark", "light", "ocean", "sunset", "chrome", "midnight"];
+let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
+
+// Apply the selected theme
+function applyTheme(theme) {
+  switch (theme) {
+    case "dark":
+      applyDarkMode();
+      break;
+    case "light":
+      applyLightMode();
+      break;
+    case "ocean":
+      applyOceanTheme();
+      break;
+    case "sunset":
+      applySunsetTheme();
+      break;
+    case "chrome":
+      applyChromeTheme();
+      break;
+    case "midnight":
+      applyMidnightTheme();
+      break;
+    default:
+      console.error("Unknown theme:", theme);
+  }
+  localStorage.setItem("theme", theme); // Save theme to localStorage
+}
+
+// Theme Functions
+function applyDarkMode() {
+  document.body.style.background = "#303030";
+  document.body.style.color = "white";
+
+  document.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+}
+
+function applyLightMode() {
+  document.body.style.background = "#ffffff";
+  document.body.style.color = "black";
+
+  document.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
+}
+
+function applyOceanTheme() {
+  document.body.style.background = "linear-gradient(to bottom, #0077be, #004080)";
+  document.body.style.minHeight = "100vh";
+  document.body.style.color = "white";
+
+  document.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
+}
+
+function applySunsetTheme() {
+  document.body.style.background = "linear-gradient(to bottom, #ff7e5f, #feb47b)";
+  document.body.style.minHeight = "100vh";
+  document.body.style.color = "black";
+
+  document.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
+}
+
+function applyChromeTheme() {
+  document.body.style.background = "#303030";
+  document.body.style.color = "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);";
+
+  document.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+}
+
+function applyMidnightTheme() {
+  document.body.style.background = "#1a1a1a";
+  document.body.style.color = "white";
+
+  document.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+}
+
+// Initialize the theme
+function initializeTheme() {
+  const savedTheme = localStorage.getItem("theme");
+  const defaultTheme = savedTheme || "dark";
+  applyTheme(defaultTheme);
+}
+
+// Add theme switching button logic
+document.getElementById("themeButton")?.addEventListener("click", () => {
+  currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+  applyTheme(themes[currentThemeIndex]);
+});
+
+// Call the theme initializer
+initializeTheme();
+
 // Send message function using 'set'
 const _0x3687fb=_0x231c;function _0x231c(_0x1e290b,_0xe2c6b7){const _0x5221b3=_0x5221();return _0x231c=function(_0x231c66,_0x849340){_0x231c66=_0x231c66-0x193;let _0x4d4710=_0x5221b3[_0x231c66];return _0x4d4710;},_0x231c(_0x1e290b,_0xe2c6b7);}function _0x5221(){const _0xe65f3b=['794374qtYgJS','nigga','737188jPWJjL','fuck','63JfCkah','whore','1888740IwsoKj','nigger','shit','1104966WewThB','2280090phTBWb','slave','327768XYEnwq','189904qvTQsg'];_0x5221=function(){return _0xe65f3b;};return _0x5221();}(function(_0x103f19,_0x68ad56){const _0x25ec7f=_0x231c,_0x24c092=_0x103f19();while(!![]){try{const _0xd6941e=-parseInt(_0x25ec7f(0x198))/0x1+parseInt(_0x25ec7f(0x199))/0x2+-parseInt(_0x25ec7f(0x194))/0x3+parseInt(_0x25ec7f(0x19b))/0x4+-parseInt(_0x25ec7f(0x195))/0x5+parseInt(_0x25ec7f(0x19f))/0x6+-parseInt(_0x25ec7f(0x19d))/0x7*(-parseInt(_0x25ec7f(0x197))/0x8);if(_0xd6941e===_0x68ad56)break;else _0x24c092['push'](_0x24c092['shift']());}catch(_0x4065cb){_0x24c092['push'](_0x24c092['shift']());}}}(_0x5221,0x3d391));const bannedWords=[_0x3687fb(0x19c),_0x3687fb(0x19a),_0x3687fb(0x1a0),'ass',_0x3687fb(0x193),_0x3687fb(0x196),'hoe','slut','cunt',_0x3687fb(0x19e)];
 

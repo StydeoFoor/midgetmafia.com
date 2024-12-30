@@ -16,6 +16,97 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
+const themes = ["dark", "light", "ocean", "sunset", "chrome", "midnight"];
+let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
+
+// Apply the selected theme
+function applyTheme(theme) {
+  switch (theme) {
+    case "dark":
+      applyDarkMode();
+      break;
+    case "light":
+      applyLightMode();
+      break;
+    case "ocean":
+      applyOceanTheme();
+      break;
+    case "sunset":
+      applySunsetTheme();
+      break;
+    case "chrome":
+      applyChromeTheme();
+      break;
+    case "midnight":
+      applyMidnightTheme();
+      break;
+    default:
+      console.error("Unknown theme:", theme);
+  }
+  localStorage.setItem("theme", theme); // Save theme to localStorage
+}
+
+// Theme Functions
+function applyDarkMode() {
+  document.body.style.background = "#303030";
+  document.body.style.color = "white";
+
+  document.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+}
+
+function applyLightMode() {
+  document.body.style.background = "#ffffff";
+  document.body.style.color = "black";
+
+  document.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
+}
+
+function applyOceanTheme() {
+  document.body.style.background = "linear-gradient(to bottom, #0077be, #004080)";
+  document.body.style.minHeight = "100vh";
+  document.body.style.color = "white";
+
+  document.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
+}
+
+function applySunsetTheme() {
+  document.body.style.background = "linear-gradient(to bottom, #ff7e5f, #feb47b)";
+  document.body.style.minHeight = "100vh";
+  document.body.style.color = "black";
+
+  document.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
+}
+
+function applyChromeTheme() {
+  document.body.style.background = "#303030";
+  document.body.style.color = "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);";
+
+  document.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+}
+
+function applyMidnightTheme() {
+  document.body.style.background = "#1a1a1a";
+  document.body.style.color = "white";
+
+  document.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+}
+
+// Initialize the theme
+function initializeTheme() {
+  const savedTheme = localStorage.getItem("theme");
+  const defaultTheme = savedTheme || "dark";
+  applyTheme(defaultTheme);
+}
+
+// Add theme switching button logic
+document.getElementById("themeButton")?.addEventListener("click", () => {
+  currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+  applyTheme(themes[currentThemeIndex]);
+});
+
+// Call the theme initializer
+initializeTheme();
+
 // Fetch all user names from the "users" node
 async function fetchAllUsers() {
   const usersRef = ref(database, "users");
