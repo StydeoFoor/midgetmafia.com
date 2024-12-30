@@ -232,7 +232,7 @@ test {
 .msgSidebar {
   height: 100%;
   margin-top: 60px;
-  width: 150px; /* Hidden initially */
+  width: 140px; /* Hidden initially */
   position: fixed;
   z-index: 1;
   top: 0;
