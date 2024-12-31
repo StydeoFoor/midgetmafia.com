@@ -176,6 +176,96 @@ async function checkIfMuted() {
   }
 }
 
+async function checkIfLocked() {
+  const lockedRef = ref(database, "locked");
+
+  try {
+    const snapshot = await get(lockedRef);
+
+    if (snapshot.exists()) {
+      const lockedSections = snapshot.val();
+
+      // Check if "Messages" is in the locked sections
+      if (lockedSections["messages"]) {
+        displayLockedUI(); // Display red lock overlay
+      } else {
+        enableChatUI(); // Enable the chat UI if "Messages" is not locked
+      }
+    } else {
+      console.log("No locked sections found.");
+      enableChatUI(); // Default to unlocked if no locked sections exist
+    }
+  } catch (error) {
+    console.error("Error fetching locked sections:", error);
+  }
+}
+
+// Display locked notification UI
+function displayLockedUI() {
+  const chatContainer = document.getElementById("chat-container");
+  if (!chatContainer) {
+    console.error("Chat container not found.");
+    return;
+  }
+
+  // Clear the chat container
+  chatContainer.innerHTML = "";
+
+  // Create a lock overlay
+  const lockOverlay = document.createElement("div");
+  lockOverlay.style.position = "absolute";
+  lockOverlay.style.top = "0";
+  lockOverlay.style.left = "0";
+  lockOverlay.style.width = "100%";
+  lockOverlay.style.height = "100%";
+  lockOverlay.style.backgroundColor = "rgba(255, 0, 0, 0.8)";
+  lockOverlay.style.display = "flex";
+  lockOverlay.style.justifyContent = "center";
+  lockOverlay.style.alignItems = "center";
+  lockOverlay.style.zIndex = "1000";
+
+  // Add a lock icon or image
+  const lockIcon = document.createElement("i");
+  lockIcon.className = "fas fa-lock";
+  lockIcon.style.fontSize = "50px";
+  lockIcon.style.color = "white";
+  lockIcon.style.marginBottom = "20px";
+
+  // Add the h1 element
+  const lockMessage = document.createElement("h1");
+  lockMessage.textContent = "We are sorry, but messaging services are locked as of now, try again later. :C";
+  lockMessage.style.color = "white";
+  lockMessage.style.textAlign = "center";
+
+  // Append lock icon and message to the overlay
+  lockOverlay.appendChild(lockIcon);
+  lockOverlay.appendChild(lockMessage);
+
+  // Append overlay to the chat container
+  chatContainer.appendChild(lockOverlay);
+}
+
+// Enable chat UI
+function enableChatUI() {
+  const chatContainer = document.getElementById("chat-container");
+  if (!chatContainer) {
+    console.error("Chat container not found.");
+    return;
+  }
+
+  // Clear any overlays and display the chat UI
+  chatContainer.innerHTML = `
+    <div id="chat-box" style="height: 300px; overflow-y: auto; border: 1px solid #ccc; border-radius: 10px; padding: 15px;"></div>
+    <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
+      <input id="message-input" type="text" placeholder="Type a message..." style="flex: 1; padding: 10px; border-radius: 20px;">
+      <button id="send-button" style="padding: 10px; border-radius: 20px; background-color: #007bff; color: white;">Send</button>
+    </div>
+  `;
+}
+
+// Call the function to check if the section is locked
+checkIfLocked();
+
 // Display muted notification UI
 function displayMutedUI() {
   const chatContainer = document.getElementById("chat-container");
