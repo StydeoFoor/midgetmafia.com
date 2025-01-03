@@ -55,61 +55,47 @@ function applyTheme(theme) {
 
 // Theme Functions
 function applyDarkMode() {
-    body.style.background = "#303030";
-    body.style.color = "white";
-  
-    body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
-    if (topbar) topbar.style.backgroundColor = "#242424";
-    if (sidebar) sidebar.style.backgroundColor = "#242424";
-  
-    localStorage.setItem("theme", "dark");
-  }
-  
-  function applyLightMode() {
-    body.style.background = "#ffffff";
-    body.style.color = "black";
-  
-    body.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
-    if (topbar) topbar.style.backgroundColor = "#e8e8e8";
-    if (sidebar) sidebar.style.backgroundColor = "#e8e8e8";
-  
-    localStorage.setItem("theme", "light");
-  }
-  
-  function applyOceanTheme() {
-    body.style.background = "linear-gradient(to bottom, #0077be, #004080)";
-    body.style.minHeight = "100vh";
-    body.style.color = "white";
-  
-    body.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
-    if (topbar) topbar.style.backgroundColor = "#003c60";
-    if (sidebar) sidebar.style.backgroundColor = "#003c60";
-  
-    localStorage.setItem("theme", "ocean");
-  }
-  
-  function applySunsetTheme() {
-    body.style.background = "linear-gradient(to bottom, #ff7e5f, #feb47b)";
-    body.style.minHeight = "100vh";
-    body.style.color = "black";
-  
-    body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
-    if (topbar) topbar.style.backgroundColor = "#b35b47";
-    if (sidebar) sidebar.style.backgroundColor = "#b35b47";
-  
-    localStorage.setItem("theme", "sunset");
-  }
+  body.style.background = "#303030";
+  body.style.color = "white";
 
-  function applyMidnightTheme() {
-    body.style.background = "#1a1a1a";
-    body.style.color = "white"
-  
-    body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
-    if (topbar) topbar.style.backgroundColor = "#000000";
-    if (sidebar) sidebar.style.backgroundColor = "#000000";
-  
-    localStorage.setItem("theme", "midnight");
-  }
+  body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+  if (topbar) topbar.style.backgroundColor = "#242424";
+}
+
+function applyLightMode() {
+  body.style.background = "#ffffff";
+  body.style.color = "black";
+
+  body.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
+  if (topbar) topbar.style.backgroundColor = "#e8e8e8";
+}
+
+function applyOceanTheme() {
+  body.style.background = "linear-gradient(to bottom, #0077be, #004080)";
+  body.style.minHeight = "100vh";
+  body.style.color = "white";
+
+  body.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
+  if (topbar) topbar.style.backgroundColor = "#003c60";
+}
+
+function applySunsetTheme() {
+  body.style.background = "linear-gradient(to bottom, #ff7e5f, #feb47b)";
+  body.style.minHeight = "100vh";
+  body.style.color = "black";
+
+  body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
+  if (topbar) topbar.style.backgroundColor = "#b35b47";
+}
+
+function applyMidnightTheme() {
+  body.style.background = "#1a1a1a";
+  body.style.color = "white";
+
+  body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+  if (topbar) topbar.style.backgroundColor = "#000000";
+}
+
 
 // Initialize the theme
 function initializeTheme() {
