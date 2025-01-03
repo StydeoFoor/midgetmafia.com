@@ -154,7 +154,11 @@ document.addEventListener("DOMContentLoaded", () => {
     body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
     if (topbar) topbar.style.backgroundColor = "#b35b47";
     if (sidebar) sidebar.style.backgroundColor = "#b35b47";
-  
+
+    body.querySelector("h1").forEach((h1) => (h1.style.color = white));
+    body.querySelector("h2").forEach((h2) => (h2.style.color = white));
+    body.querySelector("h3").forEach((h3) => (h3.style.color = white));
+
     localStorage.setItem("theme", "sunset");
   }
   
