@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===== Fetch User Data Dynamically on Each Refresh ====
 
   // ===== Dark Mode Functions =====
-  const themes = ["dark", "light", "ocean", "sunset", "chrome", "midnight"];
+  const themes = ["dark", "light", "ocean", "sunset", "midnight"];
   let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
   
   // DOM Element
@@ -94,9 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
       case "sunset":
         applySunsetTheme();
-        break;
-      case "chrome":
-        applyChromeTheme();
         break;
       case "midnight":
         applyMidnightTheme();
@@ -161,19 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     localStorage.setItem("theme", "sunset");
   }
-  
-  function applyChromeTheme() {
-    if (sunButton) sunButton.textContent = "🌈";
-    body.style.background = "#303030";
-    body.style.color = "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);"
-  
-    body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
-    if (topbar) topbar.style.backgroundColor = "#242424";
-    if (sidebar) sidebar.style.backgroundColor = "#242424";
-  
-    localStorage.setItem("theme", "chrome");
-  }
-
   function applyMidnightTheme() {
     if (sunButton) sunButton.textContent = "🌌";
     body.style.background = "#1a1a1a";

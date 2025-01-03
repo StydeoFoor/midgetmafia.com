@@ -26,7 +26,7 @@ const topbar = document.getElementById("myTopBar");
 const sidebar = document.getElementById("msgSidebar");
 const body = document.body;
 
-const themes = ["dark", "light", "ocean", "sunset", "chrome", "midnight"];
+const themes = ["dark", "light", "ocean", "sunset", "midnight"];
 let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
 
 // Apply the selected theme
@@ -43,9 +43,6 @@ function applyTheme(theme) {
       break;
     case "sunset":
       applySunsetTheme();
-      break;
-    case "chrome":
-      applyChromeTheme();
       break;
     case "midnight":
       applyMidnightTheme();
@@ -101,17 +98,6 @@ function applySunsetTheme() {
   if (sidebar) sidebar.style.backgroundColor = "#b35b47";
 
   localStorage.setItem("theme", "sunset");
-}
-
-function applyChromeTheme() {
-  body.style.background = "#303030";
-  body.style.color = "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);"
-
-  body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
-  if (topbar) topbar.style.backgroundColor = "#242424";
-  if (sidebar) sidebar.style.backgroundColor = "#242424";
-
-  localStorage.setItem("theme", "chrome");
 }
 
 function applyMidnightTheme() {
