@@ -212,6 +212,12 @@ function displayLockedUI() {
 
 // Enable chat UI
 function enableChatUI() {
+  const messageInput = document.getElementById("message-input");
+  const sendButton = document.getElementById("send-button");
+
+  if (messageInput) messageInput.style.display = "block";
+  if (sendButton) sendButton.style.display = "block";
+  
   const chatContainer = document.getElementById("chat-container");
   if (!chatContainer) {
     console.error("Chat container not found.");
