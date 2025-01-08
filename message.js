@@ -61,6 +61,7 @@ function applyDarkMode() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
   if (topbar) topbar.style.backgroundColor = "#242424";
+  if (sidebar) sidebar.style.backgroundColor = "#242424";
 }
 
 function applyLightMode() {
@@ -69,6 +70,7 @@ function applyLightMode() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
   if (topbar) topbar.style.backgroundColor = "#e8e8e8";
+  if (sidebar) sidebar.style.backgroundColor = "#e8e8e8";
 }
 
 function applyOceanTheme() {
@@ -78,6 +80,7 @@ function applyOceanTheme() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
   if (topbar) topbar.style.backgroundColor = "#003c60";
+  if (sidebar) sidebar.style.backgroundColor = "#003c60";
 }
 
 function applySunsetTheme() {
@@ -87,6 +90,7 @@ function applySunsetTheme() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
   if (topbar) topbar.style.backgroundColor = "#b35b47";
+  if (sidebar) sidebar.style.backgroundColor = "#b35b47";
 }
 
 function applyMidnightTheme() {
@@ -95,6 +99,7 @@ function applyMidnightTheme() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
   if (topbar) topbar.style.backgroundColor = "#000000";
+  if (sidebar) sidebar.style.backgroundColor = "#000000";
 }
 
 
@@ -147,6 +152,7 @@ async function checkIfMuted() {
     console.error("Error fetching muted list:", error);
   }
 }
+
 // Display muted notification UI
 function displayMutedUI() {
   const chatContainer = document.getElementById("chat-container");
