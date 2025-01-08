@@ -91,6 +91,8 @@ function applySunsetTheme() {
   body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
   if (topbar) topbar.style.backgroundColor = "#b35b47";
   if (sidebar) sidebar.style.backgroundColor = "#b35b47";
+
+  body.querySelectorAll("h1, h2, h3").forEach((el) => (el.style.color = "white"));
 }
 
 function applyMidnightTheme() {
@@ -142,11 +144,10 @@ async function checkIfMuted() {
       if (mutedList[loggedInUser.name]) {
         displayMutedUI(); // User is muted
       } else {
-        enableChatUI(); // User is not muted
+        console.log("User isn't muted") // User is not muted
       }
     } else {
-      console.log("No muted list found.");
-      enableChatUI(); // Default to unmuted if no muted list exists
+      console.log("No muted list found."); 
     }
   } catch (error) {
     console.error("Error fetching muted list:", error);

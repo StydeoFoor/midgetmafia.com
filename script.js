@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ===== Dark Mode Functions =====
   const themes = ["dark", "light", "ocean", "sunset", "midnight"];
-  let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
+let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
   
   // DOM Element
   // Apply the selected theme
@@ -113,8 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
     body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
     if (topbar) topbar.style.backgroundColor = "#242424";
     if (sidebar) sidebar.style.backgroundColor = "#242424";
-  
-    localStorage.setItem("theme", "dark");
   }
   
   function applyLightMode() {
@@ -125,8 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
     body.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
     if (topbar) topbar.style.backgroundColor = "#e8e8e8";
     if (sidebar) sidebar.style.backgroundColor = "#e8e8e8";
-  
-    localStorage.setItem("theme", "light");
   }
   
   function applyOceanTheme() {
@@ -138,8 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
     body.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
     if (topbar) topbar.style.backgroundColor = "#003c60";
     if (sidebar) sidebar.style.backgroundColor = "#003c60";
-  
-    localStorage.setItem("theme", "ocean");
   }
   
   function applySunsetTheme() {
@@ -151,26 +145,20 @@ document.addEventListener("DOMContentLoaded", () => {
     body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
     if (topbar) topbar.style.backgroundColor = "#b35b47";
     if (sidebar) sidebar.style.backgroundColor = "#b35b47";
-
-    body.querySelector("h1").forEach((h1) => (h1.style.color = white));
-    body.querySelector("h2").forEach((h2) => (h2.style.color = white));
-    body.querySelector("h3").forEach((h3) => (h3.style.color = white));
-
-    localStorage.setItem("theme", "sunset");
+  
+    body.querySelectorAll("h1, h2, h3").forEach((el) => (el.style.color = "white"));
   }
+  
   function applyMidnightTheme() {
     if (sunButton) sunButton.textContent = "🌌";
     body.style.background = "#1a1a1a";
-    body.style.color = "white"
+    body.style.color = "white";
   
     body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
     if (topbar) topbar.style.backgroundColor = "#000000";
     if (sidebar) sidebar.style.backgroundColor = "#000000";
-  
-    localStorage.setItem("theme", "midnight");
   }
   
-
   // Initialize the theme
   function initializeTheme() {
     const savedTheme = localStorage.getItem("theme");
@@ -185,6 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
       applyTheme(themes[currentThemeIndex]);
     });
   }
+  
   // Initialize everything on page load
   initializeTheme();
 

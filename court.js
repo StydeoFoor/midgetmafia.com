@@ -90,6 +90,8 @@ function applySunsetTheme() {
   body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
   if (topbar) topbar.style.backgroundColor = "#b35b47";
   if (sidebar) sidebar.style.backgroundColor = "#b35b47";
+
+  body.querySelectorAll("h1, h2, h3").forEach((el) => (el.style.color = "white"));
 }
 
 function applyMidnightTheme() {
