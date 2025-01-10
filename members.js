@@ -211,6 +211,7 @@ async function displayUserList(users) {
     const allowedRoleChange = loggedInUser?.role === "TrustedInstaller";
 
     if (allowedToChangeRoles) {
+      if (name !== "Shawn Rabb") {
         const roleButton = document.createElement("button");
         roleButton.textContent = "Change Role";
         roleButton.style.marginLeft = "10px";
@@ -225,6 +226,7 @@ async function displayUserList(users) {
         roleButton.onclick = () => showRolePopup(name);
   
         li.appendChild(roleButton);
+      }
     }
     else if (allowedRoleChange) {
       const roleButton = document.createElement("button");
@@ -349,25 +351,25 @@ async function displayUserList(users) {
     document.body.appendChild(popup);
   }
 
-  async function updateUserRole(userData, newRole, popup) {
+  async function updateUserRole(userName, newRole, popup) {
     try {
-        if (!userData || !userData.role) {
-            throw new Error("Invalid userData: role path not found");
-        }
-
-        const userRoleRef = ref(database, `users/${userData.role}`); // Reference the user's role directly
-        await set(userRoleRef, newRole); // Update the user's role
-
-        alert(`Role updated to ${newRole}`);
-        console.log(`User role updated: ${userData.role} -> ${newRole}`);
-
-        document.body.removeChild(popup); // Close the popup
-        fetchAllUsers(); // Refresh the user list
+      if (!userName) {
+        throw new Error("Invalid userName: name is required");
+      }
+  
+      const userRef = ref(database, `users/${userName}/role`); // Reference the user's role directly
+      await set(userRef, newRole); // Update the user's role
+  
+      alert(`Role updated to ${newRole}`);
+      console.log(`User role updated: ${userName} -> ${newRole}`);
+  
+      document.body.removeChild(popup); // Close the popup
+      fetchAllUsers(); // Refresh the user list
     } catch (error) {
-        console.error("Error updating user role:", error);
-        alert("An error occurred while updating the role.");
+      console.error("Error updating user role:", error);
+      alert("An error occurred while updating the role.");
     }
-}
+  }
 
 
 // On page load, fetch and display the user list
