@@ -331,7 +331,7 @@ async function displayUserList(users) {
     saveButton.style.border = "none";
     saveButton.style.borderRadius = "5px";
     saveButton.style.cursor = "pointer";
-    saveButton.onclick = () => updateUserRole(userName, select.value, popup);
+    saveButton.onclick = () => updateUserRole(userData, select.value, popup);
   
     const cancelButton = document.createElement("button");
     cancelButton.textContent = "Cancel";
@@ -351,17 +351,17 @@ async function displayUserList(users) {
     document.body.appendChild(popup);
   }
 
-  async function updateUserRole(userName, newRole, popup) {
+  async function updateUserRole(userData, newRole, popup) {
     try {
-      if (!userName) {
+      if (!userData) {
         throw new Error("Invalid userName: name is required");
       }
   
-      const userRef = ref(database, `users/${userName}/role`); // Reference the user's role directly
+      const userRef = ref(database, `users/${userData}/role`); // Reference the user's role directly
       await set(userRef, newRole); // Update the user's role
   
       alert(`Role updated to ${newRole}`);
-      console.log(`User role updated: ${userName} -> ${newRole}`);
+      console.log(`User role updated: ${userData} -> ${newRole}`);
   
       document.body.removeChild(popup); // Close the popup
       fetchAllUsers(); // Refresh the user list
