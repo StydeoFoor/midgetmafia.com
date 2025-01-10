@@ -349,17 +349,17 @@ async function displayUserList(users) {
     document.body.appendChild(popup);
   }
 
-  async function updateUserRole(userName, newRole, popup) {
+  async function updateUserRole(userData, newRole, popup) {
     try {
-        if (!userName || !userName.role) {
+        if (!userData || !userData.role) {
             throw new Error("Invalid userData: role path not found");
         }
 
-        const userRoleRef = ref(database, `users/${userName.role}`); // Reference the user's role directly
+        const userRoleRef = ref(database, `users/${userData.role}`); // Reference the user's role directly
         await set(userRoleRef, newRole); // Update the user's role
 
         alert(`Role updated to ${newRole}`);
-        console.log(`User role updated: ${userName.role} -> ${newRole}`);
+        console.log(`User role updated: ${userData.role} -> ${newRole}`);
 
         document.body.removeChild(popup); // Close the popup
         fetchAllUsers(); // Refresh the user list
