@@ -127,11 +127,6 @@ document.getElementById("password-reset-form").addEventListener("submit", async 
     return;
   }
 
-  if (newPassword.length < 6) {
-    alert("Password must be at least 6 characters long.");
-    return;
-  }
-
   try {
     // Reference the user node by username
     const userRef = ref(database, `users/${username}`);
