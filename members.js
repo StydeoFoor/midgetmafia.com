@@ -52,62 +52,42 @@ function applyDarkMode() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
   if (topbar) topbar.style.backgroundColor = "#242424";
-
-  localStorage.setItem("theme", "dark");
 }
 
 function applyLightMode() {
-
-function applyLightMode() {
+  body.style.background = "#ffffff";
+  body.style.color = "black";
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
   if (topbar) topbar.style.backgroundColor = "#e8e8e8";
-
-  localStorage.setItem("theme", "light");
 }
 
 function applyOceanTheme() {
-  localStorage.setItem("theme", "light");
-}
-
+  body.style.background = "linear-gradient(to bottom, #0077be, #004080)";
+  body.style.minHeight = "100vh";
+  body.style.color = "white";
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
   if (topbar) topbar.style.backgroundColor = "#003c60";
-
-  localStorage.setItem("theme", "ocean");
 }
 
 function applySunsetTheme() {
-  if (topbar) topbar.style.backgroundColor = "#003c60";
-
-  localStorage.setItem("theme", "ocean");
+  body.style.background = "linear-gradient(to bottom, #ff7e5f, #feb47b)";
+  body.style.minHeight = "100vh";
+  body.style.color = "black";
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
   if (topbar) topbar.style.backgroundColor = "#b35b47";
-
-  localStorage.setItem("theme", "sunset");
 }
 
 function applyMidnightTheme() {
   body.style.background = "#1a1a1a";
-  body.style.color = "white"
   body.style.color = "white";
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
   if (topbar) topbar.style.backgroundColor = "#000000";
-
-  localStorage.setItem("theme", "midnight");
 }
 
-
-// Initialize the theme
-function initializeTheme() {
-  const savedTheme = localStorage.getItem("theme");
-  body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
-  if (topbar) topbar.style.backgroundColor = "#000000";
-
-  localStorage.setItem("theme", "midnight");
-}
 
 // Initialize the theme
 function initializeTheme() {
@@ -115,6 +95,7 @@ function initializeTheme() {
   const defaultTheme = savedTheme || "dark";
   applyTheme(defaultTheme);
 }
+
 
 // Add theme switching button logic
 document.getElementById("themeButton")?.addEventListener("click", () => {
