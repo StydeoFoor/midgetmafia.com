@@ -52,49 +52,62 @@ function applyDarkMode() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
   if (topbar) topbar.style.backgroundColor = "#242424";
-  if (sidebar) sidebar.style.backgroundColor = "#242424";
+
+  localStorage.setItem("theme", "dark");
 }
 
 function applyLightMode() {
-  body.style.background = "#ffffff";
-  body.style.color = "black";
+
+function applyLightMode() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
   if (topbar) topbar.style.backgroundColor = "#e8e8e8";
-  if (sidebar) sidebar.style.backgroundColor = "#e8e8e8";
+
+  localStorage.setItem("theme", "light");
 }
 
 function applyOceanTheme() {
-  body.style.background = "linear-gradient(to bottom, #0077be, #004080)";
-  body.style.minHeight = "100vh";
-  body.style.color = "white";
+  localStorage.setItem("theme", "light");
+}
+
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
   if (topbar) topbar.style.backgroundColor = "#003c60";
-  if (sidebar) sidebar.style.backgroundColor = "#003c60";
+
+  localStorage.setItem("theme", "ocean");
 }
 
 function applySunsetTheme() {
-  body.style.background = "linear-gradient(to bottom, #ff7e5f, #feb47b)";
-  body.style.minHeight = "100vh";
-  body.style.color = "black";
+  if (topbar) topbar.style.backgroundColor = "#003c60";
+
+  localStorage.setItem("theme", "ocean");
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
   if (topbar) topbar.style.backgroundColor = "#b35b47";
-  if (sidebar) sidebar.style.backgroundColor = "#b35b47";
 
-  body.querySelectorAll("h1, h2, h3").forEach((el) => (el.style.color = "white"));
+  localStorage.setItem("theme", "sunset");
 }
 
 function applyMidnightTheme() {
   body.style.background = "#1a1a1a";
+  body.style.color = "white"
   body.style.color = "white";
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
   if (topbar) topbar.style.backgroundColor = "#000000";
-  if (sidebar) sidebar.style.backgroundColor = "#000000";
+
+  localStorage.setItem("theme", "midnight");
 }
 
+
+// Initialize the theme
+function initializeTheme() {
+  const savedTheme = localStorage.getItem("theme");
+  body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
+  if (topbar) topbar.style.backgroundColor = "#000000";
+
+  localStorage.setItem("theme", "midnight");
+}
 
 // Initialize the theme
 function initializeTheme() {
@@ -211,7 +224,6 @@ async function displayUserList(users) {
     const allowedRoleChange = loggedInUser?.role === "TrustedInstaller";
 
     if (allowedToChangeRoles) {
-      if (name !== "Shawn Rabb") {
         const roleButton = document.createElement("button");
         roleButton.textContent = "Change Role";
         roleButton.style.marginLeft = "10px";
@@ -226,7 +238,6 @@ async function displayUserList(users) {
         roleButton.onclick = () => showRolePopup(name);
   
         li.appendChild(roleButton);
-      }
     }
     else if (allowedRoleChange) {
       const roleButton = document.createElement("button");
@@ -331,7 +342,7 @@ async function displayUserList(users) {
     saveButton.style.border = "none";
     saveButton.style.borderRadius = "5px";
     saveButton.style.cursor = "pointer";
-    saveButton.onclick = () => updateUserRole(userData, select.value, popup);
+    saveButton.onclick = () => updateUserRole(userName, select.value, popup);
   
     const cancelButton = document.createElement("button");
     cancelButton.textContent = "Cancel";
@@ -353,23 +364,23 @@ async function displayUserList(users) {
 
   async function updateUserRole(userData, newRole, popup) {
     try {
-      if (!userData) {
-        throw new Error("Invalid userName: name is required");
-      }
-  
-      const userRef = ref(database, `users/${userData}/role`); // Reference the user's role directly
-      await set(userRef, newRole); // Update the user's role
-  
-      alert(`Role updated to ${newRole}`);
-      console.log(`User role updated: ${userData} -> ${newRole}`);
-  
-      document.body.removeChild(popup); // Close the popup
-      fetchAllUsers(); // Refresh the user list
+        if (!userData || !userData.role) {
+            throw new Error("Invalid userData: role path not found");
+        }
+
+        const userRoleRef = ref(database, `users/${userData.role}`); // Reference the user's role directly
+        await set(userRoleRef, newRole); // Update the user's role
+
+        alert(`Role updated to ${newRole}`);
+        console.log(`User role updated: ${userData.role} -> ${newRole}`);
+
+        document.body.removeChild(popup); // Close the popup
+        fetchAllUsers(); // Refresh the user list
     } catch (error) {
-      console.error("Error updating user role:", error);
-      alert("An error occurred while updating the role.");
+        console.error("Error updating user role:", error);
+        alert("An error occurred while updating the role.");
     }
-  }
+}
 
 
 // On page load, fetch and display the user list

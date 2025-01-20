@@ -52,7 +52,8 @@ function applyDarkMode() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
   if (topbar) topbar.style.backgroundColor = "#242424";
-  if (sidebar) sidebar.style.backgroundColor = "#242424";
+
+  localStorage.setItem("theme", "dark");
 }
 
 function applyLightMode() {
@@ -61,7 +62,8 @@ function applyLightMode() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
   if (topbar) topbar.style.backgroundColor = "#e8e8e8";
-  if (sidebar) sidebar.style.backgroundColor = "#e8e8e8";
+
+  localStorage.setItem("theme", "light");
 }
 
 function applyOceanTheme() {
@@ -71,7 +73,8 @@ function applyOceanTheme() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
   if (topbar) topbar.style.backgroundColor = "#003c60";
-  if (sidebar) sidebar.style.backgroundColor = "#003c60";
+
+  localStorage.setItem("theme", "ocean");
 }
 
 function applySunsetTheme() {
@@ -81,18 +84,19 @@ function applySunsetTheme() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
   if (topbar) topbar.style.backgroundColor = "#b35b47";
-  if (sidebar) sidebar.style.backgroundColor = "#b35b47";
 
-  body.querySelectorAll("h1, h2, h3").forEach((el) => (el.style.color = "white"));
+  localStorage.setItem("theme", "sunset");
 }
 
 function applyMidnightTheme() {
   body.style.background = "#1a1a1a";
+  body.style.color = "white"
   body.style.color = "white";
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
   if (topbar) topbar.style.backgroundColor = "#000000";
-  if (sidebar) sidebar.style.backgroundColor = "#000000";
+
+  localStorage.setItem("theme", "midnight");
 }
 
 // Initialize the theme
@@ -124,6 +128,11 @@ document.getElementById("password-reset-form").addEventListener("submit", async 
   // Validate input
   if (!username || !ownerName || !role || !newPassword) {
     alert("All fields are required.");
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    alert("Password must be at least 6 characters long.");
     return;
   }
 
