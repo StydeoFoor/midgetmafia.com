@@ -285,7 +285,7 @@ function displayMessages(messages) {
       messageElement.style.display = "flex";
       messageElement.style.justifyContent = "space-between";
       messageElement.style.alignItems = "center";
-      messageElement.style.margin = "10px 0";
+      messageElement.style.margin = "13px 0";
 
       // Display message content
       const messageText = document.createElement("span");

@@ -136,14 +136,19 @@ function displayMessages(messages) {
     return;
   }
 
-  console.log("Fetched messages:", messages); // Add this
   chatBox.innerHTML = ""; // Clear the chat box
 
   if (messages) {
     Object.keys(messages).forEach((key) => {
       const message = messages[key];
+
+      // Create a container for each message
       const messageElement = document.createElement("div");
       messageElement.textContent = `${message.username}: ${message.message}`;
+      
+      // Apply styles for spacing
+      messageElement.style.margin = "13px 0"; // Add vertical spacing between messages // Optional border for clarity
+
       chatBox.appendChild(messageElement);
     });
   } else {

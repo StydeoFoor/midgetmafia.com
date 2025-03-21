@@ -180,7 +180,7 @@ function displayDM(chatId) {
       Object.values(messages).forEach((messageData) => {
         const messageElement = document.createElement("div");
         messageElement.textContent = `${messageData.sender}: ${messageData.message}`;
-        messageElement.style.margin = "10px 0";
+        messageElement.style.margin = "13px 0";
         chatBox.appendChild(messageElement);
       });
     } else {
