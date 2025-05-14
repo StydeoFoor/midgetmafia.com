@@ -310,9 +310,10 @@ async function displayUserList(users) {
     select.style.padding = "10px";
     select.style.marginBottom = "15px";
     select.innerHTML = `
-      <option value="Owner">Owner</option>
+      <option value="Executive">Executive</option>
       <option value="Manager">Manager</option>
       <option value="Vice Manager">Vice Manager</option>
+      <option value="Judge">Judge</option>
       <option value="SPY!!!">Spy</option>
       <option value="Mighty Midget">Mighty Midget</option>
       <option value="Developer">Developer</option>
