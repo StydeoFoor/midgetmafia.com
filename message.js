@@ -271,7 +271,7 @@ function displayMessages(messages) {
   }
 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  const allowedRoles = ["Owner", "Manager", "Vice Manager", "Developer"];
+  const allowedRoles = ["Leader", "Manager", "Vice Manager", "Developer", "Executive"];
   const canDelete = allowedRoles.includes(loggedInUser?.role); // Check if the user can delete messages
 
   chatBox.innerHTML = ""; // Clear the chat box

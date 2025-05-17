@@ -120,7 +120,7 @@ document.getElementById("themeButton")?.addEventListener("click", () => {
 // Call the theme initializer
 initializeTheme();
 
-const allowedRoles = ["Developer", "Owner", "Vice Manager", "Manager", "Vice Owner", "TrustedInstaller"];
+const allowedRoles = ["Developer", "Executive", "Leader", "Vice Manager", "Manager", "Vice Owner", "TrustedInstaller"];
 
 // Function to check role and enable message input
 function initializeMessageInput() {

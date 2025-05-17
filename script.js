@@ -248,7 +248,8 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
         involvementEl.textContent = loggedInUser.currentInvolvement || "N/A";
 
       const allowedRoles = [
-        "Owner",
+        "Leader",
+        "Executive",
         "Vice Manager",
         "Developer",
         "Manager",
@@ -268,7 +269,8 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
     const bodyMsg = document.getElementById("bodyMsg");
 
     const allowedRoles = [
-      "Owner",
+      "Leader",
+      "Executive",
       "Bodyguard",
       "Developer",
       "TrustedInstaller",
@@ -289,7 +291,8 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     const allowedRoles = [
-      "Owner",
+      "Leader",
+      "Executive",
       "Vice Manager",
       "Developer",
       "Manager",
