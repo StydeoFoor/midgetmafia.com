@@ -295,50 +295,41 @@ function displayMessages(messages) {
     return `${monthStr} ${day}${ordinal}`;
   }
 
+  // Convert messages object into array with keys included
+  const messagesArray = Object.entries(messages).map(([key, msg]) => ({
+    key,
+    ...msg
+  }));
+
+  // Sort messages by timestamp ascending
+  messagesArray.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
   let previousDate = null;
 
-  messages.forEach((msg, index) => {
+  messagesArray.forEach(msg => {
     const currentDate = new Date(msg.timestamp);
-    // Remove time info for comparison (set to midnight)
     const currentDateMidnight = new Date(currentDate);
     currentDateMidnight.setHours(0, 0, 0, 0);
 
-    // Insert date divider when date changes or first message
+    // Insert date divider if day changes
     if (
       !previousDate ||
       previousDate.getTime() !== currentDateMidnight.getTime()
     ) {
-      if (previousDate) {
-        // If previous date exists, show range from previous to current
-        const prevDateStr = formatDate(previousDate);
-        const currDateStr = formatDate(currentDateMidnight);
-
-        const dateDivider = document.createElement("div");
-        dateDivider.textContent = `${prevDateStr} to ${currDateStr}`;
-        dateDivider.style.fontSize = "14px";
-        dateDivider.style.fontWeight = "bold";
-        dateDivider.style.color = "#888";
-        dateDivider.style.margin = "20px 0 10px";
-        dateDivider.style.borderBottom = "1px solid #ccc";
-        dateDivider.style.paddingBottom = "5px";
-        chatBox.appendChild(dateDivider);
-      } else {
-        // For very first message, just show single date
-        const dateDivider = document.createElement("div");
-        dateDivider.textContent = formatDate(currentDateMidnight);
-        dateDivider.style.fontSize = "14px";
-        dateDivider.style.fontWeight = "bold";
-        dateDivider.style.color = "#888";
-        dateDivider.style.margin = "20px 0 10px";
-        dateDivider.style.borderBottom = "1px solid #ccc";
-        dateDivider.style.paddingBottom = "5px";
-        chatBox.appendChild(dateDivider);
-      }
+      const dateDivider = document.createElement("div");
+      dateDivider.textContent = formatDate(currentDateMidnight);
+      dateDivider.style.fontSize = "14px";
+      dateDivider.style.fontWeight = "bold";
+      dateDivider.style.color = "#888";
+      dateDivider.style.margin = "20px 0 10px";
+      dateDivider.style.borderBottom = "1px solid #ccc";
+      dateDivider.style.paddingBottom = "5px";
+      chatBox.appendChild(dateDivider);
     }
 
     previousDate = currentDateMidnight;
 
-    // Now render message
+    // Create message element
     const messageElement = document.createElement("div");
     messageElement.style.display = "flex";
     messageElement.style.justifyContent = "space-between";
@@ -373,7 +364,7 @@ function displayMessages(messages) {
       deleteButton.style.border = "none";
       deleteButton.style.cursor = "pointer";
       deleteButton.innerHTML = `<i class="fas fa-trash-alt" style="color: red; font-size: 16px;"></i>`;
-      deleteButton.onclick = () => deleteMessage(index);
+      deleteButton.onclick = () => deleteMessage(msg.key);
 
       messageElement.appendChild(deleteButton);
     }
