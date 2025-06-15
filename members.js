@@ -237,7 +237,7 @@ async function displayUserList(users) {
         objButton.style.cursor = "pointer";
   
         // Hook the `showRolePopup` function
-        roleButton.onclick = () => showObjPopup(name);
+        objButton.onclick = () => showObjPopup(name);
   
         li.appendChild(objButton);
     }
@@ -268,7 +268,7 @@ async function displayUserList(users) {
       objButton.style.cursor = "pointer";
   
         // Hook the `showRolePopup` function
-      roleButton.onclick = () => showObjPopup(name);
+      objButton.onclick = () => showObjPopup(name);
   
       li.appendChild(objButton);
     }

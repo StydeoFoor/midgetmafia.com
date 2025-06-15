@@ -359,6 +359,20 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
     console.log("Not on the login page.");
   }
 
+  if (window.location.href.includes("index.html")) {
+    const roleList = getElementById("roleList");
+    if (!loggedInUser) {
+      console.log("Foreign user detected");
+      roleList.style.display = "none";
+    }
+    else if (loggedInUser) {
+      roleList.style.display = "block";
+    }
+    else {
+
+      }
+  }
+
   // Easter egg: Chicken Nugget on 'N' key press
   document.addEventListener("keydown", function (event) {
   console.log("Key pressed:", event.key);
