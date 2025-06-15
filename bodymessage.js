@@ -170,30 +170,115 @@ function fetchMessages() {
 // Function to display messages in the chat box
 function displayMessages(messages) {
   const chatBox = document.getElementById("chat-box");
-  chatBox.scrollTop = chatBox.scrollHeight;
   if (!chatBox) {
     console.error("HTML element with ID 'chat-box' is missing.");
     return;
   }
 
-  chatBox.innerHTML = ""; // Clear the chat box
+  chatBox.innerHTML = ""; // Clear chat box
 
-  if (messages) {
-    Object.keys(messages).forEach((key) => {
-      const message = messages[key];
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const allowedRoles = ["Leader", "Manager", "Vice Manager", "Developer", "Executive"];
+  const canDelete = allowedRoles.includes(loggedInUser?.role);
 
-      // Create a container for each message
-      const messageElement = document.createElement("div");
-      messageElement.textContent = `${message.username}: ${message.message}`;
-      
-      // Apply styles for spacing
-      messageElement.style.margin = "13px 0"; // Add vertical spacing between messages // Optional border for clarity
-
-      chatBox.appendChild(messageElement);
-    });
-  } else {
-    chatBox.innerHTML = "<div>No messages to display</div>";
+  // Helper to format date with ordinal (e.g. 18th)
+  function getOrdinal(day) {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
   }
+
+  function formatDate(date) {
+    const options = { month: "long" };
+    const monthStr = date.toLocaleDateString(undefined, options);
+    const day = date.getDate();
+    const ordinal = getOrdinal(day);
+    return `${monthStr} ${day}${ordinal}`;
+  }
+
+  // Convert messages object into array with keys included
+  const messagesArray = Object.entries(messages).map(([key, msg]) => ({
+    key,
+    ...msg
+  }));
+
+  // Sort messages by timestamp ascending
+  messagesArray.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+  let previousDate = null;
+
+  messagesArray.forEach(msg => {
+    const currentDate = new Date(msg.timestamp);
+    const currentDateMidnight = new Date(currentDate);
+    currentDateMidnight.setHours(0, 0, 0, 0);
+
+    // Insert date divider if day changes
+    if (
+      !previousDate ||
+      previousDate.getTime() !== currentDateMidnight.getTime()
+    ) {
+      const dateDivider = document.createElement("div");
+      dateDivider.textContent = formatDate(currentDateMidnight);
+      dateDivider.style.fontSize = "14px";
+      dateDivider.style.fontWeight = "bold";
+      dateDivider.style.color = "#888";
+      dateDivider.style.margin = "20px 0 10px";
+      dateDivider.style.borderBottom = "1px solid #ccc";
+      dateDivider.style.paddingBottom = "5px";
+      chatBox.appendChild(dateDivider);
+    }
+
+    previousDate = currentDateMidnight;
+
+    // Create message element
+    const messageElement = document.createElement("div");
+    messageElement.style.display = "flex";
+    messageElement.style.justifyContent = "space-between";
+    messageElement.style.alignItems = "center";
+    messageElement.style.marginBottom = "8px";
+
+    const messageText = document.createElement("div");
+    messageText.innerHTML = `<strong>${msg.username}</strong>: ${msg.message}`;
+    messageText.style.flex = "1";
+
+    const time = currentDate.toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    }).toLowerCase();
+
+    const timeElement = document.createElement("span");
+    timeElement.textContent = time;
+    timeElement.style.fontSize = "12px";
+    timeElement.style.color = "#aaa";
+    timeElement.style.marginLeft = "10px";
+    timeElement.style.whiteSpace = "nowrap";
+
+    messageElement.appendChild(messageText);
+    messageElement.appendChild(timeElement);
+
+    if (canDelete) {
+      const deleteButton = document.createElement("button");
+      deleteButton.style.marginLeft = "10px";
+      deleteButton.style.padding = "5px";
+      deleteButton.style.backgroundColor = "transparent";
+      deleteButton.style.border = "none";
+      deleteButton.style.cursor = "pointer";
+      deleteButton.innerHTML = `<i class="fas fa-trash-alt" style="color: red; font-size: 16px;"></i>`;
+      deleteButton.onclick = () => deleteMessage(msg.key);
+
+      messageElement.appendChild(deleteButton);
+    }
+
+    chatBox.appendChild(messageElement);
+  });
+
+  // Scroll to bottom
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 // Listen for real-time updates (whenever new messages are added)

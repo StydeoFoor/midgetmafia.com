@@ -176,19 +176,98 @@ function displayDM(chatId) {
     const chatBox = document.getElementById("chat-box");
     chatBox.innerHTML = "";
 
-    if (messages) {
-      Object.values(messages).forEach((messageData) => {
-        const messageElement = document.createElement("div");
-        messageElement.textContent = `${messageData.sender}: ${messageData.message}`;
-        messageElement.style.margin = "13px 0";
-        chatBox.appendChild(messageElement);
-      });
-    } else {
+    if (!messages) {
       chatBox.innerHTML = "<div>No messages to display.</div>";
+      return;
     }
+
+    // Helper to format date with ordinal (e.g. 18th)
+    function getOrdinal(day) {
+      if (day > 3 && day < 21) return "th";
+      switch (day % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+      }
+    }
+
+    function formatDate(date) {
+      const options = { month: "long" };
+      const monthStr = date.toLocaleDateString(undefined, options);
+      const day = date.getDate();
+      const ordinal = getOrdinal(day);
+      return `${monthStr} ${day}${ordinal}`;
+    }
+
+    // Convert messages object into array, include keys if needed
+    const messagesArray = Object.entries(messages).map(([key, msg]) => ({
+      key,
+      ...msg
+    }));
+
+    // Sort messages by timestamp ascending
+    messagesArray.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    let previousDate = null;
+
+    messagesArray.forEach(msg => {
+      const currentDate = new Date(msg.timestamp);
+      const currentDateMidnight = new Date(currentDate);
+      currentDateMidnight.setHours(0, 0, 0, 0);
+
+      // Add date divider when day changes
+      if (
+        !previousDate ||
+        previousDate.getTime() !== currentDateMidnight.getTime()
+      ) {
+        const dateDivider = document.createElement("div");
+        dateDivider.textContent = formatDate(currentDateMidnight);
+        dateDivider.style.fontSize = "14px";
+        dateDivider.style.fontWeight = "bold";
+        dateDivider.style.color = "#888";
+        dateDivider.style.margin = "20px 0 10px";
+        dateDivider.style.borderBottom = "1px solid #ccc";
+        dateDivider.style.paddingBottom = "5px";
+        chatBox.appendChild(dateDivider);
+      }
+
+      previousDate = currentDateMidnight;
+
+      // Create message element
+      const messageElement = document.createElement("div");
+      messageElement.style.display = "flex";
+      messageElement.style.justifyContent = "space-between";
+      messageElement.style.alignItems = "center";
+      messageElement.style.marginBottom = "8px";
+
+      const messageText = document.createElement("div");
+      messageText.innerHTML = `<strong>${msg.sender}</strong>: ${msg.message}`;
+      messageText.style.flex = "1";
+
+      const time = currentDate.toLocaleTimeString(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      }).toLowerCase();
+
+      const timeElement = document.createElement("span");
+      timeElement.textContent = time;
+      timeElement.style.fontSize = "12px";
+      timeElement.style.color = "#aaa";
+      timeElement.style.marginLeft = "10px";
+      timeElement.style.whiteSpace = "nowrap";
+
+      messageElement.appendChild(messageText);
+      messageElement.appendChild(timeElement);
+
+      chatBox.appendChild(messageElement);
+    });
+
+    // Scroll to bottom after messages load
+    chatBox.scrollTop = chatBox.scrollHeight;
   });
 }
-
 // Send Message
 async function sendMessage() {
   const messageInput = document.getElementById("message-input");
