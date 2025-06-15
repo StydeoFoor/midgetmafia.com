@@ -225,6 +225,21 @@ async function displayUserList(users) {
         roleButton.onclick = () => showRolePopup(name);
   
         li.appendChild(roleButton);
+
+        const objButton = document.createElement("button");
+        objButton.textContent = "Set Objective";
+        objButton.style.marginLeft = "10px";
+        objButton.style.padding = "5px 10px";
+        objButton.style.backgroundColor = "limegreen";
+        objButton.style.color = "white";
+        objButton.style.border = "none";
+        objButton.style.borderRadius = "5px";
+        objButton.style.cursor = "pointer";
+  
+        // Hook the `showRolePopup` function
+        roleButton.onclick = () => showObjPopup(name);
+  
+        li.appendChild(objButton);
     }
     else if (allowedRoleChange) {
       const roleButton = document.createElement("button");
@@ -241,6 +256,21 @@ async function displayUserList(users) {
       roleButton.onclick = () => showRolePopup(name);
 
       li.appendChild(roleButton);
+
+      const objButton = document.createElement("button");
+      objButton.textContent = "Set Objective";
+      objButton.style.marginLeft = "10px";
+      objButton.style.padding = "5px 10px";
+      objButton.style.backgroundColor = "limegreen";
+      objButton.style.color = "white";
+      objButton.style.border = "none";
+      objButton.style.borderRadius = "5px";
+      objButton.style.cursor = "pointer";
+  
+        // Hook the `showRolePopup` function
+      roleButton.onclick = () => showObjPopup(name);
+  
+      li.appendChild(objButton);
     }
 
 
@@ -386,6 +416,104 @@ async function displayUserList(users) {
   
       alert(`Role for ${userName} updated to ${newRole}`);
       console.log(`User role updated: ${userName} -> ${newRole}`);
+  
+      document.body.removeChild(popup); // Close the popup
+      fetchAllUsers(); // Refresh the user list
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      alert("An error occurred while updating the role.");
+    }
+  }
+
+  function showObjPopup(userName) {
+    // Create popup elements
+    const popup = document.createElement("div");
+    popup.style.position = "fixed";
+    popup.style.top = "50%";
+    popup.style.left = "50%";
+    popup.style.transform = "translate(-50%, -50%)";
+    popup.style.backgroundColor = "white";
+    popup.style.padding = "20px";
+    popup.style.border = "1px solid #ccc";
+    popup.style.borderRadius = "10px";
+    popup.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+    popup.style.zIndex = "1000";
+  
+    const title = document.createElement("h3");
+    title.textContent = `Set Objective for ${userName}`;
+    title.style.marginBottom = "15px";
+  
+    const input = document.createElement("input");
+    input.style.placeholder = "Set Objective";
+    input.style.width = "100%";
+    input.style.padding = "10px";
+    input.style.marginBottom = "15px";
+  
+    const saveButton = document.createElement("button");
+    saveButton.textContent = "Save";
+    saveButton.style.marginRight = "10px";
+    saveButton.style.padding = "10px 15px";
+    saveButton.style.backgroundColor = "#28a745";
+    saveButton.style.color = "white";
+    saveButton.style.border = "none";
+    saveButton.style.borderRadius = "5px";
+    saveButton.style.cursor = "pointer";
+    saveButton.onclick = () => updateUserObj(userName, input.value, popup);
+  
+    const cancelButton = document.createElement("button");
+    cancelButton.textContent = "Cancel";
+    cancelButton.style.padding = "10px 15px";
+    cancelButton.style.backgroundColor = "#dc3545";
+    cancelButton.style.color = "white";
+    cancelButton.style.border = "none";
+    cancelButton.style.borderRadius = "5px";
+    cancelButton.style.cursor = "pointer";
+    cancelButton.onclick = () => document.body.removeChild(popup);
+  
+    popup.appendChild(title);
+    popup.appendChild(input);
+    popup.appendChild(saveButton);
+    popup.appendChild(cancelButton);
+  
+    document.body.appendChild(popup);
+  }
+
+  async function updateUserObj(userName, newObj, popup) {
+    try {
+      if (!userName) {
+        throw new Error("Invalid userName: userName is required");
+      }
+  
+      // Reference the entire "users" node
+      const usersRef = ref(database, "users");
+  
+      // Fetch all users to find the one with the matching name
+      const snapshot = await get(usersRef);
+      if (!snapshot.exists()) {
+        throw new Error("Users not found in the database");
+      }
+  
+      const users = snapshot.val();
+      let userKey = null;
+  
+      // Find the user key by matching the name
+      for (const key in users) {
+        if (users[key]?.name === userName) {
+          userKey = key;
+          break;
+        }
+      }
+  
+      if (!userKey) {
+        throw new Error(`User with name "${userName}" not found`);
+      }
+  
+      // Update the role of the specific user
+      const userRef = ref(database, `users/${userKey}`);
+      await set(userRef, { ...users[userKey], currentInvolvement: newObj });
+  
+      alert(`Objective for ${userName} updated`);
+      console.log(`User objective updated: ${userName} -> ${objRole}`);
   
       document.body.removeChild(popup); // Close the popup
       fetchAllUsers(); // Refresh the user list

@@ -265,6 +265,7 @@ function fetchMessages() {
 // Function to display messages in the chat box
 function displayMessages(messages) {
   const chatBox = document.getElementById("chat-box");
+  chatBox.scrollTop = chatBox.scrollHeight;
   if (!chatBox) {
     console.error("HTML element with ID 'chat-box' is missing.");
     return;

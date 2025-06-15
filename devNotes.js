@@ -201,6 +201,7 @@ function fetchMessages() {
 // Function to display messages in the chat box
 function displayMessages(messages) {
   const chatBox = document.getElementById("chat-box");
+  chatBox.scrollTop = chatBox.scrollHeight;
   if (!chatBox) {
     console.error("HTML element with ID 'chat-box' is missing.");
     return;
@@ -217,7 +218,7 @@ function displayMessages(messages) {
       messageElement.textContent = `${message.username}: ${message.message}`;
       
       // Apply styles for spacing
-      messageElement.style.margin = "13px 0"; // Add vertical spacing between messages // Optional border for clarity
+      messageElement.style.margin = "26px 0"; // Add vertical spacing between messages // Optional border for clarity
 
       chatBox.appendChild(messageElement);
     });
