@@ -349,6 +349,7 @@ async function displayUserList(users) {
       <option value="Developer">Developer</option>
       <option value="Bodyguard">Bodyguard</option>
       <option value="Member">Member</option>
+      <option style="color: green; font-weight: bold;" value="Retired Staff">Demote to Retired</option>
     `;
   
     const saveButton = document.createElement("button");

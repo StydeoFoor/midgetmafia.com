@@ -265,59 +265,124 @@ function fetchMessages() {
 // Function to display messages in the chat box
 function displayMessages(messages) {
   const chatBox = document.getElementById("chat-box");
-  chatBox.scrollTop = chatBox.scrollHeight;
   if (!chatBox) {
     console.error("HTML element with ID 'chat-box' is missing.");
     return;
   }
 
+  chatBox.innerHTML = ""; // Clear chat box
+
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const allowedRoles = ["Leader", "Manager", "Vice Manager", "Developer", "Executive"];
-  const canDelete = allowedRoles.includes(loggedInUser?.role); // Check if the user can delete messages
+  const canDelete = allowedRoles.includes(loggedInUser?.role);
 
-  chatBox.innerHTML = ""; // Clear the chat box
-
-  if (messages) {
-    Object.keys(messages).forEach((key) => {
-      const message = messages[key];
-
-      // Create a container for each message
-      const messageElement = document.createElement("div");
-      messageElement.style.display = "flex";
-      messageElement.style.justifyContent = "space-between";
-      messageElement.style.alignItems = "center";
-      messageElement.style.margin = "13px 0";
-
-      // Display message content
-      const messageText = document.createElement("span");
-      messageText.textContent = `${message.username}: ${message.message}`;
-      messageText.style.flex = "1";
-
-      messageElement.appendChild(messageText);
-
-      // Add Trash Can button if the user can delete
-      if (canDelete) {
-        const deleteButton = document.createElement("button");
-        deleteButton.style.marginLeft = "10px";
-        deleteButton.style.padding = "5px";
-        deleteButton.style.backgroundColor = "transparent";
-        deleteButton.style.border = "none";
-        deleteButton.style.cursor = "pointer";
-
-        // Add a red trash can icon
-        deleteButton.innerHTML = `<i class="fas fa-trash-alt" style="color: red; font-size: 16px;"></i>`;
-
-        // Attach delete functionality
-        deleteButton.onclick = () => deleteMessage(key);
-
-        messageElement.appendChild(deleteButton);
-      }
-
-      chatBox.appendChild(messageElement);
-    });
-  } else {
-    chatBox.innerHTML = "<div>No messages to display</div>";
+  // Helper to format date with ordinal (e.g. 18th)
+  function getOrdinal(day) {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
   }
+
+  function formatDate(date) {
+    const options = { month: "long" };
+    const monthStr = date.toLocaleDateString(undefined, options);
+    const day = date.getDate();
+    const ordinal = getOrdinal(day);
+    return `${monthStr} ${day}${ordinal}`;
+  }
+
+  let previousDate = null;
+
+  messages.forEach((msg, index) => {
+    const currentDate = new Date(msg.timestamp);
+    // Remove time info for comparison (set to midnight)
+    const currentDateMidnight = new Date(currentDate);
+    currentDateMidnight.setHours(0, 0, 0, 0);
+
+    // Insert date divider when date changes or first message
+    if (
+      !previousDate ||
+      previousDate.getTime() !== currentDateMidnight.getTime()
+    ) {
+      if (previousDate) {
+        // If previous date exists, show range from previous to current
+        const prevDateStr = formatDate(previousDate);
+        const currDateStr = formatDate(currentDateMidnight);
+
+        const dateDivider = document.createElement("div");
+        dateDivider.textContent = `${prevDateStr} to ${currDateStr}`;
+        dateDivider.style.fontSize = "14px";
+        dateDivider.style.fontWeight = "bold";
+        dateDivider.style.color = "#888";
+        dateDivider.style.margin = "20px 0 10px";
+        dateDivider.style.borderBottom = "1px solid #ccc";
+        dateDivider.style.paddingBottom = "5px";
+        chatBox.appendChild(dateDivider);
+      } else {
+        // For very first message, just show single date
+        const dateDivider = document.createElement("div");
+        dateDivider.textContent = formatDate(currentDateMidnight);
+        dateDivider.style.fontSize = "14px";
+        dateDivider.style.fontWeight = "bold";
+        dateDivider.style.color = "#888";
+        dateDivider.style.margin = "20px 0 10px";
+        dateDivider.style.borderBottom = "1px solid #ccc";
+        dateDivider.style.paddingBottom = "5px";
+        chatBox.appendChild(dateDivider);
+      }
+    }
+
+    previousDate = currentDateMidnight;
+
+    // Now render message
+    const messageElement = document.createElement("div");
+    messageElement.style.display = "flex";
+    messageElement.style.justifyContent = "space-between";
+    messageElement.style.alignItems = "center";
+    messageElement.style.marginBottom = "8px";
+
+    const messageText = document.createElement("div");
+    messageText.innerHTML = `<strong>${msg.username}</strong>: ${msg.message}`;
+    messageText.style.flex = "1";
+
+    const time = currentDate.toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    }).toLowerCase();
+
+    const timeElement = document.createElement("span");
+    timeElement.textContent = time;
+    timeElement.style.fontSize = "12px";
+    timeElement.style.color = "#aaa";
+    timeElement.style.marginLeft = "10px";
+    timeElement.style.whiteSpace = "nowrap";
+
+    messageElement.appendChild(messageText);
+    messageElement.appendChild(timeElement);
+
+    if (canDelete) {
+      const deleteButton = document.createElement("button");
+      deleteButton.style.marginLeft = "10px";
+      deleteButton.style.padding = "5px";
+      deleteButton.style.backgroundColor = "transparent";
+      deleteButton.style.border = "none";
+      deleteButton.style.cursor = "pointer";
+      deleteButton.innerHTML = `<i class="fas fa-trash-alt" style="color: red; font-size: 16px;"></i>`;
+      deleteButton.onclick = () => deleteMessage(index);
+
+      messageElement.appendChild(deleteButton);
+    }
+
+    chatBox.appendChild(messageElement);
+  });
+
+  // Scroll to bottom
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 async function deleteMessage(messageId) {
@@ -357,41 +422,6 @@ const sendButton = document.getElementById("send-button");
 
 // Add event listener for Send button
 
-const COHERE_API_KEY = "peALrg2ivFtYudJwPeUAY9mMY8PVuNbnFbJiuzKZ";
-let userMessageCount = 0; // Track user messages to decide when the bot should respond
-
-async function getBotResponse(userInput) {
-  try {
-    const response = await fetch("https://api.cohere.ai/generate", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${COHERE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "command-xlarge",
-        prompt: `You are a friendly and casual chatbot for a website. Respond simply and engagingly.\nUser: ${userInput}\nChatbot:`,
-        max_tokens: 100,
-        temperature: 0.7,
-      }),
-    });
-
-    const data = await response.json();
-    console.log("Cohere API Response:", data); // Log the full response
-
-    // Check if 'generations' exists and return the response text
-    if (data && data.generations && data.generations.length > 0) {
-      return data.generations[0].text.trim();
-    } else {
-      console.error("No generations found in response.");
-      return "Hmm, I couldn't understand that!";
-    }
-  } catch (error) {
-    console.error("Error getting response from Cohere API:", error);
-    return "Sorry, there was an error processing your message.";
-  }
-}
-
 // Handle send button click
 sendButton.addEventListener("click", async () => {
   await handleUserInput(); // Call shared function for input handling
@@ -425,30 +455,6 @@ async function handleUserInput() {
   // Send user message
   sendMessage(userMessage);
   inputField.value = ""; // Clear the input field after sending
-
-  // Increment user message count
-  /*
-  userMessageCount++;
-
-  // Show AI response
-  const chatBox = document.getElementById("chat-box");
-
-  const typingIndicator = document.createElement("div");
-  typingIndicator.textContent = "Titan is typing...";
-  typingIndicator.style.color = "gray";
-  chatBox.appendChild(typingIndicator);
-
-  const botResponse = await getBotResponse(userMessage);
-
-  chatBox.removeChild(typingIndicator);
-
-  const botMessageElement = document.createElement("div");
-  botMessageElement.innerHTML = `<strong style="color: darkred;">Titan:</strong> <span style="color: darkred;">${botResponse}</span>`;
-  botMessageElement.style.margin = "10px 0";
-  botMessageElement.style.borderTop = "1px solid #ccc";
-
-  chatBox.appendChild(botMessageElement);
-  */
 }
 
 
