@@ -143,7 +143,7 @@ function sendMessage(message) {
 
 // Fetch and display messages using 'get'
 function fetchMessages() {
-  const messagesRef = ref(database, "adminChats/"); // Reference to your 'chats' node
+  const messagesRef = ref(database, "logs/"); // Reference to your 'chats' node
 
   // Fetch messages once from Firebase
   get(messagesRef)
