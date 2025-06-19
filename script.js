@@ -1,5 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {
+  getAuth,
+  signInAnonymously,
+  signOut
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import {
   getDatabase,
   ref,
   set,
@@ -7,7 +12,6 @@ import {
   get,
   onValue
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
-import { getAuth, signInAnonymously, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const topbar = document.getElementById("myTopBar");
