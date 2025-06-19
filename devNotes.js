@@ -130,9 +130,6 @@ const allowedRoles = ["Developer", "Editor", "TrustedInstaller"];
 
 // Function to check role and enable message input
 function initializeMessageInput() {
-  if (!auth.currentUser) {
-  return; // Stops sending message
-  } 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
   const messageInput = document.getElementById("message-input");
