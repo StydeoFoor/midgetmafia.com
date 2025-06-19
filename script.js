@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
               alert("Login successful!");
               window.location.href = "dashboard.html";
             } else {
-              signOut(auth)
+              await signOut(auth);
               alert("Invalid username or password.");
             }
           } else {
