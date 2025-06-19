@@ -130,7 +130,6 @@ loggedInUser = loggedInUser.name; // Extract the name string
 // Populate DM List
 async function fetchUserDMs() {
   if (!auth.currentUser) {
-  alert("User not authenticated, go to login and re-login");
   return; // Stops sending message
   } 
   try {

@@ -256,6 +256,9 @@ function sendMessage(message) {
 
 // Fetch and display messages using 'get'
 function fetchMessages() {
+  if (!auth.currentUser) {
+  return; // Stops sending message
+  } 
   const messagesRef = ref(database, "chats/"); // Reference to your 'chats' node
 
   // Fetch messages once from Firebase

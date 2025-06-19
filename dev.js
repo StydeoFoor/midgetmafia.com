@@ -168,7 +168,6 @@ document.getElementById("userForm").addEventListener("submit", async (event) => 
 
 async function loadRequests() {
   if (!auth.currentUser) {
-  alert("User not authenticated, go to login and re-login");
   return; // Stops sending message
   } 
     const requestsRef = ref(database, "requests");

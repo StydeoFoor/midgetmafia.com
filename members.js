@@ -120,7 +120,9 @@ initializeTheme();
 
 // Fetch all user names from the "users" node
 async function fetchAllUsers() {
-
+  if (!auth.currentUser) {
+  return; // Stops sending message
+  } 
   const usersRef = ref(database, "users");
 
   try {
@@ -143,6 +145,9 @@ async function fetchAllUsers() {
 }
   
 async function displayUserList(users) {
+  if (!auth.currentUser) {
+  return; // Stops sending message
+  } 
   const userListContainer = document.getElementById("user-list");
 
   if (!userListContainer) {
