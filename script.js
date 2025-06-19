@@ -2,7 +2,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebas
 import {
   getAuth,
   signInAnonymously,
-  signOut
+  signOut,
+  setPersistence, browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 import {
   getDatabase,
@@ -57,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       // Anonymous Auth
+      await setPersistence(auth, browserLocalPersistence)
       const userCredential = await signInAnonymously(auth);
       console.log("Anonymous auth success. UID:", userCredential.user.uid);
 
