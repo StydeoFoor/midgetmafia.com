@@ -215,8 +215,9 @@ function displayMessages(messages) {
     messageElement.style.marginBottom = "8px";
 
     const messageText = document.createElement("div");
-    messageText.innerHTML = `<strong>${msg.number}</strong>: ${msg.message}`;
+    messageText.innerHTML = `<strong>${msg.number}</strong>: ${msg.text}`;
     messageText.style.flex = "1";
+    messageText.style.color = "black";
 
     const time = currentDate.toLocaleTimeString(undefined, {
       hour: "numeric",
