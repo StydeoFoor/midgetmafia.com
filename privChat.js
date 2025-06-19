@@ -5,6 +5,11 @@ import {
   get,
   onValue,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB17qMT--ON4KaYZLnEjU5HbwZmds9KgWg",
@@ -20,6 +25,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+const auth = getAuth(app);
 const topbar = document.getElementById("myTopBar");
 const body = document.body;
 
@@ -130,6 +136,10 @@ function fetchMessages() {
 
 // Function to display messages in the chat box
 function displayMessages(messages) {
+  if (!isFirebaseAuthReady || !auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
   const chatBox = document.getElementById("chat-box");
   chatBox.scrollTop = chatBox.scrollHeight;
   if (!chatBox) {

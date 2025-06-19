@@ -1,5 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 // Firebase Initialization
 const firebaseConfig = {
@@ -15,6 +20,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+const auth = getAuth(app);
 const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 const topbar = document.getElementById("myTopBar");
 const body = document.body;
@@ -130,6 +136,10 @@ function checkUser() {
 checkUser();
 
 document.getElementById("userForm").addEventListener("submit", async (event) => {
+  if (!isFirebaseAuthReady || !auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
   event.preventDefault();
 
   const username = document.getElementById("username").value.trim();
@@ -157,6 +167,10 @@ document.getElementById("userForm").addEventListener("submit", async (event) => 
 });
 
 async function loadRequests() {
+  if (!isFirebaseAuthReady || !auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
     const requestsRef = ref(database, "requests");
   
     onValue(requestsRef, (snapshot) => {

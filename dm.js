@@ -1,5 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
   import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+  import {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 // Firebase Initialization
 const firebaseConfig = {
   apiKey: "AIzaSyB17qMT--ON4KaYZLnEjU5HbwZmds9KgWg",
@@ -17,6 +22,7 @@ const database = getDatabase(app);
 const topbar = document.getElementById("myTopBar");
 const sidebar = document.getElementById("msgSidebar");
 const body = document.body;
+const auth = getAuth(app);
 
 const themes = ["dark", "light", "ocean", "sunset", "midnight"];
 let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
@@ -123,6 +129,10 @@ loggedInUser = loggedInUser.name; // Extract the name string
 
 // Populate DM List
 async function fetchUserDMs() {
+  if (!isFirebaseAuthReady || !auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
   try {
     const dmsRef = ref(database, "dm_chats");
     const snapshot = await get(dmsRef);
@@ -159,6 +169,10 @@ async function fetchUserDMs() {
 
 // Switch Chat
 function switchChat(chatId, otherUser) {
+  if (!isFirebaseAuthReady || !auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
   currentChatId = chatId;
 
   const chatHeader = document.getElementById("chat-header");
@@ -169,6 +183,10 @@ function switchChat(chatId, otherUser) {
 
 // Display Messages
 function displayDM(chatId) {
+  if (!isFirebaseAuthReady || !auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
   const messagesRef = ref(database, `dm_chats/${chatId}/messages`);
 
   onValue(messagesRef, (snapshot) => {
@@ -270,6 +288,10 @@ function displayDM(chatId) {
 }
 // Send Message
 async function sendMessage() {
+  if (!isFirebaseAuthReady || !auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
   const messageInput = document.getElementById("message-input");
   const message = messageInput.value.trim();
 

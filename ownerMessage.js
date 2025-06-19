@@ -6,6 +6,11 @@ import {
   get,
   onValue,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -22,6 +27,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get Firebase Database instance
+const auth = getAuth(app);
 const topbar = document.getElementById("myTopBar");
 const body = document.body;
 
@@ -113,6 +119,10 @@ initializeTheme();
 
 // Send message function using 'set'
 function sendMessage(message) {
+  if (!isFirebaseAuthReady || !auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) {
     console.log("User is not logged in");
@@ -143,6 +153,10 @@ function sendMessage(message) {
 
 // Fetch and display messages using 'get'
 function fetchMessages() {
+  if (!isFirebaseAuthReady || !auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
   const messagesRef = ref(database, "adminChats/"); // Reference to your 'chats' node
 
   // Fetch messages once from Firebase

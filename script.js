@@ -5,8 +5,9 @@ import {
   set,
   child,
   get,
-  onValue,
+  onValue
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const topbar = document.getElementById("myTopBar");
@@ -29,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Firebase Initialization
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
+  const auth = getAuth(app);
 
   function initializeLoginForm() {
     const loginForm = document.getElementById("loginForm");
@@ -56,6 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (user.password === password) {
               localStorage.setItem("loggedInUser", JSON.stringify(user)); // Store only the logged-in user's info
               alert("Login successful!");
+              const userCredential = await signInAnonymously(auth);
+              console.log("Firebase anonymous auth successful, UID:", userCredential.user.uid);
               window.location.href = "dashboard.html";
             } else {
               alert("Invalid username or password.");

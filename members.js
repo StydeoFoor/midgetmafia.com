@@ -13,8 +13,14 @@ const firebaseConfig = {
   measurementId: "G-3PTREP7EJ8",
 };
 
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+const auth = getAuth(app);
 const topbar = document.getElementById("myTopBar");
 const body = document.body;
 
@@ -114,6 +120,11 @@ initializeTheme();
 
 // Fetch all user names from the "users" node
 async function fetchAllUsers() {
+  if (!isFirebaseAuthReady || !auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
+
   const usersRef = ref(database, "users");
 
   try {

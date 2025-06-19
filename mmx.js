@@ -6,6 +6,11 @@ import {
   get,
   onValue,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -22,6 +27,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get Firebase Database instance
+const auth = getAuth(app);
 const topbar = document.getElementById("myTopBar");
 const body = document.body;
 
@@ -112,37 +118,12 @@ document.getElementById("themeButton")?.addEventListener("click", () => {
 initializeTheme();
 
 // Send message function using 'set'
-function sendMessage(message) {
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (!loggedInUser) {
-    console.log("User is not logged in");
-    return;
-  }
-
-  if (message.length > 500) {
-    alert("Message exceeds the 500-character limit. Please shorten your message.");
-    return;
-  }
-
-  // Get reference to 'chats' node in Firebase
-  const messageRef = ref(database, "adminChats/" + Date.now()); // Timestamp as unique ID for each message
-
-  // Set the message data in Firebase
-  set(messageRef, {
-    username: loggedInUser.name,
-    message: message,
-    timestamp: Date.now(),
-  })
-    .then(() => {
-      console.log("Message sent successfully");
-    })
-    .catch((error) => {
-      console.error("Error sending message:", error);
-    });
-}
-
 // Fetch and display messages using 'get'
 function fetchMessages() {
+  if (!isFirebaseAuthReady || !auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
   const messagesRef = ref(database, "logs/"); // Reference to your 'chats' node
 
   // Fetch messages once from Firebase

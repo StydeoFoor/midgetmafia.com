@@ -195,6 +195,11 @@ function containsBannedWords(message) {
 }
 
 function sendMessage(message) {
+  if (!isFirebaseAuthReady || !auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
+
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) {
     console.log("User is not logged in");
