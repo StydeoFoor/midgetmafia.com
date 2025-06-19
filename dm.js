@@ -19,10 +19,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+const auth = getAuth(app);
 const topbar = document.getElementById("myTopBar");
 const sidebar = document.getElementById("msgSidebar");
 const body = document.body;
-const auth = getAuth(app);
 
 const themes = ["dark", "light", "ocean", "sunset", "midnight"];
 let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
