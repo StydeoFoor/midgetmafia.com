@@ -130,8 +130,7 @@ const allowedRoles = ["Developer", "Editor", "TrustedInstaller"];
 
 // Function to check role and enable message input
 function initializeMessageInput() {
-  if (!isFirebaseAuthReady || !auth.currentUser) {
-  alert("User not authenticated, go to login and re-login");
+  if (!auth.currentUser) {
   return; // Stops sending message
   } 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
