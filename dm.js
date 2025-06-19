@@ -1,21 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-  import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
-  import {
+import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import {
   getAuth,
   signInAnonymously,
   onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-// Firebase Initialization
-const firebaseConfig = {
-  apiKey: "AIzaSyB17qMT--ON4KaYZLnEjU5HbwZmds9KgWg",
-  authDomain: "midget-mafia.firebaseapp.com",
-  databaseURL: "https://midget-mafia-default-rtdb.firebaseio.com",
-  projectId: "midget-mafia",
-  storageBucket: "midget-mafia.firebasestorage.app",
-  messagingSenderId: "597092364947",
-  appId: "1:597092364947:web:2c7db18295c2cd151f5366",
-  measurementId: "G-3PTREP7EJ8",
-};
+} from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
