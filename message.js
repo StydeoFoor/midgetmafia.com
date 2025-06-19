@@ -6,6 +6,11 @@ import {
   get,
   onValue,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import {
+  getAuth,
+  signInAnonymously,
+  signOut
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -22,6 +27,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get Firebase Database instance
+const auth = getAuth(app);
 const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 const topbar = document.getElementById("myTopBar");
 const sidebar = document.getElementById("msgSidebar");
