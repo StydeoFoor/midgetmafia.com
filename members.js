@@ -120,10 +120,6 @@ initializeTheme();
 
 // Fetch all user names from the "users" node
 async function fetchAllUsers() {
-  if (!auth.currentUser) {
-  alert("User not authenticated, go to login and re-login");
-  return; // Stops sending message
-  } 
 
   const usersRef = ref(database, "users");
 
