@@ -136,7 +136,7 @@ function containsBannedWords(message) {
 }
 
 function sendMessage(message) {
-  if (!isFirebaseAuthReady || !auth.currentUser) {
+  if (!auth.currentUser) {
   alert("User not authenticated, go to login and re-login");
   return; // Stops sending message
   } 
@@ -177,7 +177,7 @@ function sendMessage(message) {
 
 // Fetch and display messages using 'get'
 function fetchMessages() {
-  if (!isFirebaseAuthReady || !auth.currentUser) {
+  if (!auth.currentUser) {
   alert("User not authenticated, go to login and re-login");
   return; // Stops sending message
   } 

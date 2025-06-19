@@ -117,6 +117,10 @@ document.getElementById("themeButton")?.addEventListener("click", () => {
 initializeTheme();
 
 function fetchMessages() {
+  if (!auth.currentUser) {
+  alert("User not authenticated, go to login and re-login");
+  return; // Stops sending message
+  } 
   const messagesRef = ref(database, "privChats/"); // Reference to your 'chats' node
 
   // Fetch messages once from Firebase
@@ -136,10 +140,6 @@ function fetchMessages() {
 
 // Function to display messages in the chat box
 function displayMessages(messages) {
-  if (!isFirebaseAuthReady || !auth.currentUser) {
-  alert("User not authenticated, go to login and re-login");
-  return; // Stops sending message
-  } 
   const chatBox = document.getElementById("chat-box");
   chatBox.scrollTop = chatBox.scrollHeight;
   if (!chatBox) {

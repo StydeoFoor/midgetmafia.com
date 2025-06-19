@@ -120,7 +120,7 @@ initializeTheme();
 // Send message function using 'set'
 // Fetch and display messages using 'get'
 function fetchMessages() {
-  if (!isFirebaseAuthReady || !auth.currentUser) {
+  if (!auth.currentUser) {
   alert("User not authenticated, go to login and re-login");
   return; // Stops sending message
   } 

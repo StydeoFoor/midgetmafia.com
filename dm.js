@@ -129,7 +129,7 @@ loggedInUser = loggedInUser.name; // Extract the name string
 
 // Populate DM List
 async function fetchUserDMs() {
-  if (!isFirebaseAuthReady || !auth.currentUser) {
+  if (!auth.currentUser) {
   alert("User not authenticated, go to login and re-login");
   return; // Stops sending message
   } 
@@ -169,7 +169,7 @@ async function fetchUserDMs() {
 
 // Switch Chat
 function switchChat(chatId, otherUser) {
-  if (!isFirebaseAuthReady || !auth.currentUser) {
+  if (!auth.currentUser) {
   alert("User not authenticated, go to login and re-login");
   return; // Stops sending message
   } 
@@ -183,7 +183,7 @@ function switchChat(chatId, otherUser) {
 
 // Display Messages
 function displayDM(chatId) {
-  if (!isFirebaseAuthReady || !auth.currentUser) {
+  if (!auth.currentUser) {
   alert("User not authenticated, go to login and re-login");
   return; // Stops sending message
   } 
@@ -288,7 +288,7 @@ function displayDM(chatId) {
 }
 // Send Message
 async function sendMessage() {
-  if (!isFirebaseAuthReady || !auth.currentUser) {
+  if (!auth.currentUser) {
   alert("User not authenticated, go to login and re-login");
   return; // Stops sending message
   } 

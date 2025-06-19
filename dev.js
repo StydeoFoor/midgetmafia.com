@@ -136,7 +136,7 @@ function checkUser() {
 checkUser();
 
 document.getElementById("userForm").addEventListener("submit", async (event) => {
-  if (!isFirebaseAuthReady || !auth.currentUser) {
+  if (!auth.currentUser) {
   alert("User not authenticated, go to login and re-login");
   return; // Stops sending message
   } 
@@ -167,7 +167,7 @@ document.getElementById("userForm").addEventListener("submit", async (event) => 
 });
 
 async function loadRequests() {
-  if (!isFirebaseAuthReady || !auth.currentUser) {
+  if (!auth.currentUser) {
   alert("User not authenticated, go to login and re-login");
   return; // Stops sending message
   } 
