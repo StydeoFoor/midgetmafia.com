@@ -7,7 +7,7 @@ import {
   get,
   onValue
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, signInAnonymously, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const topbar = document.getElementById("myTopBar");
@@ -47,6 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
   
         try {
+          const userCredential = await signInAnonymously(auth);
+          console.log("Firebase anonymous auth successful, UID:", userCredential.user.uid);
           // Fetch only the specific user's data from Firebase
           const userRef = ref(database, `users/${username}`);
           const snapshot = await get(userRef);
@@ -58,10 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (user.password === password) {
               localStorage.setItem("loggedInUser", JSON.stringify(user)); // Store only the logged-in user's info
               alert("Login successful!");
-              const userCredential = await signInAnonymously(auth);
-              console.log("Firebase anonymous auth successful, UID:", userCredential.user.uid);
               window.location.href = "dashboard.html";
             } else {
+              signOut(auth)
               alert("Invalid username or password.");
             }
           } else {
