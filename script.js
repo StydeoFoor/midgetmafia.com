@@ -32,49 +32,59 @@ document.addEventListener("DOMContentLoaded", () => {
   const database = getDatabase(app);
   const auth = getAuth(app);
 
-  function initializeLoginForm() {
-    const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-      loginForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
-  
-        const username = document.getElementById("username").value.trim();
-        const password = document.getElementById("password").value.trim();
-  
-        if (!username || !password) {
-          alert("Username and password are required.");
-          return;
-        }
-  
-        try {
-          const userCredential = await signInAnonymously(auth);
-          console.log("Firebase anonymous auth successful, UID:", userCredential.user.uid);
-          // Fetch only the specific user's data from Firebase
-          const userRef = ref(database, `users/${username}`);
-          const snapshot = await get(userRef);
-  
-          if (snapshot.exists()) {
-            const user = snapshot.val();
-  
-            // Validate the password
-            if (user.password === password) {
-              localStorage.setItem("loggedInUser", JSON.stringify(user)); // Store only the logged-in user's info
-              alert("Login successful!");
-              window.location.href = "dashboard.html";
-            } else {
-              await signOut(auth);
-              alert("Invalid username or password.");
-            }
-          } else {
-            alert("Invalid username or password.");
-          }
-        } catch (error) {
-          console.error("Error during login:", error);
-          alert("An error occurred while logging in. Please try again.");
-        }
-      });
-    }
+  async function initializeLoginForm() {
+  const loginForm = document.getElementById("loginForm");
+
+  if (!loginForm) {
+    console.error("Login form not found.");
+    return;
   }
+
+  loginForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!username || !password) {
+      alert("Username and password are required.");
+      return;
+    }
+
+    try {
+      // Anonymous Auth
+      const userCredential = await signInAnonymously(auth);
+      console.log("Anonymous auth success. UID:", userCredential.user.uid);
+
+      // Get user data from DB
+      const userRef = ref(database, `users/${username}`);
+      const snapshot = await get(userRef);
+
+      if (!snapshot.exists()) {
+        await signOut(auth);
+        alert("Invalid username or password.");
+        return;
+      }
+
+      const user = snapshot.val();
+
+      if (user.password !== password) {
+        await signOut(auth);
+        alert("Invalid username or password.");
+        return;
+      }
+
+      // Login success
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
+      alert("Login successful!");
+      window.location.href = "dashboard.html";
+
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Something went wrong during login.");
+    }
+  });
+}
 
   // Firebase initialization moved before the functions that use it
 
