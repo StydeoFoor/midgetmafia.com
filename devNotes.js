@@ -158,8 +158,8 @@ function initializeMessageInput() {
 // Send message function using 'set'
 function sendMessage(message) {
   if (!auth.currentUser) {
-  alert("User not authenticated, go to login and re-login");
-  return; // Stops sending message
+    alert("User not authenticated, go to login and re-login");
+    return; // Stops sending message
   } 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) {
@@ -193,7 +193,7 @@ function sendMessage(message) {
 function fetchMessages() {
   const messagesRef = ref(database, "devNotes/"); // Reference to your 'chats' node
   if (!auth.currentUser) {
-  return; // Stops sending message
+    return; // Stops sending message
   } 
 
   // Fetch messages once from Firebase

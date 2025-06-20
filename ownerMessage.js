@@ -120,8 +120,8 @@ initializeTheme();
 // Send message function using 'set'
 function sendMessage(message) {
   if (!auth.currentUser) {
-  alert("User not authenticated, go to login and re-login");
-  return; // Stops sending message
+    alert("User not authenticated, go to login and re-login");
+    return; // Stops sending message
   } 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) {
@@ -154,7 +154,7 @@ function sendMessage(message) {
 // Fetch and display messages using 'get'
 function fetchMessages() {
   if (!auth.currentUser) {
-  return; // Stops sending message
+    return; // Stops sending message
   } 
   const messagesRef = ref(database, "adminChats/"); // Reference to your 'chats' node
 

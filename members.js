@@ -1,5 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 // Firebase Initialization
 const firebaseConfig = {
@@ -12,11 +16,6 @@ const firebaseConfig = {
   appId: "1:597092364947:web:2c7db18295c2cd151f5366",
   measurementId: "G-3PTREP7EJ8",
 };
-
-import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
@@ -121,7 +120,7 @@ initializeTheme();
 // Fetch all user names from the "users" node
 async function fetchAllUsers() {
   if (!auth.currentUser) {
-  return; // Stops sending message
+    return; // Stops sending message
   } 
   const usersRef = ref(database, "users");
 

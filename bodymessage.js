@@ -157,7 +157,8 @@ function sendMessage(message) {
 // Fetch and display messages using 'get'
 function fetchMessages() {
   if (!auth.currentUser) {
-  return; // Stops sending message
+    console.log("Not authenticated");
+    return; // Stops sending message
   } 
   const messagesRef = ref(database, "bodyChats/"); // Reference to your 'chats' node
 

@@ -121,7 +121,7 @@ initializeTheme();
 // Fetch and display messages using 'get'
 function fetchMessages() {
   if (!auth.currentUser) {
-  return; // Stops sending message
+    return; // Stops sending message
   } 
   const messagesRef = ref(database, "logs/"); // Reference to your 'chats' node
 

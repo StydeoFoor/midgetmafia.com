@@ -118,7 +118,7 @@ initializeTheme();
 
 function fetchMessages() {
   if (!auth.currentUser) {
-  return; // Stops sending message
+    return; // Stops sending message
   } 
   const messagesRef = ref(database, "privChats/"); // Reference to your 'chats' node
 

@@ -137,8 +137,8 @@ checkUser();
 
 document.getElementById("userForm").addEventListener("submit", async (event) => {
   if (!auth.currentUser) {
-  alert("User not authenticated, go to login and re-login");
-  return; // Stops sending message
+    alert("User not authenticated, go to login and re-login");
+    return; // Stops sending message
   } 
   event.preventDefault();
 
@@ -168,7 +168,7 @@ document.getElementById("userForm").addEventListener("submit", async (event) => 
 
 async function loadRequests() {
   if (!auth.currentUser) {
-  return; // Stops sending message
+    return; // Stops sending message
   } 
     const requestsRef = ref(database, "requests");
   

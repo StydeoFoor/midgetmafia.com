@@ -3,7 +3,7 @@ import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/fir
 import {
   getAuth,
   signInAnonymously,
-  onAuthStateChanged,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 // Firebase Initialization
 const firebaseConfig = {
@@ -130,7 +130,7 @@ loggedInUser = loggedInUser.name; // Extract the name string
 // Populate DM List
 async function fetchUserDMs() {
   if (!auth.currentUser) {
-  return; // Stops sending message
+    return; // Stops sending message
   } 
   try {
     const dmsRef = ref(database, "dm_chats");

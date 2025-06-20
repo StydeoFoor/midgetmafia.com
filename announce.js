@@ -188,7 +188,7 @@ function sendMessage(message) {
 // Fetch and display messages using 'get'
 function fetchMessages() {
   if (!auth.currentUser) {
-  return; // Stops sending message
+    return; // Stops sending message
   } 
   const messagesRef = ref(database, "announce/"); // Reference to your 'chats' node
 
