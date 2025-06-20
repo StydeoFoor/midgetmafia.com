@@ -9,7 +9,8 @@ import {
 import {
   getAuth,
   signInAnonymously,
-  signOut
+  signOut,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 // Firebase Configuration
