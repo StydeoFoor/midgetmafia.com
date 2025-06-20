@@ -381,7 +381,7 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
   }
 
   if (window.location.href.includes("index.html")) {
-    const roleList = getElementById("roleList");
+    const roleList = document.getElementById("roleList");
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (!loggedInUser) {
       console.log("Foreign user detected");
