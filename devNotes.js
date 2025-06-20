@@ -126,6 +126,25 @@ document.getElementById("themeButton")?.addEventListener("click", () => {
 // Call the theme initializer
 initializeTheme();
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User is authenticated:", user.uid);
+    fetchMessages(); // NOW it's safe to call it
+    initializeMessageInput();
+  } else {
+    console.log("No user, signing in...");
+    signInAnonymously(auth)
+      .then((result) => {
+        console.log("Signed in as:", result.user.uid);
+        fetchMessages(); // Also safe here
+        initializeMessageInput();
+      })
+      .catch((error) => {
+        console.error("Sign-in failed:", error);
+      });
+  }
+});
+
 const allowedRoles = ["Developer", "Editor", "TrustedInstaller"];
 
 // Function to check role and enable message input
@@ -157,10 +176,6 @@ function initializeMessageInput() {
 
 // Send message function using 'set'
 function sendMessage(message) {
-  if (!auth.currentUser) {
-    alert("User not authenticated, go to login and re-login");
-    return; // Stops sending message
-  } 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) {
     console.log("User is not logged in");
@@ -192,9 +207,6 @@ function sendMessage(message) {
 // Fetch and display messages using 'get'
 function fetchMessages() {
   const messagesRef = ref(database, "devNotes/"); // Reference to your 'chats' node
-  if (!auth.currentUser) {
-    return; // Stops sending message
-  } 
 
   // Fetch messages once from Firebase
   get(messagesRef)

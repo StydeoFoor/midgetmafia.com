@@ -128,6 +128,25 @@ initializeTheme();
 
 const allowedRoles = ["Developer", "Executive", "Leader", "Vice Manager", "Manager", "Vice Owner", "TrustedInstaller"];
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User is authenticated:", user.uid);
+    fetchMessages(); // NOW it's safe to call it
+    initializeMessageInput();
+  } else {
+    console.log("No user, signing in...");
+    signInAnonymously(auth)
+      .then((result) => {
+        console.log("Signed in as:", result.user.uid);
+        fetchMessages(); // Also safe here
+        initializeMessageInput();
+      })
+      .catch((error) => {
+        console.error("Sign-in failed:", error);
+      });
+  }
+});
+
 // Function to check role and enable message input
 function initializeMessageInput() {
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -187,9 +206,6 @@ function sendMessage(message) {
 
 // Fetch and display messages using 'get'
 function fetchMessages() {
-  if (!auth.currentUser) {
-    return; // Stops sending message
-  } 
   const messagesRef = ref(database, "announce/"); // Reference to your 'chats' node
 
   // Fetch messages once from Firebase

@@ -127,11 +127,25 @@ if (!loggedInUser || !loggedInUser.name) {
 }
 loggedInUser = loggedInUser.name; // Extract the name string
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User is authenticated:", user.uid);
+    fetchUserDMs(); // NOW it's safe to call it
+  } else {
+    console.log("No user, signing in...");
+    signInAnonymously(auth)
+      .then((result) => {
+        console.log("Signed in as:", result.user.uid);
+        fetchMessages(); // Also safe here
+      })
+      .catch((error) => {
+        console.error("Sign-in failed:", error);
+      });
+  }
+});
+
 // Populate DM List
 async function fetchUserDMs() {
-  if (!auth.currentUser) {
-    return; // Stops sending message
-  } 
   try {
     const dmsRef = ref(database, "dm_chats");
     const snapshot = await get(dmsRef);
@@ -168,10 +182,6 @@ async function fetchUserDMs() {
 
 // Switch Chat
 function switchChat(chatId, otherUser) {
-  if (!auth.currentUser) {
-  alert("User not authenticated, go to login and re-login");
-  return; // Stops sending message
-  } 
   currentChatId = chatId;
 
   const chatHeader = document.getElementById("chat-header");
@@ -182,10 +192,6 @@ function switchChat(chatId, otherUser) {
 
 // Display Messages
 function displayDM(chatId) {
-  if (!auth.currentUser) {
-  alert("User not authenticated, go to login and re-login");
-  return; // Stops sending message
-  } 
   const messagesRef = ref(database, `dm_chats/${chatId}/messages`);
 
   onValue(messagesRef, (snapshot) => {
@@ -287,10 +293,6 @@ function displayDM(chatId) {
 }
 // Send Message
 async function sendMessage() {
-  if (!auth.currentUser) {
-  alert("User not authenticated, go to login and re-login");
-  return; // Stops sending message
-  } 
   const messageInput = document.getElementById("message-input");
   const message = messageInput.value.trim();
 

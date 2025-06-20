@@ -119,6 +119,23 @@ document.getElementById("themeButton")?.addEventListener("click", () => {
 // Call the theme initializer
 initializeTheme();
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User is authenticated:", user.uid);
+    loadRequests(); // NOW it's safe to call it
+  } else {
+    console.log("No user, signing in...");
+    signInAnonymously(auth)
+      .then((result) => {
+        console.log("Signed in as:", result.user.uid);
+        loadRequests(); // Also safe here
+      })
+      .catch((error) => {
+        console.error("Sign-in failed:", error);
+      });
+  }
+});
+
 function checkUser() {
   if (!loggedInUser) {
     alert("You are not logged in");
@@ -136,10 +153,6 @@ function checkUser() {
 checkUser();
 
 document.getElementById("userForm").addEventListener("submit", async (event) => {
-  if (!auth.currentUser) {
-    alert("User not authenticated, go to login and re-login");
-    return; // Stops sending message
-  } 
   event.preventDefault();
 
   const username = document.getElementById("username").value.trim();
@@ -167,9 +180,6 @@ document.getElementById("userForm").addEventListener("submit", async (event) => 
 });
 
 async function loadRequests() {
-  if (!auth.currentUser) {
-    return; // Stops sending message
-  } 
     const requestsRef = ref(database, "requests");
   
     onValue(requestsRef, (snapshot) => {

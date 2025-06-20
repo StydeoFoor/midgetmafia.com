@@ -124,6 +124,23 @@ document.getElementById("themeButton")?.addEventListener("click", () => {
 // Call the theme initializer
 initializeTheme();
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User is authenticated:", user.uid);
+    fetchMessages(); // NOW it's safe to call it
+  } else {
+    console.log("No user, signing in...");
+    signInAnonymously(auth)
+      .then((result) => {
+        console.log("Signed in as:", result.user.uid);
+        fetchMessages(); // Also safe here
+      })
+      .catch((error) => {
+        console.error("Sign-in failed:", error);
+      });
+  }
+});
+
 // Send message function using 'set'
 function sendMessage(message) {
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -156,10 +173,6 @@ function sendMessage(message) {
 
 // Fetch and display messages using 'get'
 function fetchMessages() {
-  if (!auth.currentUser) {
-    console.log("Not authenticated");
-    return; // Stops sending message
-  } 
   const messagesRef = ref(database, "bodyChats/"); // Reference to your 'chats' node
 
   // Fetch messages once from Firebase

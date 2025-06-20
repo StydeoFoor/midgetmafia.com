@@ -119,10 +119,24 @@ initializeTheme();
 
 // Send message function using 'set'
 // Fetch and display messages using 'get'
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User is authenticated:", user.uid);
+    fetchMessages(); // NOW it's safe to call it
+  } else {
+    console.log("No user, signing in...");
+    signInAnonymously(auth)
+      .then((result) => {
+        console.log("Signed in as:", result.user.uid);
+        fetchMessages(); // Also safe here
+      })
+      .catch((error) => {
+        console.error("Sign-in failed:", error);
+      });
+  }
+});
+
 function fetchMessages() {
-  if (!auth.currentUser) {
-    return; // Stops sending message
-  } 
   const messagesRef = ref(database, "logs/"); // Reference to your 'chats' node
 
   // Fetch messages once from Firebase

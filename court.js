@@ -135,11 +135,24 @@ function containsBannedWords(message) {
   return regex.test(message);
 }
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User is authenticated:", user.uid);
+    fetchMessages(); // NOW it's safe to call it
+  } else {
+    console.log("No user, signing in...");
+    signInAnonymously(auth)
+      .then((result) => {
+        console.log("Signed in as:", result.user.uid);
+        fetchMessages(); // Also safe here
+      })
+      .catch((error) => {
+        console.error("Sign-in failed:", error);
+      });
+  }
+});
+
 function sendMessage(message) {
-  if (!auth.currentUser) {
-    alert("User not authenticated, go to login and re-login");
-    return; // Stops sending message
-  } 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) {
     console.log("User is not logged in");
@@ -177,9 +190,6 @@ function sendMessage(message) {
 
 // Fetch and display messages using 'get'
 function fetchMessages() {
-  if (!auth.currentUser) {
-    return; // Stops sending message
-  } 
   const messagesRef = ref(database, "court/"); // Reference to your 'chats' node
 
   // Fetch messages once from Firebase

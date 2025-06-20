@@ -117,6 +117,23 @@ document.getElementById("themeButton")?.addEventListener("click", () => {
 // Call the theme initializer
 initializeTheme();
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User is authenticated:", user.uid);
+    fetchAllUsers(); // NOW it's safe to call it
+  } else {
+    console.log("No user, signing in...");
+    signInAnonymously(auth)
+      .then((result) => {
+        console.log("Signed in as:", result.user.uid);
+        fetchAllUsers(); // Also safe here
+      })
+      .catch((error) => {
+        console.error("Sign-in failed:", error);
+      });
+  }
+});
+
 // Fetch all user names from the "users" node
 async function fetchAllUsers() {
   if (!auth.currentUser) {
