@@ -375,7 +375,7 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
         messageElement.style.marginBottom = "8px";
     
         const messageText = document.createElement("div");
-        messageText.innerHTML = `<strong>${msg.number}</strong>: ${msg.text}`;
+        messageText.innerHTML = `<strong>${msg.title}</strong>: ${msg.description}`;
         messageText.style.flex = "1";
         messageText.style.color = "black";
     
