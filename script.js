@@ -261,6 +261,7 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
       const teamEl = document.getElementById("team");
       const involvementEl = document.getElementById("currentInvolvement");
       const ownerDash = document.getElementById("ownerDash");
+      const giveQuest = document.getElementById("giveQuest");
 
       if (nameEl) nameEl.textContent = loggedInUser.name || "N/A";
       if (roleEl) roleEl.textContent = loggedInUser.role || "N/A";
@@ -280,6 +281,10 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
       if (ownerDash && allowedRoles.includes(loggedInUser.role)) {
         ownerDash.style.display = "block";
         ownerDash.style.pointerEvents = "auto";
+      }
+      if (giveQuest && allowedRoles.includes(loggedInUser.role)) {
+        giveQuest.style.display = "block";
+        giveQuest.style.pointerEvents = "auto";
       }
     }
     function fetchMessages() {
