@@ -28,11 +28,9 @@
     <a href="signup.html">Sign-up</a>
     <a href="login.html">Log-in</a>
     <a href="info.html">Info</a>
-  </div>
-    <div id="quests" style="margin-left: 75%; top: 80px; width: 20%; background: white; border-radius: 10px;">
-      <strong style="color: black;">Jobs</strong>
-    </div>
-  <div id="content">
+  </div> 
+  <div style="display: flex; align-items: flex-start;">
+  <div id="content" style="flex: 1; padding-right: 20px;">
     <h1>Dashboard</h1>
     <p>Here is your dashboard</p>
 
@@ -68,6 +66,7 @@
       onmouseout="this.style.transition = 'all 0.1s ease'; this.style.width='175px'; this.style.height='100px'; this.style.backgroundColor='#b36800'; this.style.right='900px'; this.style.top='700px';">
       Admin Dashboard
     </a>
+    <br>
     <a href="giveQuest.html" id="giveQuest" class="ownerDash" style="
       width: 175px;
       height: 100px;
@@ -86,6 +85,19 @@
       Assign Jobs
     </a>
   </div>
+
+  <div id="quests" style="
+    width: 250px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    color: black;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  ">
+    <strong style="font-size: 1.2em;">Jobs</strong>
+    <!-- jobs content here -->
+  </div>
+</div>
 </body>
 
 </html>
