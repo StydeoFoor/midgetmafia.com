@@ -378,7 +378,7 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
         messageElement.style.justifyContent = "space-between";
         messageElement.style.alignItems = "center";
         messageElement.style.marginBottom = "8px";
-        messageElement.style.marginLeft = "2px";
+        messageElement.style.marginLeft = "5px";
     
         const messageText = document.createElement("div");
         messageText.innerHTML = `<strong>${msg.title}</strong>: ${msg.description}`;
