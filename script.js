@@ -249,7 +249,7 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
   // ===== Login System =====
 
   // ===== Dashboard Logic =====
-  function populateDashboard() {
+  async function populateDashboard() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     // Redirect to login only if not already on the login page
@@ -261,7 +261,7 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
     if (loggedInUser) {
       const username = localStorage.getItem("loggedInUser");
       const userRef = ref(database, `users/${username}`);
-      const snapshot = get(userRef);
+      const snapshot = await get(userRef);
       const user = snapshot.val();
       const nameEl = document.getElementById("name");
       const roleEl = document.getElementById("role");
@@ -289,11 +289,11 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
         "Vice Owner",
         "TrustedInstaller",
       ];
-      if (ownerDash && allowedRoles.includes(loggedInUser.role)) {
+      if (ownerDash && allowedRoles.includes(role)) {
         ownerDash.style.display = "block";
         ownerDash.style.pointerEvents = "auto";
       }
-      if (giveQuest && allowedRoles.includes(loggedInUser.role)) {
+      if (giveQuest && allowedRoles.includes(role)) {
         giveQuest.style.display = "block";
         giveQuest.style.pointerEvents = "auto";
       }
@@ -421,8 +421,12 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
     fetchMessages();
   }
 
-  function bodyguardMessage() {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  async function bodyguardMessage() {
+    const username = localStorage.getItem("loggedInUser");
+    const userRef = ref(database, `users/${username}`);
+    const snapshot = await get(userRef);
+    const user = snapshot.val();
+    const role = user.role;
 
     const bodyMsg = document.getElementById("bodyMsg");
 
@@ -433,7 +437,7 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
       "Developer",
       "TrustedInstaller",
     ];
-    if (bodyMsg && allowedRoles.includes(loggedInUser.role)) {
+    if (bodyMsg && allowedRoles.includes(role)) {
       bodyMsg.style.display = "block";
       bodyMsg.style.pointerEvents = "auto";
     }
@@ -445,10 +449,10 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
     }
   }
 
-  function ownerDashboard() {
+  async function ownerDashboard() {
     const username = localStorage.getItem("loggedInUser");
     const userRef = ref(database, `users/${username}`);
-    const snapshot = get(userRef);
+    const snapshot = await get(userRef);
     const user = snapshot.val();
     const name = user.name;
     const role = user.role;
