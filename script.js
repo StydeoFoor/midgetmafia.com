@@ -454,6 +454,7 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
   }
 
   async function ownerDashboard() {
+    const loggedInUser = localStorage.getItem("loggedInUser");
     const username = localStorage.getItem("loggedInUser");
     const userRef = ref(database, `users/${username}`);
     const snapshot = await get(userRef);
