@@ -263,6 +263,10 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
       const userRef = ref(database, `users/${username}`);
       const snapshot = await get(userRef);
       const user = snapshot.val();
+      if (!snapshot.exists()) {
+        console.error(`User data not found for username: ${username}`);
+        return;
+      }
       const nameEl = document.getElementById("name");
       const roleEl = document.getElementById("role");
       const teamEl = document.getElementById("team");
