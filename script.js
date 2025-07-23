@@ -250,7 +250,7 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
 
   // ===== Dashboard Logic =====
   async function populateDashboard() {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    const loggedInUser = localStorage.getItem("loggedInUser");
 
     // Redirect to login only if not already on the login page
     if (!loggedInUser && !window.location.pathname.includes("login.html")) {

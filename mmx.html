@@ -34,9 +34,9 @@
   <div id="content">
   <h1>MMX</h1>
   <h3>Since this is a prototype, this feature is currently Staff only</h3>
-    <p>MMX is a new tool made to give a GUI to Staff members, simply drag the link to your bookmarks, and name it what you please</p>
-    <p>MMX is here in the slim but non-zero chance that other groups may copy the website, which considering we know our website best, will give us an advantage.</p>
-    <p>Since this is a new feature, you may want to update the bookmark every now and again</p>
+    <p>MMX is a new tool made to give a GUI to members, simply drag the link to your bookmarks, and name it what you please</p>
+    <p>MMX is here so that users can use small portions of the site from anywhere. So that if the site is on lockdown, it can still be used, but only a little.</p>
+    <p>You may want to update the bookmark by redragging it to your bookmarks bar (auto updates will be worked on shortly).</p>
   <br>
   <a href="javascript:(function(){if(document.getElementById('mmx'))return;const e=document.createElement('div');e.id='mmx';e.style='font-family:cursive;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#222;color:#fff;padding:20px;border-radius:8px;z-index:99999;width:300px;text-align:center;';e.innerHTML='<h4 style=&quot;margin-top:0;&quot;>MMX</h4><input id=&quot;log-input&quot; placeholder=&quot;Log a message...&quot; style=&quot;background:#333;color:#fff;border:none;border-radius:5px;padding:5px;width:80%;margin-bottom:10px;&quot; /><br/><button id=&quot;log-send&quot; style=&quot;background:#28a745;border:none;border-radius:8px;color:white;padding:5px 10px;cursor:pointer;&quot;>Send</button><button onclick=&quot;this.parentNode.remove()&quot; style=&quot;background:#333;border:none;border-radius:8px;color:white;padding:5px 10px;margin-top:5px;&quot;>Close</button>';document.body.appendChild(e);document.getElementById('log-send').onclick=function(){const msg=document.getElementById('log-input').value;if(!msg)return alert('Type something first');fetch('https://midget-mafia-default-rtdb.firebaseio.com/logs.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:msg,timestamp:new Date().toISOString(),number: Math.floor(10000 + Math.random() * 90000)})}).then(r=>{if(r.ok){alert('Logged!');document.getElementById('log-input').value='';}else{alert('Failed to log');}}).catch(e=>alert('Error: '+e));};})();">
     MMX (Drag to your bookmarks bar)
