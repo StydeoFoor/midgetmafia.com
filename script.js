@@ -81,9 +81,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // Login success
-      localStorage.setItem("loggedInUser", JSON.stringify(user));
+      localStorage.setItem("loggedInUser", username);
       alert("Login successful!");
       window.location.href = "dashboard.html";
+      const usernameRef = ref(database, `users/${username}` + Date.now()); // Timestamp as unique ID for each message
+      update(ref(database, `users/${username}`), { online: "true" });
+      onDisconnect(ref(database, `users/${username}/online`)).set("false");
 
     } catch (error) {
       console.error("Login error:", error);
@@ -256,18 +259,26 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
     }
 
     if (loggedInUser) {
+      const username = localStorage.getItem("loggedInUser");
+      const userRef = ref(database, `users/${username}`);
+      const snapshot = get(userRef);
+      const user = snapshot.val();
       const nameEl = document.getElementById("name");
       const roleEl = document.getElementById("role");
       const teamEl = document.getElementById("team");
       const involvementEl = document.getElementById("currentInvolvement");
       const ownerDash = document.getElementById("ownerDash");
       const giveQuest = document.getElementById("giveQuest");
+      const name = user.name;
+      const role = user.role;
+      const team = user.team;
+      const currentInvolvement = user.currentInvolvement
 
-      if (nameEl) nameEl.textContent = loggedInUser.name || "N/A";
-      if (roleEl) roleEl.textContent = loggedInUser.role || "N/A";
-      if (teamEl) teamEl.textContent = loggedInUser.team || "N/A";
+      if (nameEl) nameEl.textContent = name || "N/A";
+      if (roleEl) roleEl.textContent = role || "N/A";
+      if (teamEl) teamEl.textContent = team || "N/A";
       if (involvementEl)
-        involvementEl.textContent = loggedInUser.currentInvolvement || "N/A";
+        involvementEl.textContent = currentInvolvement || "N/A";
 
       const allowedRoles = [
         "Leader",
@@ -435,7 +446,13 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
   }
 
   function ownerDashboard() {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    const username = localStorage.getItem("loggedInUser");
+    const userRef = ref(database, `users/${username}`);
+    const snapshot = get(userRef);
+    const user = snapshot.val();
+    const name = user.name;
+    const role = user.role;
+    const currentInvolvement = user.currentInvolvement
 
     const allowedRoles = [
       "Leader",
@@ -446,7 +463,7 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
       "Vice Owner",
       "TrustedInstaller",
     ];
-    if (!allowedRoles.includes(loggedInUser.role)) {
+    if (!allowedRoles.includes(role)) {
       window.location.href = "index.html";
       alert("You aren't allowed here")
       return;
@@ -461,10 +478,10 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
     const roleEl = document.getElementById("adrole");
     const involvementEl = document.getElementById("adcurrentInvolvement");
 
-    if (nameEl) nameEl.textContent = loggedInUser.name || "N/A";
-    if (roleEl) roleEl.textContent = loggedInUser.role || "N/A";
+    if (nameEl) nameEl.textContent = name || "N/A";
+    if (roleEl) roleEl.textContent = role || "N/A";
     if (involvementEl)
-      involvementEl.textContent = loggedInUser.currentInvolvement || "N/A";
+      involvementEl.textContent = currentInvolvement || "N/A";
   }
 
   function initOwnerDashboard() {
