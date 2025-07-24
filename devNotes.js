@@ -148,8 +148,12 @@ onAuthStateChanged(auth, (user) => {
 const allowedRoles = ["Developer", "Editor", "TrustedInstaller"];
 
 // Function to check role and enable message input
-function initializeMessageInput() {
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+async function initializeMessageInput() {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const userRef = ref(database, `users/${loggedInUser}`);
+  const snapshot = await get(userRef);
+  const user = snapshot.val();
+  const role = user.role;
 
   const messageInput = document.getElementById("message-input");
   const sendButton = document.getElementById("send-button");
@@ -160,13 +164,13 @@ function initializeMessageInput() {
   }
 
   // Check if the user's role is allowed
-  if (allowedRoles.includes(loggedInUser.role)) {
+  if (allowedRoles.includes(role)) {
     messageInput.style.display = "block";
     messageInput.style.pointerEvents = "auto";
     sendButton.style.display = "block";
     sendButton.style.pointerEvents = "auto";
   } else {
-    console.log(`User role "${loggedInUser.role}" does not allow messaging.`);
+    console.log(`User role "${role}" does not allow messaging.`);
     messageInput.style.display = "none";
     messageInput.style.pointerEvents = "none";
     sendButton.style.display = "none";
@@ -175,8 +179,12 @@ function initializeMessageInput() {
 }
 
 // Send message function using 'set'
-function sendMessage(message) {
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+async function sendMessage(message) {
+  const loggedInUser = localStorage.getItem("loggedInUser"); 
+  const userRef = ref(database, `users/${loggedInUser}`);
+  const snapshot = await get(userRef);
+  const user = snapshot.val();
+  const name = user.name;
   if (!loggedInUser) {
     console.log("User is not logged in");
     return;
@@ -192,7 +200,7 @@ function sendMessage(message) {
 
   // Set the message data in Firebase
   set(messageRef, {
-    username: loggedInUser.name,
+    username: name,
     message: message,
     timestamp: Date.now(),
   })

@@ -161,58 +161,64 @@ async function fetchAllUsers() {
 }
   
 async function displayUserList(users) {
-  if (!auth.currentUser) {
-  return; // Stops sending message
-  } 
-  const userListContainer = document.getElementById("user-list");
+  if (!auth.currentUser) return;
 
+  const userListContainer = document.getElementById("user-list");
   if (!userListContainer) {
     console.error("HTML element with ID 'user-list' is missing.");
     return;
   }
-
-  userListContainer.innerHTML = ""; // Clear the user list
+  userListContainer.innerHTML = "";
 
   if (users.length === 0) {
     userListContainer.textContent = "No users found.";
     return;
   }
 
-  // Fetch the muted list from Firebase
+  // Fetch muted list once
   const mutedRef = ref(database, "muted");
   let mutedList = {};
   try {
     const snapshot = await get(mutedRef);
-    if (snapshot.exists()) {
-      mutedList = snapshot.val();
-    }
+    if (snapshot.exists()) mutedList = snapshot.val();
   } catch (error) {
     console.error("Error fetching muted list:", error);
+  }
+
+  // Fetch current user info once
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  let canChangeRoles = false;
+  try {
+    const userRef = ref(database, `users/${loggedInUser}`);
+    const snapshot = await get(userRef);
+    if (snapshot.exists()) {
+      const currentUser = snapshot.val();
+      const username = currentUser?.name;
+      const userrole = currentUser?.role;
+      canChangeRoles = username === "John Doe" || userrole === "TrustedInstaller";
+    }
+  } catch (error) {
+    console.error("Error fetching logged in user info:", error);
   }
 
   const ul = document.createElement("ul");
   ul.style.listStyleType = "none";
   ul.style.padding = "0";
 
-  users.forEach((userData) => {
-    const { name, role } = userData;
-
-    if (!name) return; // Skip users without a name
+  users.forEach(({ name, role }) => {
+    if (!name) return;
 
     const li = document.createElement("li");
     li.style.padding = "10px 0";
     li.style.fontFamily = "Arial, sans-serif";
     li.style.color = "#333";
 
-    // Add user details
     const userText = document.createElement("span");
     userText.textContent = `${name} - ${role || "No Role"}`;
     li.appendChild(userText);
 
-    // Determine if user is muted
     const isMuted = !!mutedList[name];
 
-    // Add Mute/Unmute button
     const muteButton = document.createElement("button");
     muteButton.textContent = isMuted ? "Unmute" : "Mute";
     muteButton.style.marginLeft = "10px";
@@ -222,54 +228,10 @@ async function displayUserList(users) {
     muteButton.style.border = "none";
     muteButton.style.borderRadius = "5px";
     muteButton.style.cursor = "pointer";
-
-    muteButton.onclick = () => {
-      if (isMuted) {
-        unmuteUser(name); // Call unmute function
-      } else {
-        muteUser(name); // Call mute function
-      }
-    };
-
+    muteButton.onclick = () => (isMuted ? unmuteUser(name) : muteUser(name));
     li.appendChild(muteButton);
 
-    // Add Role Change button (visible only to specific users)
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    const allowedToChangeRoles = loggedInUser?.name === "Shawn Rabb";
-    const allowedRoleChange = loggedInUser?.role === "TrustedInstaller";
-
-    if (allowedToChangeRoles) {
-        const roleButton = document.createElement("button");
-        roleButton.textContent = "Change Role";
-        roleButton.style.marginLeft = "10px";
-        roleButton.style.padding = "5px 10px";
-        roleButton.style.backgroundColor = "#007bff";
-        roleButton.style.color = "white";
-        roleButton.style.border = "none";
-        roleButton.style.borderRadius = "5px";
-        roleButton.style.cursor = "pointer";
-  
-        // Hook the `showRolePopup` function
-        roleButton.onclick = () => showRolePopup(name);
-  
-        li.appendChild(roleButton);
-
-        const objButton = document.createElement("button");
-        objButton.textContent = "Set Objective";
-        objButton.style.marginLeft = "10px";
-        objButton.style.padding = "5px 10px";
-        objButton.style.backgroundColor = "limegreen";
-        objButton.style.color = "white";
-        objButton.style.border = "none";
-        objButton.style.borderRadius = "5px";
-        objButton.style.cursor = "pointer";
-  
-        // Hook the `showRolePopup` function
-        objButton.onclick = () => showObjPopup(name);
-  
-        li.appendChild(objButton);
-    }
-    else if (allowedRoleChange) {
+    if (canChangeRoles) {
       const roleButton = document.createElement("button");
       roleButton.textContent = "Change Role";
       roleButton.style.marginLeft = "10px";
@@ -279,10 +241,7 @@ async function displayUserList(users) {
       roleButton.style.border = "none";
       roleButton.style.borderRadius = "5px";
       roleButton.style.cursor = "pointer";
-
-      // Hook the `showRolePopup` function
       roleButton.onclick = () => showRolePopup(name);
-
       li.appendChild(roleButton);
 
       const objButton = document.createElement("button");
@@ -294,19 +253,16 @@ async function displayUserList(users) {
       objButton.style.border = "none";
       objButton.style.borderRadius = "5px";
       objButton.style.cursor = "pointer";
-  
-        // Hook the `showRolePopup` function
       objButton.onclick = () => showObjPopup(name);
-  
       li.appendChild(objButton);
     }
-
 
     ul.appendChild(li);
   });
 
   userListContainer.appendChild(ul);
 }
+
 
   async function muteUser(userName) {
     if (!userName) {

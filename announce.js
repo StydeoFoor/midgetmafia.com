@@ -175,8 +175,12 @@ function initializeMessageInput() {
 }
 
 // Send message function using 'set'
-function sendMessage(message) {
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+async function sendMessage(message) {
+  const loggedInUser = localStorage.getItem("loggedInUser"); 
+  const userRef = ref(database, `users/${loggedInUser}`);
+  const snapshot = await get(userRef);
+  const user = snapshot.val();
+  const name = user.name;
   if (!loggedInUser) {
     console.log("User is not logged in");
     return;
@@ -192,7 +196,7 @@ function sendMessage(message) {
 
   // Set the message data in Firebase
   set(messageRef, {
-    username: loggedInUser.name,
+    username: name,
     message: message,
     timestamp: Date.now(),
   })

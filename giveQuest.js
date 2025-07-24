@@ -134,7 +134,7 @@ onAuthStateChanged(auth, (user) => {
 
 // Send message function using 'set'
 function sendMessage(title, message) {
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const loggedInUser = localStorage.getItem("loggedInUser");
   if (!loggedInUser) {
     console.log("User is not logged in");
     return;

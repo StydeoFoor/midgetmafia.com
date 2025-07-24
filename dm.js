@@ -293,6 +293,11 @@ function displayDM(chatId) {
 }
 // Send Message
 async function sendMessage() {
+  const loggedInUser = localStorage.getItem("loggedInUser"); 
+  const userRef = ref(database, `users/${loggedInUser}`);
+  const snapshot = await get(userRef);
+  const user = snapshot.val();
+  const name = user.name;
   const messageInput = document.getElementById("message-input");
   const message = messageInput.value.trim();
 
@@ -319,7 +324,7 @@ async function sendMessage() {
 
     // Set the message in Firebase
     await set(ref(database, chatMessagesPath), {
-      sender: loggedInUser,
+      sender: name,
       message,
       timestamp: Date.now(),
     });

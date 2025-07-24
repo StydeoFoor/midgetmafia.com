@@ -218,20 +218,24 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-function sendMessage(message) {
+async function sendMessage(message) {
   if (!auth.currentUser) {
     alert("User not authenticated, go to login and re-login");
     return; // Stops sending message
   } 
 
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const userRef = ref(database, `users/${loggedInUser}`);
+  const snapshot = await get(userRef);
+  const user = snapshot.val();
+  const name = user.name;
   if (!loggedInUser) {
     console.log("User is not logged in");
     return;
   }
 
   // Check if user is muted
-  const mutedRef = ref(database, "muted/" + loggedInUser.name);
+  const mutedRef = ref(database, "muted/" + name);
 
   get(mutedRef)
     .then((snapshot) => {
@@ -256,7 +260,7 @@ function sendMessage(message) {
       const messageRef = ref(database, "chats/" + Date.now());
 
       set(messageRef, {
-        username: loggedInUser.name,
+        username: name,
         message: message.trim(),
         timestamp: Date.now(),
       })

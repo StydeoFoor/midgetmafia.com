@@ -273,10 +273,3 @@ const messageInput = document.getElementById("message-input");
 const sendButton = document.getElementById("send-button");
 
 // Add event listener for Send button
-sendButton.addEventListener("click", function () {
-  const message = messageInput.value.trim();
-  if (message) {
-    sendMessage(message); // Send message to Firebase
-    messageInput.value = ""; // Clear the input after sending
-  }
-});

@@ -1,12 +1,18 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  set,
+  get,
+  onValue,
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 import {
   getAuth,
   signInAnonymously,
   onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
-// Firebase Initialization
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyB17qMT--ON4KaYZLnEjU5HbwZmds9KgWg",
   authDomain: "midget-mafia.firebaseapp.com",
@@ -18,10 +24,10 @@ const firebaseConfig = {
   measurementId: "G-3PTREP7EJ8",
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+const database = getDatabase(app); // Get Firebase Database instance
 const auth = getAuth(app);
-const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 const topbar = document.getElementById("myTopBar");
 const body = document.body;
 
@@ -42,7 +48,6 @@ function applyTheme(theme) {
       break;
     case "sunset":
       applySunsetTheme();
-      break;
     case "midnight":
       applyMidnightTheme();
       break;
@@ -59,7 +64,6 @@ function applyDarkMode() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
   if (topbar) topbar.style.backgroundColor = "#242424";
-  if (sidebar) sidebar.style.backgroundColor = "#242424";
 }
 
 function applyLightMode() {
@@ -68,7 +72,6 @@ function applyLightMode() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "black"));
   if (topbar) topbar.style.backgroundColor = "#e8e8e8";
-  if (sidebar) sidebar.style.backgroundColor = "#e8e8e8";
 }
 
 function applyOceanTheme() {
@@ -78,7 +81,6 @@ function applyOceanTheme() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "#a8d0e6"));
   if (topbar) topbar.style.backgroundColor = "#003c60";
-  if (sidebar) sidebar.style.backgroundColor = "#003c60";
 }
 
 function applySunsetTheme() {
@@ -88,9 +90,6 @@ function applySunsetTheme() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "#ffdda1"));
   if (topbar) topbar.style.backgroundColor = "#b35b47";
-  if (sidebar) sidebar.style.backgroundColor = "#b35b47";
-
-  body.querySelectorAll("h1, h2, h3").forEach((el) => (el.style.color = "white"));
 }
 
 function applyMidnightTheme() {
@@ -99,7 +98,6 @@ function applyMidnightTheme() {
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
   if (topbar) topbar.style.backgroundColor = "#000000";
-  if (sidebar) sidebar.style.backgroundColor = "#000000";
 }
 
 
@@ -122,13 +120,13 @@ initializeTheme();
 onAuthStateChanged(auth, (user) => {
   if (user) {
     console.log("User is authenticated:", user.uid);
-    loadRequests(); // NOW it's safe to call it
+    fetchMessages(); // NOW it's safe to call it
   } else {
     console.log("No user, signing in...");
     signInAnonymously(auth)
       .then((result) => {
         console.log("Signed in as:", result.user.uid);
-        loadRequests(); // Also safe here
+        fetchMessages(); // Also safe here
       })
       .catch((error) => {
         console.error("Sign-in failed:", error);
@@ -136,73 +134,129 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-async function checkUser() {
-  const loggedInUser = localStorage.getItem("loggedInUser"); 
-  const userRef = ref(database, `users/${loggedInUser}`);
-  const snapshot = await get(userRef);
-  const user = snapshot.val();
-  const role = user.role;
+// Send message function using 'set'
+function sendYesVote() {
+  const loggedInUser = localStorage.getItem("loggedInUser");
   if (!loggedInUser) {
-    alert("You are not logged in");
-    window.location.href = "index.html";
+    console.log("User is not logged in");
     return;
   }
 
-  if (role !== "Developer" && role !== "TrustedInstaller") {
-    alert("You are not allowed here.");
-    window.location.href = "index.html";
-    return;
-  }
+  const userVoteRef = ref(database, `flagVotes/${loggedInUser}`);
+
+  get(userVoteRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      console.warn("User has already voted.");
+      alert("You've already voted!");
+      return;
+    }
+
+    // User hasn't voted yet, proceed to vote
+    set(userVoteRef, {
+      vote: "yes",
+      name: loggedInUser,
+      timestamp: Date.now()
+    })
+    .then(() => {
+      console.log("Voted successfully");
+    })
+    .catch((error) => {
+      console.error("Error sending vote:", error);
+    });
+  });
 }
 
-checkUser();
-
-document.getElementById("userForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const username = document.getElementById("username").value.trim();
-  const role = document.getElementById("role").value.trim();
-  const team = document.getElementById("team").value.trim();
-  const name = document.getElementById("name").value.trim();
-  const currentInvolvement = document.getElementById("currentInvolvement").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  if (!username || !role || !team || !name || !currentInvolvement || !password) {
-    alert("All fields are required!");
+function sendNoVote() {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  if (!loggedInUser) {
+    console.log("User is not logged in");
     return;
   }
 
-  try {
-    const userRef = ref(database, `users/${username}`);
-    await set(userRef, { role, team, name, currentInvolvement, password });
-    alert("User data submitted successfully!");
-    document.getElementById("userForm").reset();
-    loadUsers();
-  } catch (error) {
-    console.error("Error submitting user data:", error);
-    alert("An error occurred. Please try again.");
+  const userVoteRef = ref(database, `flagVotes/${loggedInUser}`);
+
+  get(userVoteRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      console.warn("User has already voted.");
+      alert("You've already voted!");
+      return;
+    }
+
+    // User hasn't voted yet, proceed to vote
+    set(userVoteRef, {
+      vote: "no",
+      name: loggedInUser,
+      timestamp: Date.now()
+    })
+    .then(() => {
+      console.log("Voted successfully");
+    })
+    .catch((error) => {
+      console.error("Error sending vote:", error);
+    });
+  });
+}
+
+
+// Fetch and display messages using 'get'
+function fetchVotes() {
+  const messagesRef = ref(database, "flagVotes/"); // Reference to your 'chats' node
+
+  // Fetch messages once from Firebase
+    get(messagesRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const votes = snapshot.val();
+        displayVotes(votes);
+      } else {
+        console.log("No messages available.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching messages: ", error);
+    });
+}
+
+// Function to display messages in the chat box
+function displayVotes(votes) {
+  const yesVotes = document.getElementById("yesVotes");
+  const noVotes = document.getElementById("noVotes");
+
+  let yesCount = 0;
+  let noCount = 0;
+
+  for (const voter in votes) {
+    const vote = votes[voter].vote;
+    if (vote === "yes") yesCount++;
+    if (vote === "no") noCount++;
   }
+
+  if (yesVotes) yesVotes.textContent = `Replace the Flag: ${yesCount}`;
+  if (noVotes) noVotes.textContent = `Keep the Old Flag: ${noCount}`;
+}
+
+// Listen for real-time updates (whenever new messages are added)
+const messagesRef = ref(database, "flagVotes/");
+onValue(messagesRef, (snapshot) => {
+  const votes = snapshot.val();
+  displayVotes(votes);
 });
 
-async function loadRequests() {
-    const requestsRef = ref(database, "requests");
-  
-    onValue(requestsRef, (snapshot) => {
-      const requestsList = document.getElementById("requestsList");
-      requestsList.innerHTML = ""; // Clear existing list
-  
-      if (snapshot.exists()) {
-        const requests = snapshot.val();
-  
-        Object.entries(requests).forEach(([requestId, requestData]) => {
-          const listItem = document.createElement("li");
-          listItem.textContent = `Name: ${requestData.name}, Description: ${requestData.description}`;
-          requestsList.appendChild(listItem);
-        });
-      } else {
-        requestsList.innerHTML = "<li>No requests available</li>";
-      }
-    });
-  }
+// Call fetchMessages to load initial messages when the page loads
+window.onload = () => {
+  fetchVotes(); // Load messages on page load (optional if onValue is enough)
+};
 
-window.onload = loadRequests;
+// Get references for input and send button
+const yesButton = document.getElementById("yes");
+const noButton = document.getElementById("no");
+
+// Add event listener for Send button
+yesButton.addEventListener("click", function () {
+    sendYesVote(); // Send message to Firebase
+  }
+);
+noButton.addEventListener("click", function () {
+    sendNoVote(); // Send message to Firebase
+  }
+);
