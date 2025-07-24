@@ -21,7 +21,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const auth = getAuth(app);
-const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+const loggedInUser = localStorage.getItem("loggedInUser");
 const topbar = document.getElementById("myTopBar");
 const body = document.body;
 
