@@ -24,12 +24,11 @@ h3 {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #242424;
+  background-color: #1f1f1f;
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 0 20px;
 }
 .topbar a {
@@ -112,7 +111,7 @@ body {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #242424;
+  background-color: #1f1f1f;
   overflow-x: hidden;
   transition: width 0.3s;
   padding-top: 60px;
@@ -154,7 +153,6 @@ body {
 img {
   max-width: 150px;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   margin: 10px;
 }
 img.fade-out {
@@ -238,7 +236,7 @@ test {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #242424;
+  background-color: #1f1f1f;
   overflow-x: hidden;
   padding-top: 60px;
 }
