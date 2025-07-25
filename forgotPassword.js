@@ -51,7 +51,7 @@ function applyDarkMode() {
   body.style.color = "white";
 
   body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
-  if (topbar) topbar.style.backgroundColor = "#242424";
+  if (topbar) topbar.style.backgroundColor = "#1f1f1f";
 
   localStorage.setItem("theme", "dark");
 }

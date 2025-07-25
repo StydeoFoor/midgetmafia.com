@@ -135,8 +135,8 @@ let currentThemeIndex = themes.indexOf(localStorage.getItem("theme") || "dark");
     body.style.color = "white";
   
     body.querySelectorAll("a").forEach((a) => (a.style.color = "white"));
-    if (topbar) topbar.style.backgroundColor = "#242424";
-    if (sidebar) sidebar.style.backgroundColor = "#242424";
+    if (topbar) topbar.style.backgroundColor = "#1f1f1f";
+    if (sidebar) sidebar.style.backgroundColor = "#1f1f1f";
   }
   
   function applyLightMode() {
