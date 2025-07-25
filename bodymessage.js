@@ -195,7 +195,7 @@ function fetchMessages() {
 }
 
 // Function to display messages in the chat box
-function displayMessages(messages) {
+async function displayMessages(messages) {
   const chatBox = document.getElementById("chat-box");
   if (!chatBox) {
     console.error("HTML element with ID 'chat-box' is missing.");
@@ -204,9 +204,13 @@ function displayMessages(messages) {
 
   chatBox.innerHTML = ""; // Clear chat box
 
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const userRef = ref(database, `users/${loggedInUser}`);
+  const snapshot = await get(userRef);
+  const user = snapshot.val();
+  const role = user.role
   const allowedRoles = ["Leader", "Manager", "Vice Manager", "Developer", "Executive"];
-  const canDelete = allowedRoles.includes(loggedInUser?.role);
+  const canDelete = allowedRoles.includes(role);
 
   // Helper to format date with ordinal (e.g. 18th)
   function getOrdinal(day) {

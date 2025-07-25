@@ -118,14 +118,18 @@ document.getElementById("themeButton")?.addEventListener("click", () => {
 initializeTheme();
 
 let currentChatId = null;
-let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+let loggedInUser = localStorage.getItem("loggedInUser");
+const userRef = ref(database, `users/${loggedInUser}`);
+const snapshot = await get(userRef);
+const user = snapshot.val();
+const name = user.name
 
 // Validate logged-in user and extract name
-if (!loggedInUser || !loggedInUser.name) {
+if (!loggedInUser || !name) {
   alert("User not logged in. Please log in first.");
   throw new Error("User not logged in.");
 }
-loggedInUser = loggedInUser.name; // Extract the name string
+loggedInUser = name; // Extract the name string
 
 onAuthStateChanged(auth, (user) => {
   if (user) {

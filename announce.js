@@ -148,8 +148,12 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // Function to check role and enable message input
-function initializeMessageInput() {
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+async function initializeMessageInput() {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const userRef = ref(database, `users/${loggedInUser}`);
+  const snapshot = await get(userRef);
+  const user = snapshot.val();
+  const role = user.role
 
   const messageInput = document.getElementById("message-input");
   const sendButton = document.getElementById("send-button");
@@ -160,13 +164,13 @@ function initializeMessageInput() {
   }
 
   // Check if the user's role is allowed
-  if (allowedRoles.includes(loggedInUser.role)) {
+  if (allowedRoles.includes(role)) {
     messageInput.style.display = "block";
     messageInput.style.pointerEvents = "auto";
     sendButton.style.display = "block";
     sendButton.style.pointerEvents = "auto";
   } else {
-    console.log(`User role "${loggedInUser.role}" does not allow messaging.`);
+    console.log(`User role "${role}" does not allow messaging.`);
     messageInput.style.display = "none";
     messageInput.style.pointerEvents = "none";
     sendButton.style.display = "none";
@@ -228,7 +232,7 @@ function fetchMessages() {
 }
 
 // Function to display messages in the chat box
-function displayMessages(messages) {
+async function displayMessages(messages) {
   const chatBox = document.getElementById("chat-box");
   if (!chatBox) {
     console.error("HTML element with ID 'chat-box' is missing.");
@@ -237,9 +241,13 @@ function displayMessages(messages) {
 
   chatBox.innerHTML = ""; // Clear chat box
 
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const userRef = ref(database, `users/${loggedInUser}`);
+  const snapshot = await get(userRef);
+  const user = snapshot.val();
+  const role = user.role
   const allowedRoles = ["Leader", "Manager", "Vice Manager", "Developer", "Executive"];
-  const canDelete = allowedRoles.includes(loggedInUser?.role);
+  const canDelete = allowedRoles.includes(role);
 
   // Helper to format date with ordinal (e.g. 18th)
   function getOrdinal(day) {
