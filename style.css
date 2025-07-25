@@ -1,9 +1,10 @@
 body {
   background: #303030;
   color: white;
-  font-family: cursive;
+  font-family: 'Trebuchet MS';
   height: 100%;
 }
+/* Verdana and Trebuchet MS are great new font options */
 p {
   color: white;
 }
