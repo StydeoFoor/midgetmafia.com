@@ -90,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     } catch (error) {
       console.error("Login error:", error);
-      alert("Something went wrong during login.");
     }
   });
 }
